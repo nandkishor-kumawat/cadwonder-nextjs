@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { ThemeProvider } from '@/components/providers/theme-provider'
+import { Providers } from '@/components/providers/session-provider'
+import Navbar from '@/components/navbar/Navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +19,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="lignt"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            {children}
+          </ThemeProvider>
+        </Providers>
+      </body>
     </html>
   )
 }

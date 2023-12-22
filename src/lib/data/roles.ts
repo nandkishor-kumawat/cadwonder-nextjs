@@ -1,0 +1,30 @@
+const roles = [
+    "Administrator/Principal/Superintendent",
+    "Biomedical Engineer",
+    "C-level Executive",
+    "Clinical/PreClinical",
+    "Dean/Department Head",
+    "Dentist",
+    "Designer",
+    "Educator",
+    "Engineer",
+    "Equipment manufacturer",
+    "Lab Owner",
+    "Lab Technician",
+    "Marketing",
+    "Medical Education and Training",
+    "Parent",
+    "Practicing Physician",
+    "President/Provost",
+    "Prosthetist/Orthotist",
+    "Purchasing",
+    "Quality",
+    "R&D/Engineering",
+    "Sales",
+    "Senior management/administration",
+    "Student",
+    "Training",
+    "Other"
+]
+
+export default roles;
