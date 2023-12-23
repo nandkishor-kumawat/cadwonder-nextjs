@@ -25,11 +25,12 @@ interface SelectWithSearchProps {
     data: string[]
     type: string
     onSelect: (value: string) => void,
+    defaultValue?: string
 }
 
-export function SelectWithSearch({ data, type, onSelect }: SelectWithSearchProps) {
+export function SelectWithSearch({ data, type, onSelect, defaultValue }: SelectWithSearchProps) {
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
+    const [value, setValue] = React.useState(defaultValue?.toLowerCase() ?? "")
 
 
     const filteredData = data.map((item) => ({
@@ -39,7 +40,8 @@ export function SelectWithSearch({ data, type, onSelect }: SelectWithSearchProps
 
 
     const handleSelect = (currentValue: string) => {
-        setValue(currentValue === value ? "" : currentValue)
+        // setValue(currentValue === value ? "" : currentValue)
+        setValue(currentValue)
         setOpen(false);
     }
 
@@ -64,7 +66,7 @@ export function SelectWithSearch({ data, type, onSelect }: SelectWithSearchProps
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[300px] p-0">
+            <PopoverContent className="w-full p-0 z-[100]">
                 <Command>
                     <CommandInput placeholder={`Search ${type}...`} className="h-9" />
                     <CommandEmpty>No {type} found.</CommandEmpty>

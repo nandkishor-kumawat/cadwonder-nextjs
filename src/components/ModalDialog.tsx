@@ -21,15 +21,16 @@ import { AiOutlineAppstoreAdd } from "react-icons/ai"
 
 interface ModalDialogProps {
     children: React.ReactNode
-    selectedItems: string[]
+    edit?: boolean
     title: string
 }
 
-export default function ModalDialog({ children, selectedItems, title }: ModalDialogProps) {
+
+export default function ModalDialog({ children, edit, title }: ModalDialogProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="ghost" size={"icon"}>{selectedItems?.length > 0 ? <FaEdit /> : <AiOutlineAppstoreAdd size={20} />}</Button>
+                <Button variant="ghost" size={"icon"}>{edit ? <FaEdit /> : <AiOutlineAppstoreAdd size={20} />}</Button>
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-md">
@@ -40,7 +41,7 @@ export default function ModalDialog({ children, selectedItems, title }: ModalDia
                     </DialogDescription> */}
                 </DialogHeader>
 
-                <ScrollArea className="h-[400px] px-3">
+                <ScrollArea className="max-h-[450px]">
                     {children}
                 </ScrollArea>
 
@@ -51,6 +52,7 @@ export default function ModalDialog({ children, selectedItems, title }: ModalDia
                         </Button>
                     </DialogClose>
                 </DialogFooter>
+
             </DialogContent>
         </Dialog>
     )

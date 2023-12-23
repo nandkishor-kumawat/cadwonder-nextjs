@@ -1,6 +1,10 @@
 "use client"
 import BoxModel from '@/components/BoxModel'
 import ModalDialog from '@/components/ModalDialog'
+import EducationDetailCard from '@/components/edit-profile/EducationDetailCard'
+import EducationFormModal from '@/components/edit-profile/EducationFormModal'
+import ExperienceDetailCard from '@/components/edit-profile/ExperienceDetailCard'
+import ExperienceFormModal from '@/components/edit-profile/ExperienceFormModal'
 import { SelectWithSearch } from '@/components/form/SelectWithSearch'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -66,20 +70,110 @@ const EditProfile = () => {
         console.table(values)
     }
 
-    const handleImageSelect = async(e: React.ChangeEvent<HTMLInputElement>)=>{
+    const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const dataURI = URL.createObjectURL(e.target.files![0])
         const blob = await fetch(dataURI).then((res) => res.blob());
         // setProfilePic(blob);
         setProfilePic(e.target.files![0]);
     }
 
-    console.table(form.getValues())
+    const [Experience, setExperience] = useState([
+        {
+            "company": "ABC Corporation",
+            "position": "Software Engineer",
+            "startYear": "2020",
+            "startMonth": "January",
+            "endYear": "2022",
+            "endMonth": "December",
+            "description": "Developed and maintained software applications for the company."
+        },
+        {
+            "company": "XYZ Tech Solutions",
+            "position": "Data Analyst",
+            "startYear": "2019",
+            "startMonth": "June",
+            "endYear": "2021",
+            "endMonth": "November",
+            "description": "Analyzed and interpreted data to provide insights for business decision-making."
+        },
+        {
+            "company": "123 Marketing Agency",
+            "position": "Digital Marketing Specialist",
+            "startYear": "2018",
+            "startMonth": "March",
+            "endYear": "2020",
+            "endMonth": "September",
+            "description": "Executed digital marketing campaigns and optimized online presence."
+        },
+        {
+            "company": "Tech Innovators Inc.",
+            "position": "Product Manager",
+            "startYear": "2017",
+            "startMonth": "August",
+            "endYear": "2019",
+            "endMonth": "July",
+            "description": "Led cross-functional teams in the development and launch of innovative products."
+        },
+        {
+            "company": "Global Finance Group",
+            "position": "Financial Analyst",
+            "startYear": "2016",
+            "startMonth": "January",
+            "endYear": "2018",
+            "endMonth": "May",
+            "description": "Conducted financial analysis and prepared reports for investment decisions."
+        }
+    ])
+
+    const [Education, setEducation] = useState([
+        {
+            "school": "University A",
+            "field": "Computer Science",
+            "degree": "Bachelor of Science",
+            "startYear": "2018",
+            "endYear": "2022",
+            "description": "Studied computer science with a focus on algorithms and software development."
+        },
+        {
+            "school": "College B",
+            "field": "Business Administration",
+            "degree": "Master of Business Administration",
+            "startYear": "2016",
+            "endYear": "2018",
+            "description": "Pursued an MBA with a specialization in strategic management and entrepreneurship."
+        },
+        {
+            "school": "High School C",
+            "field": "Science",
+            "degree": "High School Diploma",
+            "startYear": "2012",
+            "endYear": "2016",
+            "description": "Completed high school with a focus on science subjects and extracurricular activities."
+        },
+        {
+            "school": "Technical Institute D",
+            "field": "Electrical Engineering",
+            "degree": "Associate Degree",
+            "startYear": "2014",
+            "endYear": "2016",
+            "description": "Studied electrical engineering with hands-on experience in circuits and electronics."
+        },
+        {
+            "school": "Language School E",
+            "field": "Languages",
+            "degree": "Certificate in French",
+            "startYear": "2019",
+            "endYear": "2020",
+            "description": "Attended language school to obtain a certificate in French language proficiency."
+        }
+    ])
+
 
     return (
         <>
-            <div className="absolute top-0 left-0 right-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
+            <div className="fixed top-0 left-0 right-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
                 <div className="flex items-center justify-between py-1">
-                    <p className="text-white text-lg">New Question</p>
+                    <p className="text-white text-lg">Edit Profile</p>
 
                     <div className="flex items-center gap-2">
                         <Button className="bg-transparent">Cancel</Button>
@@ -201,7 +295,7 @@ const EditProfile = () => {
                                     <FormItem className='flex items-center justify-between'>
                                         <FormLabel>Software Skills</FormLabel>
                                         <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
-                                            <ModalDialog selectedItems={field.value} title='Edit Software Skills'>
+                                            <ModalDialog edit={!!field.value.length} title='Edit Software Skills'>
                                                 <BoxModel data={SoftwareSkills} max={4} selectedItems={field.value} handleSave={field.onChange} />
                                             </ModalDialog>
                                         </FormControl>
@@ -210,11 +304,14 @@ const EditProfile = () => {
                                 )}
                             />
 
-                            {
-                                form.watch('softwareSkills').map((item) => (
-                                    <Button variant="outline" type='button' className='px-2 py-1 text-xs h-6 mr-1 select-none'>{item}</Button>
-                                ))
-                            }
+
+                            <div className='flex flex-wrap gap-1'>
+                                {
+                                    form.watch('softwareSkills').map((item) => (
+                                        <Button variant="outline" type='button' className='px-2 py-1 text-xs h-6 mr-1 select-none'>{item}</Button>
+                                    ))
+                                }
+                            </div>
                         </div>
 
                         <div className='my-3'>
@@ -225,7 +322,7 @@ const EditProfile = () => {
                                     <FormItem className='flex items-center justify-between'>
                                         <FormLabel>Specialized In</FormLabel>
                                         <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
-                                            <ModalDialog selectedItems={field.value} title='Edit specializations'>
+                                            <ModalDialog edit={!!field.value.length} title='Edit specializations'>
                                                 <BoxModel data={SpecializedIn} max={4} selectedItems={field.value} handleSave={field.onChange} />
                                             </ModalDialog>
                                         </FormControl>
@@ -233,23 +330,45 @@ const EditProfile = () => {
                                     </FormItem>
                                 )}
                             />
-                            {
-                                form.watch('specializedIn').map((item) => (
-                                    <Button variant="outline" type='button' className='px-2 py-1 text-xs h-6 mr-1 select-none'>{item}</Button>
-                                ))
-                            }
+
+
+                            <div className='flex flex-wrap gap-1'>
+                                {
+                                    form.watch('specializedIn').map((item) => (
+                                        <Button variant="outline" type='button' className='px-2 py-1 text-xs h-6 mr-1 select-none'>{item}</Button>
+                                    ))
+                                }
+                            </div>
                         </div>
 
 
 
-
-
-                        <div>
-
-                        </div>
                     </form>
                 </Form>
 
+                <div className='my-3'>
+                    <div className="flex items-center justify-between">
+                        <p>Work Experience</p>
+                        <ExperienceFormModal />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        {Experience.map((data, index) => (
+                            <ExperienceDetailCard key={index} data={data} />
+                        ))}
+                    </div>
+                </div>
+
+                <div className='my-3'>
+                    <div className="flex items-center justify-between">
+                        <p>Education</p>
+                        <EducationFormModal />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        {Education.map((data, index) => (
+                            <EducationDetailCard key={index} data={data} />
+                        ))}
+                    </div>
+                </div>
             </div>
         </>
     )
