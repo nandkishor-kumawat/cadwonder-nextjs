@@ -10,6 +10,7 @@ export const getData = async ({ coll, key, value }) => {
 
     const querySnapshot = await getDocs(q);
 
+
     querySnapshot.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() })
     });
@@ -17,6 +18,15 @@ export const getData = async ({ coll, key, value }) => {
     return data
 }
 
+export const getUsers = async () => {
+    const q = query(collection(db, "users"));
+    const users = []
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+        users.push({ id: doc.id, ...doc.data() })
+    });
+    return users
+}
 
 
 export const getFollowers = (user_id, callback, type = "following") => {

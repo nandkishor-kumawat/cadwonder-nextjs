@@ -9,12 +9,12 @@ import Link from 'next/link';
 import React from 'react'
 
 function QuestionList() {
-  const [allQuestions, setAllQuestions] = React.useState([]);
+  const [allQuestions, setAllQuestions] = React.useState<any[]>([]);
   React.useEffect(() => {
     const q = query(collection(db, 'questions'), orderBy('createdAt', 'desc'));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-        let d = []
+        let d = [] as any[]
         snapshot.forEach((doc) => {
             d.push({ id: doc.id, ...doc.data() })
         })
@@ -22,6 +22,8 @@ function QuestionList() {
     });
     return () => unsubscribe()
 }, []);
+
+console.log(JSON.stringify(allQuestions[0], null, 2))
 
   return (
     <div className="container max-w-3xl mx-auto px-2">

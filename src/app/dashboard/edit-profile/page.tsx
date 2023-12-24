@@ -30,7 +30,7 @@ import { z } from 'zod'
 
 
 const formSchema = z.object({
-    fullName: z.string().min(3, {
+    name: z.string().min(3, {
         message: "Name must be at least 3 characters",
     }),
     introduction: z.string().min(10, {
@@ -51,7 +51,7 @@ const EditProfile = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            fullName: "",
+            name: "",
             introduction: "",
             about: "",
             country: "",
@@ -213,7 +213,7 @@ const EditProfile = () => {
 
                         <FormField
                             control={form.control}
-                            name="fullName"
+                            name="name"
                             render={({ field }) => (
                                 <FormItem aria-required>
                                     <FormLabel>Full Name</FormLabel>
@@ -230,7 +230,7 @@ const EditProfile = () => {
                             name="introduction"
                             render={({ field }) => (
                                 <FormItem >
-                                    <FormLabel>Email address</FormLabel>
+                                    <FormLabel>Introduction</FormLabel>
                                     <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
                                         <Input placeholder="Write a short tagline about yourself..." {...field} />
                                     </FormControl>
@@ -307,8 +307,8 @@ const EditProfile = () => {
 
                             <div className='flex flex-wrap gap-1'>
                                 {
-                                    form.watch('softwareSkills').map((item) => (
-                                        <Button variant="outline" type='button' className='px-2 py-1 text-xs h-6 mr-1 select-none'>{item}</Button>
+                                    form.watch('softwareSkills').map((item, index) => (
+                                        <Button key={index} variant="outline" type='button' className='px-2 py-1 text-xs h-6 mr-1 select-none'>{item}</Button>
                                     ))
                                 }
                             </div>
@@ -334,8 +334,8 @@ const EditProfile = () => {
 
                             <div className='flex flex-wrap gap-1'>
                                 {
-                                    form.watch('specializedIn').map((item) => (
-                                        <Button variant="outline" type='button' className='px-2 py-1 text-xs h-6 mr-1 select-none'>{item}</Button>
+                                    form.watch('specializedIn').map((item, index) => (
+                                        <Button key={index} variant="outline" type='button' className='px-2 py-1 text-xs h-6 mr-1 select-none'>{item}</Button>
                                     ))
                                 }
                             </div>

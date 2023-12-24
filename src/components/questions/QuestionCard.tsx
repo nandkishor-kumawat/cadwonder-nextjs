@@ -10,9 +10,8 @@ import {
 import { color1, color2 } from '@/lib/data/colors';
 import Link from 'next/link';
 import { getFollowers, getUser } from '@/lib/functions';
-import type { InferGetStaticPropsType, GetStaticProps } from 'next'
 
-const QuestionCard = ({ question: data }) => {
+const QuestionCard = ({ question: data }:any) => {
 
     const {
         id,
@@ -26,23 +25,17 @@ const QuestionCard = ({ question: data }) => {
     } = data;
 
 
-
     const [followers, setFollowers] = React.useState([]);
-    const [user, setUser] = React.useState(null);
+    const [user, setUser] = React.useState<any>(null);
 
     React.useEffect(() => {
         if (data) {
             getUser(user_id).then(user => {
                 setUser(user)
             })
-        }
-    }, [])
-
-    React.useEffect(() => {
-        if (data) {
             getFollowers(user_id, setFollowers)
         }
-    }, [])
+    }, [data, user_id])
 
     return (
         <Card className='my-2 py-2' style={{ backgroundColor: color2 }}>

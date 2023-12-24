@@ -20,9 +20,10 @@ import PasswordInput from "@/components/form/PasswordInput";
 import { SelectWithSearch } from "@/components/form/SelectWithSearch";
 import countries from "@/lib/data/countries";
 import roles from "@/lib/data/roles";
+import { useState } from "react";
 
 const formSchema = z.object({
-  fullName: z.string().min(3, {
+  name: z.string().min(3, {
     message: "Please enter your full name.",
   }),
   email: z.string().email({
@@ -31,10 +32,14 @@ const formSchema = z.object({
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
-  confirmPassword: z.string().min(8),
-  country: z.string(),
+  confirmPassword: z.string(),
+  country: z.string().refine(value => countries.includes(value), {
+    message: "Select a country",
+  }),
   college: z.string().optional(),
-  role: z.string(),
+  role: z.string().refine(value => roles.includes(value), {
+    message: "Select a role",
+  })
 }).refine(data => data.password === data.confirmPassword, {
   message: "Passwords do not match.",
   path: ["confirmPassword"],
@@ -47,7 +52,7 @@ export default function ProfileForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -57,17 +62,26 @@ export default function ProfileForm() {
     },
   })
 
+  const [isLoading, setIsLoading] = useState(false);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
 
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.table(values)
+    setIsLoading(true);
+    fetch('/api/auth/signup',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    }).then(res=>res.json()).then(data=>{
+      console.table(data.user);
+      if(data.error){
+        alert(data.error);
+      }
+      setIsLoading(false)
+    })
   }
 
-  // const handleSelect = (type: string, value: string) => {
-  //   form.setValue(type as keyof z.infer<typeof formSchema>, value);
-  //   console.log(type, value)
-  // };
 
   return (
     <div className="container max-w-md m-auto my-2">
@@ -76,7 +90,7 @@ export default function ProfileForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
             control={form.control}
-            name="fullName"
+            name="name"
             render={({ field }) => (
               <FormItem aria-required>
                 <FormLabel>Full Name</FormLabel>
@@ -110,7 +124,7 @@ export default function ProfileForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
-                <PasswordInput {...field} />
+                <PasswordInput {...field} ref={field.ref} />
                 <FormMessage />
               </FormItem>
             )}
@@ -123,7 +137,7 @@ export default function ProfileForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
-                <PasswordInput {...field} />
+                <PasswordInput {...field} ref={field.ref} />
                 <FormMessage />
               </FormItem>
             )}

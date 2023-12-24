@@ -38,17 +38,15 @@ export function SelectWithSearch({ data, type, onSelect, defaultValue }: SelectW
         value: item.toLowerCase()
     }))
 
+   
 
     const handleSelect = (currentValue: string) => {
         // setValue(currentValue === value ? "" : currentValue)
-        setValue(currentValue)
+        setValue(currentValue);
+        const selected = data.find((item) => item.toLowerCase() === currentValue.toLowerCase()) ?? "";
+        onSelect(selected);
         setOpen(false);
     }
-
-    React.useEffect(() => {
-        const selected = data.find((item) => item.toLowerCase() === value.toLowerCase()) ?? ""
-        onSelect(selected);
-    }, [value, type]);
 
 
     return (

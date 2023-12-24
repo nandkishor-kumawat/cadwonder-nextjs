@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -18,6 +17,10 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useState } from "react";
 import PasswordInput from "@/components/form/PasswordInput";
+import { FcGoogle } from "react-icons/fc";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import Spinner from "@/components/loaders/Spinner";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -30,8 +33,6 @@ const formSchema = z.object({
 
 export default function ProfileForm() {
 
-
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,10 +41,45 @@ export default function ProfileForm() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+
+  const { data: session } = useSession();
+  console.log(session)
+
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams?.get("callbackUrl") ?? '/';
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { email, password } = values
+    setIsLoading(true)
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+      callbackUrl
+    })
+
+    setIsLoading(false);
+    console.log(res?.error)
+    if (res?.error) {
+      setErrorMessage("Invalid credentials");
+      setTimeout(() => setErrorMessage(""), 2000);
+    } else {
+      // router.push(callbackUrl);
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+
+    const res = await signIn("google", {
+      redirect: false,
+      // callbackUrl
+    })
+
+    console.log(res)
+
   }
 
   return (
@@ -60,37 +96,51 @@ export default function ProfileForm() {
                 <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
                   <Input type="email" placeholder="Enter your email" {...field} />
                 </FormControl>
-                {/* <FormDescription>
-                  This is your public display name.
-                </FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <PasswordInput {...field} />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="mt-3">
-            <Button type="submit" className="w-full bg-orange-500 text-lg mt-3 hover:bg-orange-600">Submit</Button>
+
+          <div className="my-2">
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <PasswordInput {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="text-right mt-2">
+              <Link href="/forgot-password">Forgot your password?</Link>
+            </div>
           </div>
+
+          <div className="mt-2">
+            {errorMessage && <p className="text-center text-lg text-red-500">{errorMessage}</p>}
+          </div>
+
+          <div className="">
+            <Button type="submit" disabled={isLoading} className="w-full bg-orange-500 text-lg tracking-wider disabled:bg-orange-400 hover:bg-orange-600">
+              {isLoading && <Spinner className='w-5 h-5 mr-2' />} Login
+            </Button>
+          </div>
+
         </form>
       </Form>
       <div className="my-2">
-        <div>
-          <Link href="/forgot-password">Forgot your password?</Link>
-        </div>
+
         <div>
           <Link href="/signup">Don&apos;t have an account? </Link>
         </div>
-
+      </div>
+      <div className="my-4">
+        <Button type="button" className="w-full text-lg mt-3 bg-slate-50 hover:bg-slate-100 text-black py-5" onClick={handleGoogleSignIn}>
+          <FcGoogle className="mx-2" size={24} />
+          <p className="font-medium">Sign In with Google</p>
+        </Button>
       </div>
     </div>
   )

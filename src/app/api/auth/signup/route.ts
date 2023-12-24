@@ -1,14 +1,20 @@
 import { auth, db } from '@/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
-    const { email, password, name } = await request.json();
-    
-    if (!email || !password || !name) {
-        return NextResponse.json({ message: 'Email, password and name are required' });
+    const { name,
+        email,
+        password,
+        country,
+        college,
+        role } = await request.json();
+
+
+    if (!name || !email || !password || !country || !role) {
+        return NextResponse.json({ error: 'Email, password and name are required' });
     }
 
     try {
@@ -16,21 +22,27 @@ export async function POST(request: Request) {
         const user = userCredential.user;
 
         const userDetails = {
-            id: user.uid,
-            email,
+            uid: user.uid,
             name,
+            email,
+            country,
+            college,
+            role,
+            createdAt: new Date().toISOString(),
         }
 
+        // await addDoc(collection(db, "users"), userDetails);
         await setDoc(doc(db, "users", user.uid), userDetails);
+
 
         return NextResponse.json({
             message: "User created successfully",
-            data: userDetails,
+            user: userDetails,
         });
 
-    } catch (error: any ) {
+    } catch (error: any) {
         if (error.code === 'auth/email-already-in-use') {
-            return NextResponse.json({ message: 'Email already exists, try to login' });
+            return NextResponse.json({ error: 'Email already exists, try to login' });
         }
         NextResponse.json({ error: error.message });
     }

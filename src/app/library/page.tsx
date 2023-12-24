@@ -9,8 +9,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 function ModelList() {
-  const [models, setModels] = useState([])
-  const [allModels, setAllModels] = useState(null);
+  const [models, setModels] = useState<any[]>([])
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -19,13 +18,11 @@ function ModelList() {
     const q = query(collection(db, "models"), orderBy('createdAt', 'desc'));
     getDocs(q).then(snapshot => {
       // console.log(snapshot.docs.length)
-      let d = []
+      let d = [] as any[];
       snapshot.forEach((doc) => {
         d.push({ id: doc.id, ...doc.data() })
       });
-
       setModels(d);
-      setAllModels(d);
       setLoading(false);
     });
   }, [])

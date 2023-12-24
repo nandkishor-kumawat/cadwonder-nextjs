@@ -1,0 +1,27 @@
+import { color2 } from '@/lib/data/colors'
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import Link from 'next/link'
+
+export default function UserCard({ user }) {
+
+    return (
+        <Card className='my-2 py-2 px-4' style={{ backgroundColor: color2 }}>
+            <Link href={`/users/${user.id}`}>
+            <CardHeader className='border-b py-1 px-2 flex-row items-center justify-between'>
+                <CardTitle className='text-lg'>{user.name}</CardTitle>
+            </CardHeader>
+
+            <CardContent className='flex flex-col p-2 gap-1 text-sm'>
+                <div className='flex gap-2'>
+                    <p>{user.role}</p>
+                </div>
+                <div>
+                    <p className='text-xs'>{user.country}</p>
+                </div>
+
+            </CardContent>
+            </Link>
+        </Card>
+    )
+}
