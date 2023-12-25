@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/card"
 import { color1, color2 } from '@/lib/data/colors';
 import Link from 'next/link';
-import { getFollowers, getUser } from '@/lib/functions';
 
-const QuestionCard = ({ question: data }:any) => {
+
+const QuestionCard = async ({ question: data }: any) => {
 
     const {
         id,
@@ -25,17 +25,10 @@ const QuestionCard = ({ question: data }:any) => {
     } = data;
 
 
-    const [followers, setFollowers] = React.useState([]);
-    const [user, setUser] = React.useState<any>(null);
 
-    React.useEffect(() => {
-        if (data) {
-            getUser(user_id).then(user => {
-                setUser(user)
-            })
-            getFollowers(user_id, setFollowers)
-        }
-    }, [data, user_id])
+    const { user } = await fetch('http://localhost:3001/api/users/' + user_id).then(res => res.json());
+    const { followers } = await fetch('http://localhost:3001/api/users/' + user_id + '/followers').then(res => res.json());
+
 
     return (
         <Card className='my-2 py-2' style={{ backgroundColor: color2 }}>
@@ -46,7 +39,7 @@ const QuestionCard = ({ question: data }:any) => {
                         <p className='sm:text-base text-sm'>Answers</p>
                     </div>
                     <div className="hidden flex-col items-center md:flex">
-                        <p  className='sm:text-base text-sm' style={{ color: color1 }}>{views}</p>
+                        <p className='sm:text-base text-sm' style={{ color: color1 }}>{views}</p>
                         <p className='sm:text-base text-sm'>Views</p>
                     </div>
                     <div className="hidden flex-col items-center sm:flex">

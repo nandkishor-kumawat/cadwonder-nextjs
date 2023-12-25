@@ -65,7 +65,7 @@ function NewModal() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Modal Name</FormLabel>
-                  <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                  <FormControl>
                     <Input placeholder="Enter modal name" {...field} />
                   </FormControl>
                   <FormMessage />
@@ -78,7 +78,7 @@ function NewModal() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
-                  <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                  <FormControl>
                     <Textarea placeholder="Enter description" {...field} rows={5}/>
                   </FormControl>
                   <FormMessage />
@@ -92,7 +92,7 @@ function NewModal() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Categories ({field.value.length}/3)</FormLabel>
-                  <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                  <FormControl>
                     <BoxModel data={categories} max={3} selectedItems={field.value} handleSave={field.onChange} />
                   </FormControl>
                   <FormMessage />

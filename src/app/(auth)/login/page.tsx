@@ -93,7 +93,7 @@ export default function ProfileForm() {
             render={({ field }) => (
               <FormItem >
                 <FormLabel>Email address</FormLabel>
-                <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                <FormControl>
                   <Input type="email" placeholder="Enter your email" {...field} />
                 </FormControl>
                 <FormMessage />

@@ -1,29 +1,24 @@
-"use client"
 import SearchBar from '@/components/form/SearchBar';
 import QuestionCard from '@/components/questions/QuestionCard';
+import Questions from '@/components/questions/question-list';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { db } from '@/firebase';
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
-import React from 'react'
+import React, { Suspense } from 'react'
 
-function QuestionList() {
-  const [allQuestions, setAllQuestions] = React.useState<any[]>([]);
-  React.useEffect(() => {
-    const q = query(collection(db, 'questions'), orderBy('createdAt', 'desc'));
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: {
+    query?: string;
+    page?: string;
+  };
+}) {
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-        let d = [] as any[]
-        snapshot.forEach((doc) => {
-            d.push({ id: doc.id, ...doc.data() })
-        })
-        setAllQuestions(d);
-    });
-    return () => unsubscribe()
-}, []);
 
-console.log(JSON.stringify(allQuestions[0], null, 2))
+  const data = await fetch(`http://localhost:3001/api/questions?query=${searchParams?.query ?? ""}`).then(res => res.json())
+
+  const { questions } = data;
 
   return (
     <div className="container max-w-3xl mx-auto px-2">
@@ -32,13 +27,11 @@ console.log(JSON.stringify(allQuestions[0], null, 2))
       </Link>
 
       <SearchBar />
-
-      {
-        allQuestions.map((question, index) => <QuestionCard question={question} key={index} />)
-      }
+      
+      <Suspense fallback={<Skeleton className="w-full h-[100px] rounded" />}>
+        <Questions questions={questions}/>
+      </Suspense>
 
     </div>
   )
 }
-
-export default QuestionList

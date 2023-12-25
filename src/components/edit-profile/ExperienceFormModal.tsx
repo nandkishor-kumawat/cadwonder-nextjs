@@ -78,7 +78,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Company</FormLabel>
-                                        <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                        <FormControl>
                                             <Input placeholder="Ex: Siemens PLM Software" {...field} />
                                         </FormControl>
                                         <FormMessage />
@@ -93,7 +93,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Position</FormLabel>
-                                        <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                        <FormControl>
                                             <Input placeholder="Ex: Mechanical Engineer" {...field} />
                                         </FormControl>
                                         <FormMessage />
@@ -111,7 +111,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
                                         render={({ field }) => (
                                             <FormItem className='sm:w-1/2'>
                                                 {/* <FormLabel>From Year</FormLabel> */}
-                                                <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                                <FormControl>
                                                     <SelectWithSearch data={YEARS} type='Year' defaultValue={field.value} onSelect={field.onChange} />
                                                 </FormControl>
                                                 <FormMessage />
@@ -125,7 +125,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
                                         render={({ field }) => (
                                             <FormItem className='sm:w-1/2'>
                                                 {/* <FormLabel>To Year</FormLabel> */}
-                                                <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                                <FormControl>
                                                     <SelectWithSearch data={MONTHS} type='Month' defaultValue={field.value} onSelect={field.onChange} />
                                                 </FormControl>
                                                 <FormMessage />
@@ -145,7 +145,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
                                         render={({ field }) => (
                                             <FormItem className='sm:w-1/2'>
                                                 {/* <FormLabel>From Year</FormLabel> */}
-                                                <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                                <FormControl>
                                                     <SelectWithSearch data={YEARS} type='Year' defaultValue={field.value} onSelect={field.onChange} />
                                                 </FormControl>
                                                 <FormMessage />
@@ -159,7 +159,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
                                         render={({ field }) => (
                                             <FormItem className='sm:w-1/2'>
                                                 {/* <FormLabel>To Year</FormLabel> */}
-                                                <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                                <FormControl>
                                                     <SelectWithSearch data={MONTHS} type='Month' defaultValue={field.value} onSelect={field.onChange} />
                                                 </FormControl>
                                                 <FormMessage />
@@ -176,7 +176,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Description</FormLabel>
-                                        <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                        <FormControl>
                                             <Textarea rows={4} placeholder="description" {...field} />
                                         </FormControl>
                                         <FormMessage />

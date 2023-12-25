@@ -15,7 +15,12 @@ export const GET = async (request: Request, { params }: { params: { slug: string
     const question = questions[0];
 
     if (!question) return new Response(JSON.stringify({ error: "Question not found" }), { status: 404 })
-    const user = await getUser(question.user_id as string);
+    const user = await getUser(question.user_id as string) as {
+        username: string;
+        profilePicture: string;
+        name: string;
+        id: string
+    };
 
     // if (!user) return new Response(JSON.stringify({ error: "User not found" }), { status: 404 })
     // return new Response(JSON.stringify({ user }), { status: 200 })

@@ -1,10 +1,11 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Link from 'next/link'
+import { Comment } from '@/lib/types'
 
-export default async function CommentItem({ comment }) {
+export default async function CommentItem({ comment }: { comment: Comment }) {
 
-    const { user } = await fetch(`http://localhost:3001/api/users/getuser/${comment.user_id}`).then(res => res.json())
+    const { user } = await fetch(`http://localhost:3001/api/users/${comment.user_id}`).then(res => res.json())
 
     return (
         <div className="flex border-t border-gray-400 py-1 mt-2">

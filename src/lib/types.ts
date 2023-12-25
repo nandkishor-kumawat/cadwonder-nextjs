@@ -20,6 +20,7 @@ export interface Education {
 export interface User {
     id: string
     name: string
+    username: string
     email: string
     introduction: string
     about: string
@@ -44,12 +45,29 @@ export interface Question {
     user_id: string
     question: string
     slug: string
-    description: string
+    description?: string
     category: string
-    software: string
-    fileDetails: FileDetails[]
+    software?: string
+    fileDetails?: FileDetails[]
     views: number
     answer_count: number
-    tags: string[]
+    tags?: string[]
+    createdAt: number
+}
+
+export interface Answer {
+    id: string
+    user_id: string
+    question_id: string
+    answer: string
+    fileDetails: FileDetails[]
+    createdAt: number
+}
+
+export interface Comment {
+    id: string
+    association: string
+    comment: string
+    user_id: string
     createdAt: number
 }

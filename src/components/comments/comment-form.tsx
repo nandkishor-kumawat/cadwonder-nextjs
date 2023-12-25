@@ -4,54 +4,71 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useSession } from 'next-auth/react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { z } from 'zod'
+import { useFormStatus } from 'react-dom'
+import { postComment } from '@/app/questions/[slug]/action'
+import { Skeleton } from '../ui/skeleton'
 
 
-export default function CommentForm({commentTo}: any) {
+function Submit() {
+    const { pending } = useFormStatus()
+    return (
+        <Button
+            disabled={pending}
+            aria-disabled={pending}
+            type='submit'
+            className="rounded-none py-1 h-8 bg-orange-400 hover:bg-orange-500"
+        >{pending ? 'Posting...' : 'Post'}</Button>
+    )
+}
+
+interface Props {
+    association: string
+}
+
+
+export default function CommentForm({ association }: Props) {
     const { data: session } = useSession();
-    const user = session?.user;
+    const user = session?.user as {
+        id: string;
+        name: string;
+        profilePicture: string;
+    };
+    const ref = React.useRef<HTMLFormElement>(null);
 
-    const [comment, setComment] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
 
-    const submitForm = async () => {
-        console.table({ comment, commentTo, user_id: user?.id })
-        return
-        setIsLoading(true);
-
-        const res = await fetch('http://localhost:3001/api/comments/postcomment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ comment, commentTo, user_id: user.id })
-        })
-
-        if (res.ok) {
-            setComment('');
-            setIsLoading(false);
-            console.log('first')
-        }
-    }
+    if (!user) return (
+        <div className="flex gap-2 items-center">
+            <Skeleton className='w-7 h-7 rounded-full' />
+            <Skeleton className='flex-grow h-7' />
+            <Skeleton className='w-20 h-7' />
+        </div>
+    );
 
     return (
-        <div className="my-3 py-3 h-8 box-border">
-            <div className="flex gap-2 items-center">
-                <Avatar className='w-7 h-7'>
-                    <AvatarImage src={user?.profilePicture} />
-                    <AvatarFallback>{user?.name[0]?.toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <Input
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    placeholder="Write a comment"
-                    className="h-8 rounded-none w-full py-1 focus-visible:ring-cyan-400 focus-visible:ring-offset-0" />
-                <Button 
-                disabled={isLoading || !comment}
-                onClick={submitForm}
-                className="rounded-none py-1 h-8 bg-orange-400 hover:bg-orange-500"
-                >Submit</Button>
+        <form
+            ref={ref}
+            action={async (formData) => {
+                await postComment(formData);
+                ref.current?.reset();
+            }}>
+
+            <input type="hidden" name="association" value={association} />
+            <input type="hidden" name="user_id" value={user?.id} />
+            <div className="my-3">
+                <div className="flex gap-2 items-center">
+                    <Avatar className='w-7 h-7'>
+                        <AvatarImage src={user?.profilePicture} />
+                        <AvatarFallback>{user?.name[0]?.toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                    <Input
+                        name='comment'
+                        placeholder="Write a comment"
+                        className="h-8 rounded-none w-full py-1"
+                        required
+                    />
+                    <Submit />
+                </div>
             </div>
-        </div>
+        </form>
     )
 }

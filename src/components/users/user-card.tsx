@@ -2,12 +2,13 @@ import { color2 } from '@/lib/data/colors'
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import Link from 'next/link'
+import { User } from '@/lib/types'
 
-export default function UserCard({ user }) {
+export default function UserCard({ user }:{ user: User }) {
 
     return (
         <Card className='my-2 py-2 px-4' style={{ backgroundColor: color2 }}>
-            <Link href={`/users/${user.id}`}>
+            <Link href={`/${user.username}`}>
             <CardHeader className='border-b py-1 px-2 flex-row items-center justify-between'>
                 <CardTitle className='text-lg'>{user.name}</CardTitle>
             </CardHeader>

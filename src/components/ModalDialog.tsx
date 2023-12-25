@@ -41,7 +41,7 @@ export default function ModalDialog({ children, edit, title }: ModalDialogProps)
                     </DialogDescription> */}
                 </DialogHeader>
 
-                <ScrollArea className="max-h-[450px]">
+                <ScrollArea className="max-h-[450px] px-3">
                     {children}
                 </ScrollArea>
 

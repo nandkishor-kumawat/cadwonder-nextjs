@@ -45,7 +45,7 @@ const BoxModel = ({ data, max, selectedItems, handleSave }: BoxModelProps) => {
     };
 
     return (
-        <div className='flex flex-wrap gap-2 px-3'>
+        <div className='flex flex-wrap gap-2'>
             {data.map((skill) => renderSkillCheckbox(skill))}
         </div>
     )

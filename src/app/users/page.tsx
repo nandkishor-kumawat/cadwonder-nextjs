@@ -1,4 +1,5 @@
 import UserCard from '@/components/users/user-card';
+import { User } from '@/lib/types';
 import React from 'react'
 
 export default async function Users() {
@@ -7,7 +8,9 @@ export default async function Users() {
 
   if(data.error) return <div>Error</div>;
 
-  const { users } = data;
+  const { users } = data as {
+    users : User[]
+  };
 
   return (
       <div className="container max-w-2xl">

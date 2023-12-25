@@ -217,7 +217,7 @@ const EditProfile = () => {
                             render={({ field }) => (
                                 <FormItem aria-required>
                                     <FormLabel>Full Name</FormLabel>
-                                    <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                    <FormControl>
                                         <Input type="text" placeholder="Enter your full Name" {...field} />
                                     </FormControl>
                                     <FormMessage />
@@ -231,7 +231,7 @@ const EditProfile = () => {
                             render={({ field }) => (
                                 <FormItem >
                                     <FormLabel>Introduction</FormLabel>
-                                    <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                    <FormControl>
                                         <Input placeholder="Write a short tagline about yourself..." {...field} />
                                     </FormControl>
                                     <FormMessage />
@@ -245,7 +245,7 @@ const EditProfile = () => {
                             render={({ field }) => (
                                 <FormItem >
                                     <FormLabel>About</FormLabel>
-                                    <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                    <FormControl>
                                         <Textarea placeholder="Describe yourself, your interests and specialities..." rows={5} {...field} />
                                     </FormControl>
                                     <FormMessage />
@@ -276,7 +276,7 @@ const EditProfile = () => {
                                 render={({ field }) => (
                                     <FormItem className='sm:w-1/2'>
                                         <FormLabel>City</FormLabel>
-                                        <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                        <FormControl>
                                             <Input placeholder="Enter your city" {...field} />
                                         </FormControl>
                                         <FormMessage />
@@ -294,7 +294,7 @@ const EditProfile = () => {
                                 render={({ field }) => (
                                     <FormItem className='flex items-center justify-between'>
                                         <FormLabel>Software Skills</FormLabel>
-                                        <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                        <FormControl>
                                             <ModalDialog edit={!!field.value.length} title='Edit Software Skills'>
                                                 <BoxModel data={SoftwareSkills} max={4} selectedItems={field.value} handleSave={field.onChange} />
                                             </ModalDialog>
@@ -321,7 +321,7 @@ const EditProfile = () => {
                                 render={({ field }) => (
                                     <FormItem className='flex items-center justify-between'>
                                         <FormLabel>Specialized In</FormLabel>
-                                        <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                                        <FormControl>
                                             <ModalDialog edit={!!field.value.length} title='Edit specializations'>
                                                 <BoxModel data={SpecializedIn} max={4} selectedItems={field.value} handleSave={field.onChange} />
                                             </ModalDialog>

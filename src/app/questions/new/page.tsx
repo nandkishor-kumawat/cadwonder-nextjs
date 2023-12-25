@@ -15,13 +15,14 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import Link from "next/link"
-import PasswordInput from "@/components/form/PasswordInput";
 import { SelectWithSearch } from "@/components/form/SelectWithSearch";
 import { bg1 } from "@/lib/data/colors";
 import { Textarea } from "@/components/ui/textarea";
 import categories, { category1 } from "@/lib/data/category";
 import SoftwareSkills from "@/lib/data/SoftwareSkills";
+import TagsInput from "@/components/ui/tags-input";
+import React from "react";
+
 
 const formSchema = z.object({
   question: z.string().min(10, {
@@ -29,7 +30,8 @@ const formSchema = z.object({
   }),
   description: z.string().optional(),
   category: z.string().refine(data => categories.includes(data), { message: "Please select a valid category" }),
-  software: z.string()
+  software: z.string(),
+  tags: z.array(z.string()).max(6, { message: "You can only add up to 6 tags" })
 }).refine(data => {
   if (category1.includes(data.category)) {
     return SoftwareSkills.includes(data.software);
@@ -40,9 +42,8 @@ const formSchema = z.object({
   path: ["software"],
 })
 
-export default function NewQuestion() {
 
-  // form.setValue("location", language.value)
+export default function NewQuestion() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,21 +52,16 @@ export default function NewQuestion() {
       description: "",
       category: "",
       software: "",
+      tags: []
     }
   })
 
-
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if(!form.formState.isValid){
+    if (!form.formState.isValid) {
       return
     }
     console.table(values)
   }
-
-  const handleSelect = (type: string, value: string) => {
-    form.setValue(type as keyof z.infer<typeof formSchema>, value);
-    console.log(type, value)
-  };
 
 
   return (
@@ -79,9 +75,8 @@ export default function NewQuestion() {
 
             <Button
               className="bg-orange-500 text-lg hover:bg-orange-600"
-            // onClick={uploadFiles}
-
-            >Publish Question</Button>
+              onClick={form.handleSubmit(onSubmit)}
+            >Publish</Button>
           </div>
         </div>
       </div>
@@ -94,20 +89,21 @@ export default function NewQuestion() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Question</FormLabel>
-                  <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                  <FormControl>
                     <Input type="text" placeholder="Example: How do I export to an STL?" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            
             <FormField
               control={form.control}
               name="description"
               render={({ field }) => (
                 <FormItem >
                   <FormLabel>Description</FormLabel>
-                  <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                  <FormControl>
                     <Textarea placeholder="Describe your question" rows={5} {...field} />
                   </FormControl>
                   <FormMessage />
@@ -143,9 +139,23 @@ export default function NewQuestion() {
               )}
             />}
 
-            <div className="mt-3">
+            <FormField
+              control={form.control}
+              name="tags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tags (up to 6, separate with commas)</FormLabel>
+                  <FormControl>
+                    <TagsInput tags={field.value} setTags={field.onChange} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* <div className="mt-3">
               <Button type="submit" className="text-lg w-full bg-orange-500 mt-3 hover:bg-orange-600">Submit</Button>
-            </div>
+            </div> */}
           </form>
         </Form>
 

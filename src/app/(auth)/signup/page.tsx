@@ -94,7 +94,7 @@ export default function ProfileForm() {
             render={({ field }) => (
               <FormItem aria-required>
                 <FormLabel>Full Name</FormLabel>
-                <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                <FormControl>
                   <Input type="text" placeholder="Enter your full Name" {...field} />
                 </FormControl>
                 {/* <FormDescription>
@@ -110,7 +110,7 @@ export default function ProfileForm() {
             render={({ field }) => (
               <FormItem >
                 <FormLabel>Email address</FormLabel>
-                <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                <FormControl>
                   <Input type="email" placeholder="Enter your email" {...field} />
                 </FormControl>
                 <FormMessage />
@@ -163,7 +163,7 @@ export default function ProfileForm() {
             render={({ field }) => (
               <FormItem >
                 <FormLabel>College</FormLabel>
-                <FormControl className="focus:ring focus-visible:ring-cyan-400 focus-visible:ring-offset-0">
+                <FormControl>
                   <Input type="text" placeholder="Enter your college" {...field} />
                 </FormControl>
                 <FormMessage />
