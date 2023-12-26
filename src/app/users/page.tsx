@@ -1,5 +1,5 @@
 import UserCard from '@/components/users/user-card';
-import { User } from '@/lib/types';
+import { User } from '@/lib/types/types';
 import React from 'react'
 
 export default async function Users() {

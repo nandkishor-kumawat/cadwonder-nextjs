@@ -2,7 +2,7 @@ import Link from 'next/link'
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { color2 } from '@/lib/data/colors'
-import { Education } from '@/lib/types'
+import { Education } from '@/lib/types/types'
 import EducationFormModal from './EducationFormModal'
 
 interface EducationDetailCardProps {

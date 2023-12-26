@@ -1,6 +1,6 @@
 import React from 'react'
 import QuestionCard from './QuestionCard'
-import { Question } from '@/lib/types'
+import { Question } from '@/lib/types/types'
 
 export default function Questions({questions}:{questions: Question[]}) {
   

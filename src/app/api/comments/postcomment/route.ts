@@ -3,16 +3,16 @@ import { addDoc, collection } from 'firebase/firestore';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
-    const { comment, association,user_id } = await request.json();
+    const { comment, association_id,user_id } = await request.json();
 
-    if (!comment || !association || !user_id) {
+    if (!comment || !association_id || !user_id) {
         return NextResponse.json({ message: 'Email and password are required' });
     }
 
     try {
         const docRef = await addDoc(collection(db, 'comments'), {
             comment,
-            association,
+            association_id,
             user_id,
             createdAt: Date.now(),
           });

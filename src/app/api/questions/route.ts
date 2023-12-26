@@ -1,6 +1,6 @@
 import { db } from "@/firebase";
 import { getRegex } from "@/lib/functions";
-import { Question } from "@/lib/types";
+import { Question } from "@/lib/types/types";
 import { collection, getDocs, orderBy, query as que } from "firebase/firestore";
 
 export const GET = async (request: Request) => {

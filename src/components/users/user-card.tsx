@@ -2,7 +2,7 @@ import { color2 } from '@/lib/data/colors'
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import Link from 'next/link'
-import { User } from '@/lib/types'
+import { User } from '@/lib/types/types'
 
 export default function UserCard({ user }:{ user: User }) {
 

@@ -6,7 +6,6 @@ import EducationFormModal from '@/components/edit-profile/EducationFormModal'
 import ExperienceDetailCard from '@/components/edit-profile/ExperienceDetailCard'
 import ExperienceFormModal from '@/components/edit-profile/ExperienceFormModal'
 import { SelectWithSearch } from '@/components/form/SelectWithSearch'
-import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
     Form,
@@ -27,7 +26,30 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { FaLink, FaLinkedin, FaTwitterSquare, FaInstagram, } from 'react-icons/fa';
+import { InputElement, InputGroup, InputItem } from '@/components/ui/input-group'
+import Link from 'next/link'
 
+
+
+const SocialLinks = [
+    {
+        placeholder: "Twitter URL",
+        Icon: FaTwitterSquare
+    },
+    {
+        placeholder: "LinkedIn URL",
+        Icon: FaLinkedin
+    },
+    {
+        placeholder: "Instagram URL",
+        Icon: FaInstagram
+    },
+    {
+        placeholder: "Your Website Link",
+        Icon: FaLink
+    }
+]
 
 const formSchema = z.object({
     name: z.string().min(3, {
@@ -62,8 +84,20 @@ const EditProfile = () => {
     })
 
     const [profilePic, setProfilePic] = useState(new Blob());
+    const socialsRef = React.useRef<React.RefObject<HTMLInputElement>[]>([]);
 
     function onSubmit(values: z.infer<typeof formSchema>) {
+
+        const [twitter, linkedin, instagram, website] = socialsRef.current.map(ref => ref.current?.value);
+        const socials = {
+            twitter,
+            linkedin,
+            instagram,
+            website
+        }
+
+        console.table(socials)
+
         if (!form.formState.isValid) {
             return
         }
@@ -169,6 +203,7 @@ const EditProfile = () => {
     ])
 
 
+
     return (
         <>
             <div className="fixed top-0 left-0 right-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
@@ -176,10 +211,10 @@ const EditProfile = () => {
                     <p className="text-white text-lg">Edit Profile</p>
 
                     <div className="flex items-center gap-2">
-                        <Button className="bg-transparent">Cancel</Button>
+                        <Link href="./" className='text-white py-2 px-3' >Cancel</Link>
 
                         <Button className="bg-orange-500 hover:bg-orange-600"
-                        // onClick={uploadFiles}
+                            onClick={form.handleSubmit(onSubmit)}
                         >Update Profile</Button>
                     </div>
                 </div>
@@ -340,9 +375,6 @@ const EditProfile = () => {
                                 }
                             </div>
                         </div>
-
-
-
                     </form>
                 </Form>
 
@@ -369,6 +401,25 @@ const EditProfile = () => {
                         ))}
                     </div>
                 </div>
+
+
+                <div className="social my-2">
+                    <h1>Links on the web</h1>
+                    <div>
+                        {SocialLinks.map(({ placeholder, Icon }, index) => {
+                            socialsRef.current[index] = React.createRef<HTMLInputElement>();
+                            return (
+                                <InputGroup key={placeholder} className='my-3'>
+                                    <InputElement>
+                                        <Icon />
+                                    </InputElement>
+                                    <InputItem ref={socialsRef.current[index]} placeholder={placeholder} type="text" className='pr-2' />
+                                </InputGroup>
+                            )
+                        })}
+                    </div>
+                </div>
+
             </div>
         </>
     )

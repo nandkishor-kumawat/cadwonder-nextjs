@@ -4,7 +4,7 @@ import CommentForm from '../comments/comment-form'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Link from 'next/link'
 import { getServerSession } from 'next-auth'
-import { Answer } from '@/lib/types'
+import { Answer } from '@/lib/types/types'
 import { Button } from '../ui/button'
 
 interface Props {
@@ -44,7 +44,7 @@ export default async function AnswerItem({ answer }: Props) {
 
           <div className="deails my-1">
             <p>{answer.answer}</p>
-            {answer.fileDetails?.map((file: any) => (
+            {answer.file_details?.map((file: any) => (
               <a
                 href={file.url}
                 target="_blank"
@@ -61,7 +61,7 @@ export default async function AnswerItem({ answer }: Props) {
             <CommentList id={answer.id} />
 
             {session &&
-              <CommentForm association={answer.id} />
+              <CommentForm association_id={answer.id} />
             }
           </div>
         </div>

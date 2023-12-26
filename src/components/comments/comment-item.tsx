@@ -1,7 +1,7 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Link from 'next/link'
-import { Comment } from '@/lib/types'
+import { Comment } from '@/lib/types/types'
 
 export default async function CommentItem({ comment }: { comment: Comment }) {
 

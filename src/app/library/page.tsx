@@ -1,34 +1,27 @@
-"use client"
+import React, { Suspense } from 'react'
 import SearchBar from '@/components/form/SearchBar'
-import ModelItem from '@/components/model/ModelItem'
+import ModelList from '@/components/model/model-list'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { db } from '@/firebase'
-import { collection, getDocs, orderBy, query } from 'firebase/firestore'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Model } from '@/lib/types/types'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
 
-function ModelList() {
-  const [models, setModels] = useState<any[]>([])
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: {
+    query?: string;
+    page?: string;
+  };
+}) {
 
+  const data = await fetch(`http://localhost:3001/api/models?query=${searchParams?.query ?? ""}`).then(res => res.json())
 
-  useEffect(() => {
-    const q = query(collection(db, "models"), orderBy('createdAt', 'desc'));
-    getDocs(q).then(snapshot => {
-      // console.log(snapshot.docs.length)
-      let d = [] as any[];
-      snapshot.forEach((doc) => {
-        d.push({ id: doc.id, ...doc.data() })
-      });
-      setModels(d);
-      setLoading(false);
-    });
-  }, [])
+  const { models } = data;
+
 
   return (
-    <div className="container max-w-4xl mx-auto px-2">
+    <div className="container max-w-4xl mx-auto px-2 mb-2">
       <Link href={'/library/new'}>
         <Button className="text-lg my-4 bg-orange-400 hover:bg-orange-500">New Model</Button>
       </Link>
@@ -39,13 +32,16 @@ function ModelList() {
       <div className="grid gap-2" style={{
         gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
       }}>
-
-        {models.map((data, index) => <ModelItem key={index} data={data} />)}
-
+        <Suspense fallback={<>
+          <Skeleton className="w-full h-[300px] rounded" />
+          <Skeleton className="w-full h-[300px] rounded" />
+          <Skeleton className="w-full h-[300px] rounded" />
+        </>}>
+          {/* <Skeleton className="w-full h-[300px] rounded" /> */}
+          <ModelList models={models} />
+        </Suspense>
       </div>
 
     </div>
   )
 }
-
-export default ModelList

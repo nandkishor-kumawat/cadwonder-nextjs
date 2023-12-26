@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import categories from '@/lib/data/category'
 import { bg1 } from '@/lib/data/colors'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -34,7 +35,7 @@ function NewModal() {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if(!form.formState.isValid){
+    if (!form.formState.isValid) {
       return
     }
     console.table(values)
@@ -47,12 +48,11 @@ function NewModal() {
           <p className="text-white text-lg">New Model</p>
 
           <div className="flex items-center gap-2">
-            <Button className="bg-transparent text-md">Cancel</Button>
-
-            {/* <Button className="bg-orange-500 text-lg hover:bg-orange-600"
-            // onClick={uploadFiles}
-
-            >Publish Model</Button> */}
+            <Link href="./" className='text-white py-2 px-3' >Cancel</Link>
+            <Button
+              className="bg-orange-500 text-lg hover:bg-orange-600"
+              onClick={form.handleSubmit(onSubmit)}
+            >Publish</Button>
           </div>
         </div>
       </div>
@@ -79,14 +79,14 @@ function NewModal() {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Enter description" {...field} rows={5}/>
+                    <Textarea placeholder="Enter description" {...field} rows={5} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-          <FormField
+            <FormField
               control={form.control}
               name="categories"
               render={({ field }) => (
@@ -98,13 +98,13 @@ function NewModal() {
                   <FormMessage />
                 </FormItem>
               )}
-            />  
+            />
 
 
 
-            <div className="mt-3">
+            {/* <div className="mt-3">
               <Button type="submit" className="bg-orange-500 text-lg hover:bg-orange-600">Publish Model</Button>
-            </div>
+            </div> */}
 
           </form>
         </Form>

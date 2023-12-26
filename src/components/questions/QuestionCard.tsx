@@ -16,7 +16,6 @@ const QuestionCard = async ({ question: data }: any) => {
     const {
         id,
         question,
-        answer_count,
         views,
         user_id,
         tags,
@@ -28,6 +27,7 @@ const QuestionCard = async ({ question: data }: any) => {
 
     const { user } = await fetch('http://localhost:3001/api/users/' + user_id).then(res => res.json());
     const { followers } = await fetch('http://localhost:3001/api/users/' + user_id + '/followers').then(res => res.json());
+    const {answer_count} = await fetch(`http://localhost:3001/api/answers/${id}`).then(res => res.json());
 
 
     return (
@@ -35,11 +35,11 @@ const QuestionCard = async ({ question: data }: any) => {
             <CardContent className='flex p-2 gap-3'>
                 <div className="flex items-center justify-center gap-3 p-2">
                     <div className="flex flex-col items-center">
-                        <p className='sm:text-base text-sm' style={{ color: color1 }}>{answer_count}</p>
+                        <p className='sm:text-base text-sm' style={{ color: color1 }}>{answer_count ?? 0}</p>
                         <p className='sm:text-base text-sm'>Answers</p>
                     </div>
                     <div className="hidden flex-col items-center md:flex">
-                        <p className='sm:text-base text-sm' style={{ color: color1 }}>{views}</p>
+                        <p className='sm:text-base text-sm' style={{ color: color1 }}>{views ?? 0}</p>
                         <p className='sm:text-base text-sm'>Views</p>
                     </div>
                     <div className="hidden flex-col items-center sm:flex">
@@ -51,13 +51,13 @@ const QuestionCard = async ({ question: data }: any) => {
                 <div className="flex flex-1">
                     <div className='flex flex-col flex-1'>
                         <Link href={`/questions/${slug}`}>
-                            <h2 className='sm:text-xl font-bold text-lg'>{question}</h2>
+                            <h2 className='sm:text-xl font-bold text-lg'>{question.length > 50 ? question.slice(0, 50) + '...' : question}</h2>
                         </Link>
                         <p className='pt-1'>By
                             <Link href={`/${user?.username}`} > <span className='text-orange-500'>{user?.name}</span></Link>
                         </p>
                         <p className='sm:text-base text-sm'>Category: {category}</p>
-                        <p className='sm:text-base text-sm'>Tags: {tags.join(',')}</p>
+                        {!!tags.length && <p className='sm:text-base text-sm'>Tags: {tags.join(', ')}</p>}
                     </div>
                 </div>
 

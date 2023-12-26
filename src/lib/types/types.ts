@@ -48,7 +48,7 @@ export interface Question {
     description?: string
     category: string
     software?: string
-    fileDetails?: FileDetails[]
+    file_details?: FileDetails[]
     views: number
     answer_count: number
     tags?: string[]
@@ -60,14 +60,26 @@ export interface Answer {
     user_id: string
     question_id: string
     answer: string
-    fileDetails: FileDetails[]
+    file_details: FileDetails[]
     createdAt: number
 }
 
 export interface Comment {
     id: string
-    association: string
+    association_id: string
     comment: string
     user_id: string
+    createdAt: number
+}
+
+
+export interface Model {
+    id: string
+    user_id: string
+    modelName: string
+    description: string
+    slug: string
+    category: string[]
+    file_details: FileDetails[]
     createdAt: number
 }

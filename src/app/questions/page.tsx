@@ -23,7 +23,7 @@ export default async function Page({
   return (
     <div className="container max-w-3xl mx-auto px-2">
       <Link href={'/questions/new'}>
-        <Button className="text-lg my-4 bg-orange-400 hover:bg-orange-500">New Question</Button>
+        <Button className="text-lg my-4 bg-orange-400 hover:bg-orange-500">Ask Question</Button>
       </Link>
 
       <SearchBar />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
     Card,
     CardContent,
@@ -15,7 +15,7 @@ import { AiFillLike } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
 
 
-const ModelItem = ({ data }: any) => {
+const ModelItem = async ({ model: data }: any) => {
 
     const {
         id,
@@ -25,14 +25,11 @@ const ModelItem = ({ data }: any) => {
         modelName
     } = data;
 
-    const [followers, setFollowers] = useState([])
-    const [isHovered, setIsHovered] = useState(false);
+    const { user } = await fetch('http://localhost:3001/api/users/' + user_id).then(res => res.json());
+    const { followers } = await fetch('http://localhost:3001/api/users/' + user_id + '/followers').then(res => res.json());
 
     return (
-        <div className="rounded border bg-card text-card-foreground shadow-sm"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
+        <div className="rounded border bg-card text-card-foreground shadow-sm group">
             <div className="flex flex-col space-y-1.5 p-1">
                 <Link href={`/library/${slug}`}>
                     <div className='w-full relative'>
@@ -42,20 +39,21 @@ const ModelItem = ({ data }: any) => {
                             className='rounded w-full object-contain'
                             height={200}
                             width={300}
+                            placeholder='empty'
                         />
 
-                        <div style={{background:'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 100%)'}} className={`absolute bottom-0 px-2 opacity-${isHovered ? 100 : 0} transition-opacity ease-linear duration-300 flex justify-end w-full`}>
+                        <div style={{ background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 100%)' }} className={`absolute bottom-0 px-2 group-hover:opacity-100 opacity-0 transition-opacity ease-linear duration-500 flex justify-end w-full`}>
                             <p className='text-xs text-white'>{new Date(data.createdAt).toLocaleString()}</p>
                         </div>
 
                     </div>
                 </Link>
             </div>
-            <div className="px-4 pb-2 pt-0 flex flex-col gap-1">
+            <div className="px-4 pb-2 pt-0 flex flex-col gap-1 a">
                 <div className="flex justify-between">
                     <div>
                         <Link href={`/library/${slug}`}>{modelName.length > 25 ? `${modelName.slice(0, 25)}...` : modelName}</Link>
-                        <Link href={`/${'user.username'}`}><p className="text-sm text-muted-foreground">By {'user.name'}</p></Link>
+                        <Link href={`/${user.username}`}><p className="text-sm text-muted-foreground">By {user.name}</p></Link>
                     </div>
                     <div>
                         <Avatar className='w-[32px] h-[32px]'>

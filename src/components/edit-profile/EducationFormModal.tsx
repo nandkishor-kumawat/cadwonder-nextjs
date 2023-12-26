@@ -20,7 +20,7 @@ import { FaEdit } from 'react-icons/fa'
 import { AiOutlineAppstoreAdd } from 'react-icons/ai'
 import { Button } from '../ui/button'
 import { ScrollArea } from '../ui/scroll-area'
-import { Education } from '@/lib/types'
+import { Education } from '@/lib/types/types'
 import { YEARS } from '@/lib/data/time-period'
 
 const formSchema = z.object({

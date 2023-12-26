@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { IoMdClose } from "react-icons/io";
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -21,7 +21,16 @@ import { Textarea } from "@/components/ui/textarea";
 import categories, { category1 } from "@/lib/data/category";
 import SoftwareSkills from "@/lib/data/SoftwareSkills";
 import TagsInput from "@/components/ui/tags-input";
-import React from "react";
+import React, { use, useState } from "react";
+import Link from "next/link";
+import { Progress } from "@/components/ui/progress";
+import { uploadFileWithProgress } from "@/firebase/functions";
+import { FileDetails } from "@/lib/types/types";
+import { useSession } from "next-auth/react";
+import { createSlug } from "@/lib/functions";
+import { redirect, useRouter } from "next/navigation";
+import { revalidateTag } from "next/cache";
+import UploadFileCard from "@/components/upload-file-card";
 
 
 const formSchema = z.object({
@@ -31,7 +40,8 @@ const formSchema = z.object({
   description: z.string().optional(),
   category: z.string().refine(data => categories.includes(data), { message: "Please select a valid category" }),
   software: z.string(),
-  tags: z.array(z.string()).max(6, { message: "You can only add up to 6 tags" })
+  tags: z.array(z.string()).max(6, { message: "You can only add up to 6 tags" }),
+  files: z.array(z.instanceof(File)),
 }).refine(data => {
   if (category1.includes(data.category)) {
     return SoftwareSkills.includes(data.software);
@@ -52,26 +62,88 @@ export default function NewQuestion() {
       description: "",
       category: "",
       software: "",
-      tags: []
+      tags: [],
+      files: []
     }
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!form.formState.isValid) {
-      return
+  const { data: session } = useSession();
+
+
+  const [uploadProgress, setUploadProgress] = useState<Record<number, number>>({})
+
+  const handleRemoveFile = (fileToRemove: File) => {
+    const updatedFiles = form.getValues('files').filter(file => file !== fileToRemove);
+    form.setValue('files', updatedFiles);
+  };
+
+  const handleUploadFiles = async (files: File[]) => {
+    if (!files) return;
+
+    const uploadPromises = files.map((file, index) => {
+      return uploadFileWithProgress(file, index, (progressIndex, progress) => {
+        setUploadProgress((prevProgress) => ({
+          ...prevProgress,
+          [progressIndex]: progress,
+        }));
+      });
+    });
+
+    try {
+      const results = await Promise.all(uploadPromises);
+      console.log(JSON.stringify(results, null, 2));
+      return results;
+    } catch (error) {
+      console.error('Error uploading files:', error);
     }
-    console.table(values)
+  };
+
+  const router = useRouter();
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { files, ...other } = values;
+
+    let file_details = [] as FileDetails[];
+
+    if (files.length) {
+      file_details = await handleUploadFiles(files) as FileDetails[];
+    }
+
+    const slug = createSlug(other.question);
+
+    const body = {
+      ...other,
+      file_details,
+      slug,
+      user_id: session?.user?.id,
+    }
+
+    try {
+      const response = await fetch('http://localhost:3001/api/questions/new', {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json());
+
+      // revalidateTag(`/questions`);
+      router.push(`/questions/${response.slug}`);
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 
   return (
     <>
-      <div className="absolute top-0 left-0 right-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
+      <div className="fixed top-0 left-0 right-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
         <div className="flex items-center justify-between py-1">
           <p className="text-white text-lg">New Question</p>
 
           <div className="flex items-center gap-2">
-            <Button className="bg-transparent text-md">Cancel</Button>
+            <Link href="./" className='text-white py-2 px-3' >Cancel</Link>
 
             <Button
               className="bg-orange-500 text-lg hover:bg-orange-600"
@@ -96,7 +168,7 @@ export default function NewQuestion() {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="description"
@@ -153,12 +225,47 @@ export default function NewQuestion() {
               )}
             />
 
+            <div className="files">
+              <p className="my-2">Attachments</p>
+              <FormField
+                control={form.control}
+                name="files"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base cursor-pointer">Attach a file</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept=".gif,.jpg,.jpeg,.png"
+                        multiple
+                        className="hidden"
+                        onChange={(e) => {
+                          form.setValue("files", Array.from(e.target.files || []));
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+
             {/* <div className="mt-3">
               <Button type="submit" className="text-lg w-full bg-orange-500 mt-3 hover:bg-orange-600">Submit</Button>
             </div> */}
           </form>
         </Form>
 
+        <div className="flex flex-col gap-2 my-2">
+          {form.watch('files').map((file, index) => (
+            <UploadFileCard key={index} file={file} index={index} handleRemoveFile={handleRemoveFile} progress={uploadProgress[index]} />
+          ))}
+        </div>
+
       </div>
+
+
+
     </>)
 }

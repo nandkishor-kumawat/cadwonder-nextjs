@@ -76,7 +76,7 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
 
             <div className="deails my-1">
               <p>{question.description}</p>
-              {question.fileDetails.map((file: any) => (
+              {question.file_details?.map((file: any) => (
                 <a
                   href={file.url}
                   target="_blank"
@@ -93,7 +93,7 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
               <CommentList id={question.id} />
 
               {session &&
-                <CommentForm association={question.id} />
+                <CommentForm association_id={question.id} />
               }
             </div>
           </div>
@@ -110,7 +110,7 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
             {session ? (
               <>
                 <h1 className='text-2xl font-bold'>Drop your answer</h1>
-                <AnswerForm question_id={question.id} slug={question.slug} />
+                <AnswerForm question_id={question.id} />
               </>
             ):
               <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500">Login to answer</Button>

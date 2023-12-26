@@ -14,7 +14,7 @@ export const getData = async ({ coll, key, value }) => {
     querySnapshot.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() })
     });
-    
+
     return data
 }
 
@@ -46,7 +46,7 @@ export const getFollowers = (user_id, callback, type = "following") => {
 
 export const getUser = async id => {
     const user = await getDoc(doc(db, "users", id))
-    if(!user.exists()) return null;
+    if (!user.exists()) return null;
     return { id: user.id, ...user.data() }
 }
 
@@ -55,4 +55,16 @@ export const getRegex = (search) => {
     const regexPattern = `^(?=.*${searchWords}).*`;
     const regex = new RegExp(regexPattern, 'i');
     return regex;
+}
+
+
+export const createSlug = (text) => {
+    const slug = text
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/[\s_-]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+    return slug + '-' + Date.now().toString().slice(-2);
 }

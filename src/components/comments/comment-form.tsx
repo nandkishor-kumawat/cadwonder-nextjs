@@ -22,11 +22,11 @@ function Submit() {
 }
 
 interface Props {
-    association: string
+    association_id: string
 }
 
 
-export default function CommentForm({ association }: Props) {
+export default function CommentForm({ association_id }: Props) {
     const { data: session } = useSession();
     const user = session?.user as {
         id: string;
@@ -52,7 +52,7 @@ export default function CommentForm({ association }: Props) {
                 ref.current?.reset();
             }}>
 
-            <input type="hidden" name="association" value={association} />
+            <input type="hidden" name="association_id" value={association_id} />
             <input type="hidden" name="user_id" value={user?.id} />
             <div className="my-3">
                 <div className="flex gap-2 items-center">
