@@ -1,16 +1,17 @@
 import { auth, db } from '@/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { addDoc, collection, doc, serverTimestamp, setDoc } from 'firebase/firestore';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import {  doc, setDoc } from 'firebase/firestore';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
-    const { name,
+    const {
+        name,
         email,
         password,
         country,
         college,
-        role } = await request.json();
+        role
+    } = await request.json();
 
 
     if (!name || !email || !password || !country || !role) {

@@ -5,12 +5,10 @@ import CommentList from '@/components/comments/comment-list';
 import Link from 'next/link';
 import CommentForm from '@/components/comments/comment-form';
 import { getServerSession } from 'next-auth';
-import { revalidatePath } from 'next/cache';
-import { addDoc, collection, doc } from 'firebase/firestore';
-import { db } from '@/firebase';
 import AnswerForm from '@/components/answers/answer-form';
 import AnswerItem from '@/components/answers/answer-item';
 import { Button } from '@/components/ui/button';
+import { FileDetails } from '@/lib/types/types';
 
 type Props = {
   params: { slug: string };
@@ -76,7 +74,7 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
 
             <div className="deails my-1">
               <p>{question.description}</p>
-              {question.file_details?.map((file: any) => (
+              {question.file_details?.map((file: FileDetails) => (
                 <a
                   href={file.url}
                   target="_blank"

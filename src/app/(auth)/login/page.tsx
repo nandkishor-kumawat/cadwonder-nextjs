@@ -67,7 +67,7 @@ export default function ProfileForm() {
       setErrorMessage("Invalid credentials");
       setTimeout(() => setErrorMessage(""), 2000);
     } else {
-      // router.push(callbackUrl);
+      router.push(callbackUrl);
     }
   }
 

@@ -55,12 +55,10 @@ export const options: NextAuthOptions = {
 
                 if (user) {
                     return {
+                        ...user,
                         id: user?.uid,
-                        name: user.name,
-                        email: user.email,
                     }
                 }
-
 
                 return null;
             },
@@ -68,12 +66,14 @@ export const options: NextAuthOptions = {
 
     ],
     callbacks: {
-        async jwt({ token, user }) {
-            if (user) token.id = user.id
-            return token
+        async jwt({ token, user, trigger, session }) {
+            // if (trigger === "update") {
+            //     return { ...token, ...session.user };
+            // }
+            return { ...token, ...user };
         },
-        async session({ session, token }:any) {
-            if (session?.user) session.user.id = token.id
+        async session({ session, token }) {
+            session.user = token as any;
             return session
         }
     },

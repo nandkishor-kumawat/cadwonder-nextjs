@@ -1,4 +1,5 @@
 export interface Experience {
+    id?: string
     company: string
     position: string
     startYear: string
@@ -9,6 +10,7 @@ export interface Experience {
 }
 
 export interface Education {
+    id?: string
     school: string
     field: string
     degree: string
