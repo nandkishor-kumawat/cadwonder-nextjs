@@ -1,5 +1,6 @@
+"use client"
 import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
+import React, { startTransition, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
@@ -22,6 +23,10 @@ import { Button } from '../ui/button'
 import { ScrollArea } from '../ui/scroll-area'
 import { Experience } from '@/lib/types/types'
 import { MONTHS, YEARS } from '@/lib/data/time-period'
+import { addExperience, deleteExperience } from '@/app/dashboard/action'
+import { useSession } from 'next-auth/react'
+import { useFormStatus } from 'react-dom'
+import Overlay from '../loaders/overlay'
 
 const formSchema = z.object({
     company: z.string().min(1, 'Required'),
@@ -39,24 +44,65 @@ interface ExperienceFormProps {
 }
 
 const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
+    const { data: session } = useSession();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            company: data?.company ?? "",
-            position: data?.position ?? "",
-            startYear: data?.startYear ?? "",
-            startMonth: data?.startMonth ?? "",
-            endYear: data?.endYear ?? "",
-            endMonth: data?.endMonth ?? "",
-            description: data?.description ?? "",
+            company: "",
+            position: "",
+            startYear: "",
+            startMonth: "",
+            endYear: "",
+            endMonth: "",
+            description: "",
         }
-    })
+    });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    useEffect(() => {
+        if (data) {
+            form.reset({
+                company: data?.company,
+                position: data?.position,
+                startYear: data?.startYear,
+                startMonth: data?.startMonth,
+                endYear: data?.endYear,
+                endMonth: data?.endMonth,
+                description: data?.description
+            })
+        }
+    }, [data])
+
+    const [isLoading, setIsLoading] = React.useState(false);
+    const closeBtnRef = React.useRef<HTMLButtonElement>(null);
+
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         //save to db
-        console.table(values)
+        console.table(values);
+        setIsLoading(true);
+        startTransition(() => {
+            addExperience({ id: data?.id, ...values }, session?.user)
+                .then((data) => {
+                    form.reset()
+                    console.table(data);
+                    setIsLoading(false);
+                    closeBtnRef.current?.click();
+                });
+        })
     }
+
+
+    const DeleteButton = () => {
+        const { pending } = useFormStatus()
+        return (
+            <>
+                {pending && <Overlay />}
+                <Button variant="destructive" disabled={pending}>{pending ? "Deleting..." : "Delete"}</Button>
+            </>
+        )
+    }
+
+
 
     return (
         <Dialog>
@@ -65,6 +111,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-md">
+                {isLoading && <Overlay />}
                 <DialogHeader>
                     <DialogTitle>Add Experience</DialogTitle>
                 </DialogHeader>
@@ -189,12 +236,22 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
 
                 <DialogFooter className="sm:justify-end px-3">
                     <div className="flex gap-2">
-                        {data && <Button variant="destructive">Delete</Button>}
-                        <Button type="submit" variant="secondary" onClick={form.handleSubmit(onSubmit)}>Save</Button>
+                        {data &&
+                            <form action={deleteExperience}>
+                                <Input type="hidden" name='id' value={data.id} />
+                                <Input type="hidden" name='user_id' value={session?.user?.id} />
+                                <DeleteButton />
+                            </form>}
+
+                        <Button
+                            type="submit"
+                            variant="outline"
+                            disabled={isLoading}
+                            onClick={form.handleSubmit(onSubmit)}>{isLoading ? 'Saving...' : 'Save'}</Button>
                     </div>
 
                     <DialogClose asChild>
-                        <Button type="reset" variant="outline" onClick={() => form.reset()} >
+                        <Button ref={closeBtnRef} type="reset" variant="outline" onClick={() => form.reset()} >
                             Close
                         </Button>
                     </DialogClose>

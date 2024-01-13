@@ -28,17 +28,19 @@ interface SelectWithSearchProps {
     defaultValue?: string
 }
 
-export function SelectWithSearch({ data, type, onSelect, defaultValue }: SelectWithSearchProps) {
+export function SelectWithSearch({ data, type, onSelect, defaultValue = "" }: SelectWithSearchProps) {
+
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState(defaultValue?.toLowerCase() ?? "")
+    const [value, setValue] = React.useState(defaultValue.toLowerCase());
 
 
     const filteredData = data.map((item) => ({
         label: item,
         value: item.toLowerCase()
-    }))
+    }));
 
-   
+    const selected = filteredData.find((framework) => [defaultValue.toLowerCase(), value].includes(framework.value))
+
 
     const handleSelect = (currentValue: string) => {
         // setValue(currentValue === value ? "" : currentValue)
@@ -58,8 +60,8 @@ export function SelectWithSearch({ data, type, onSelect, defaultValue }: SelectW
                     aria-expanded={open}
                     className="w-full justify-between"
                 >
-                    {value
-                        ? filteredData.find((framework) => framework.value === value)?.label
+                    {selected
+                        ? selected?.label
                         : `Select ${type}...`}
                     <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>

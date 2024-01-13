@@ -67,7 +67,7 @@ export default function AnswerForm({ question_id }: Props) {
 
     try {
       const results = await Promise.all(uploadPromises);
-      console.log(JSON.stringify(results, null, 2));
+
       return results;
     } catch (error) {
       console.error('Error uploading files:', error);

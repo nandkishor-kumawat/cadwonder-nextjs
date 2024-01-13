@@ -13,7 +13,7 @@ export const uploadFiles = async (files: File[]) => {
     return fileDetails;
 }
 
-export const uploadFileWithProgress = async (file:File, index:number, onProgress: (progressIndex: number, progress: number) => void) => {
+export const uploadFileWithProgress = async (file: File, index: number, onProgress: (progressIndex: number, progress: number) => void) => {
     return new Promise((resolve, reject) => {
         const storageRef = ref(storage, `files/files/${file.name}-${Date.now()}`);
         const uploadTask = uploadBytesResumable(storageRef, file);
@@ -40,3 +40,10 @@ export const uploadFileWithProgress = async (file:File, index:number, onProgress
         );
     });
 };
+
+export const uploadFile = async (file: File | Blob, filename: string) => {
+    const storageRef = ref(storage, `files/${filename}`);
+    const snapshot = await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(snapshot.ref);
+    return { name: filename, url };
+}

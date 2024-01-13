@@ -29,7 +29,7 @@ export default async function Page({
       <SearchBar />
 
 
-      <div className="grid gap-2" style={{
+      <div className="grid gap-2 pb-2" style={{
         gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
       }}>
         <Suspense fallback={<>

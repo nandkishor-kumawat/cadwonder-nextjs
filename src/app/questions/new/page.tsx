@@ -31,6 +31,8 @@ import { createSlug } from "@/lib/functions";
 import { redirect, useRouter } from "next/navigation";
 import { revalidateTag } from "next/cache";
 import UploadFileCard from "@/components/upload-file-card";
+import Overlay from "@/components/loaders/overlay";
+import { postModel } from "@/app/library/action";
 
 
 const formSchema = z.object({
@@ -68,6 +70,7 @@ export default function NewQuestion() {
   })
 
   const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const [uploadProgress, setUploadProgress] = useState<Record<number, number>>({})
@@ -91,7 +94,7 @@ export default function NewQuestion() {
 
     try {
       const results = await Promise.all(uploadPromises);
-      console.log(JSON.stringify(results, null, 2));
+
       return results;
     } catch (error) {
       console.error('Error uploading files:', error);
@@ -102,7 +105,7 @@ export default function NewQuestion() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { files, ...other } = values;
-
+    setIsLoading(true);
     let file_details = [] as FileDetails[];
 
     if (files.length) {
@@ -127,18 +130,23 @@ export default function NewQuestion() {
         }
       }).then(res => res.json());
 
-      // revalidateTag(`/questions`);
-      router.push(`/questions/${response.slug}`);
+      await postModel('/questions');
 
+      router.replace(`/questions/${response.slug}`,{
+        scroll: true
+      });
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsLoading(false);
     }
   }
 
 
   return (
-    <>
-      <div className="fixed top-0 left-0 right-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
+    <div className="absolute top-0 left-0 right-0 bottom-0 z-50">
+      {isLoading && <Overlay />}
+      <div className="top-0 left-0 right-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
         <div className="flex items-center justify-between py-1">
           <p className="text-white text-lg">New Question</p>
 
@@ -148,7 +156,7 @@ export default function NewQuestion() {
             <Button
               className="bg-orange-500 text-lg hover:bg-orange-600"
               onClick={form.handleSubmit(onSubmit)}
-            >Publish</Button>
+            >{isLoading?'Publishing...':'Publish'}</Button>
           </div>
         </div>
       </div>
@@ -267,5 +275,5 @@ export default function NewQuestion() {
 
 
 
-    </>)
+    </div>)
 }

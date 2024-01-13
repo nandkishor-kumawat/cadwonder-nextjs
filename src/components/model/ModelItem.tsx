@@ -50,10 +50,10 @@ const ModelItem = async ({ model: data }: any) => {
                 </Link>
             </div>
             <div className="px-4 pb-2 pt-0 flex flex-col gap-1 a">
-                <div className="flex justify-between">
+                <div className="flex justify-between gap-2">
                     <div>
-                        <Link href={`/library/${slug}`}>{modelName.length > 25 ? `${modelName.slice(0, 25)}...` : modelName}</Link>
-                        <Link href={`/${user.username}`}><p className="text-sm text-muted-foreground">By {user.name}</p></Link>
+                        <Link href={`/library/${slug}`} className='break-all'>{modelName.length > 25 ? `${modelName.slice(0, 25)}...` : modelName}</Link>
+                        <Link href={`/${user?.username}`}><p className="text-sm text-muted-foreground">By {user?.name}</p></Link>
                     </div>
                     <div>
                         <Avatar className='w-[32px] h-[32px]'>
@@ -65,21 +65,21 @@ const ModelItem = async ({ model: data }: any) => {
                 <div className="flex items-center gap-2">
                     <button className='flex items-center gap-1 py-2 rounded-md px-3 hover:bg-[#EDF2F7] active:scale-90 active:bg-[#E2E8F0] transition-all ease-out duration-300'>
                         <AiFillLike />
-                        <p>{followers.length}</p>
+                        <p>{followers?.length}</p>
                     </button>
                     <button className='flex items-center gap-1 py-2 rounded-md px-3 hover:bg-[#EDF2F7] active:scale-90 active:bg-[#E2E8F0] transition-all ease-out duration-300'>
                         <MdDownload />
-                        <p>{followers.length}</p>
+                        <p>{followers?.length}</p>
                     </button>
                     <button className='flex items-center gap-1 py-2 rounded-md px-3 hover:bg-[#EDF2F7] active:scale-90 active:bg-[#E2E8F0] transition-all ease-out duration-300'>
                         <BiCommentDetail />
-                        <p>{followers.length}</p>
+                        <p>{followers?.length}</p>
                     </button>
                 </div>
                 <hr className='border-gray-200' />
             </div>
             <div className="flex items-center p-4 pt-0">
-                <p className='text-sm'>{category.join(', ')}</p>
+                <p className='text-xs'>{category?.join(', ')}</p>
             </div>
         </div>
 

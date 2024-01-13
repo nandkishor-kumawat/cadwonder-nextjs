@@ -17,7 +17,6 @@ export const postComment = async (formData: FormData) => {
     createdAt: Date.now(),
   });
 
-  console.log(docRef.id)
   revalidateTag(`/questions`);
 }
 
@@ -35,6 +34,5 @@ export const postAnswer = async (formData: FormData) => {
     createdAt: Date.now(),
   });
 
-  console.log({ ...rowData, id: docRef.id })
   revalidatePath('/questions', 'page');
 }

@@ -6,7 +6,7 @@ import { collection, getDocs, orderBy, query as que } from "firebase/firestore";
 export const GET = async (request: Request) => {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('query');
-    console.log(query)
+
 
     const q = que(collection(db, 'models'), orderBy('createdAt', 'desc'));
     const models = [] as Model[];

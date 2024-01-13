@@ -23,29 +23,44 @@ import SpecializedIn from '@/lib/data/SpecializedIn'
 import { bg1 } from '@/lib/data/colors'
 import countries from '@/lib/data/countries'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useState } from 'react'
+import React, { startTransition, use, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { FaLink, FaLinkedin, FaTwitterSquare, FaInstagram, } from 'react-icons/fa';
 import { InputElement, InputGroup, InputItem } from '@/components/ui/input-group'
 import Link from 'next/link'
+import { collection, doc, onSnapshot, query } from 'firebase/firestore'
+import { db } from '@/firebase'
+import { useSession } from 'next-auth/react'
+import ProfilePicUploader from '@/components/edit-profile/profile-pic-uploader'
+import { updateProfile } from '../action'
+import { useRouter } from 'next/navigation'
+import Overlay from '@/components/loaders/overlay'
 
+interface linkType {
+    name: string
+    placeholder: string
+    Icon: any
+}
 
-
-const SocialLinks = [
+const SocialLinks: linkType[] = [
     {
+        name: 'twitter',
         placeholder: "Twitter URL",
         Icon: FaTwitterSquare
     },
     {
+        name: 'linkedin',
         placeholder: "LinkedIn URL",
         Icon: FaLinkedin
     },
     {
+        name: 'instagram',
         placeholder: "Instagram URL",
         Icon: FaInstagram
     },
     {
+        name: 'website',
         placeholder: "Your Website Link",
         Icon: FaLink
     }
@@ -70,10 +85,12 @@ const formSchema = z.object({
 })
 
 const EditProfile = () => {
+    const { data: session } = useSession();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
+            name: session?.user?.name ?? "",
             introduction: "",
             about: "",
             country: "",
@@ -81,14 +98,28 @@ const EditProfile = () => {
             softwareSkills: [],
             specializedIn: [],
         }
-    })
+    });
 
-    const [profilePic, setProfilePic] = useState(new Blob());
+    const user_id = session?.user?.id as string;
+    
+    const [profilePic, setProfilePic] = useState('');
+    const [coverPic, setCoverPic] = useState('');
+
     const socialsRef = React.useRef<React.RefObject<HTMLInputElement>[]>([]);
+    const [socialLinks, setSocialLinks] = useState<Record<string, string>>({
+        twitter: '',
+        linkedin: '',
+        instagram: '',
+        website: ''
+    });
+
+
+    const [isLoading, setIsLoading] = useState(false);
 
     function onSubmit(values: z.infer<typeof formSchema>) {
 
         const [twitter, linkedin, instagram, website] = socialsRef.current.map(ref => ref.current?.value);
+
         const socials = {
             twitter,
             linkedin,
@@ -96,117 +127,82 @@ const EditProfile = () => {
             website
         }
 
-        console.table(socials)
-
-        if (!form.formState.isValid) {
-            return
-        }
-        console.table(values)
+        setIsLoading(true);
+        startTransition(() => {
+            updateProfile({
+                ...values,
+                socials,
+            }, user_id).then(() => {
+                setIsLoading(false);
+            })
+        })
     }
 
-    const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const dataURI = URL.createObjectURL(e.target.files![0])
-        const blob = await fetch(dataURI).then((res) => res.blob());
-        // setProfilePic(blob);
-        setProfilePic(e.target.files![0]);
-    }
+    const [Experience, setExperience] = useState([]);
+    const [Education, setEducation] = useState([]);
 
-    const [Experience, setExperience] = useState([
-        {
-            "company": "ABC Corporation",
-            "position": "Software Engineer",
-            "startYear": "2020",
-            "startMonth": "January",
-            "endYear": "2022",
-            "endMonth": "December",
-            "description": "Developed and maintained software applications for the company."
-        },
-        {
-            "company": "XYZ Tech Solutions",
-            "position": "Data Analyst",
-            "startYear": "2019",
-            "startMonth": "June",
-            "endYear": "2021",
-            "endMonth": "November",
-            "description": "Analyzed and interpreted data to provide insights for business decision-making."
-        },
-        {
-            "company": "123 Marketing Agency",
-            "position": "Digital Marketing Specialist",
-            "startYear": "2018",
-            "startMonth": "March",
-            "endYear": "2020",
-            "endMonth": "September",
-            "description": "Executed digital marketing campaigns and optimized online presence."
-        },
-        {
-            "company": "Tech Innovators Inc.",
-            "position": "Product Manager",
-            "startYear": "2017",
-            "startMonth": "August",
-            "endYear": "2019",
-            "endMonth": "July",
-            "description": "Led cross-functional teams in the development and launch of innovative products."
-        },
-        {
-            "company": "Global Finance Group",
-            "position": "Financial Analyst",
-            "startYear": "2016",
-            "startMonth": "January",
-            "endYear": "2018",
-            "endMonth": "May",
-            "description": "Conducted financial analysis and prepared reports for investment decisions."
-        }
-    ])
+    useEffect(() => {
+        if (!user_id) return;
 
-    const [Education, setEducation] = useState([
-        {
-            "school": "University A",
-            "field": "Computer Science",
-            "degree": "Bachelor of Science",
-            "startYear": "2018",
-            "endYear": "2022",
-            "description": "Studied computer science with a focus on algorithms and software development."
-        },
-        {
-            "school": "College B",
-            "field": "Business Administration",
-            "degree": "Master of Business Administration",
-            "startYear": "2016",
-            "endYear": "2018",
-            "description": "Pursued an MBA with a specialization in strategic management and entrepreneurship."
-        },
-        {
-            "school": "High School C",
-            "field": "Science",
-            "degree": "High School Diploma",
-            "startYear": "2012",
-            "endYear": "2016",
-            "description": "Completed high school with a focus on science subjects and extracurricular activities."
-        },
-        {
-            "school": "Technical Institute D",
-            "field": "Electrical Engineering",
-            "degree": "Associate Degree",
-            "startYear": "2014",
-            "endYear": "2016",
-            "description": "Studied electrical engineering with hands-on experience in circuits and electronics."
-        },
-        {
-            "school": "Language School E",
-            "field": "Languages",
-            "degree": "Certificate in French",
-            "startYear": "2019",
-            "endYear": "2020",
-            "description": "Attended language school to obtain a certificate in French language proficiency."
-        }
-    ])
+        const q = query(collection(db, `users/${user_id}/workExperience`));
 
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            let d = [] as any;
+            snapshot.forEach((doc) => {
+                d.push({ id: doc.id, ...doc.data() })
+            })
+            setExperience(d);
+        });
+        return () => unsubscribe()
+    }, [user_id]);
+
+    useEffect(() => {
+        if (!user_id) return;
+
+        const q = query(collection(db, `users/${user_id}/Education`));
+
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            let d = [] as any;
+            snapshot.forEach((doc) => {
+                d.push({ id: doc.id, ...doc.data() })
+            })
+            setEducation(d);
+        });
+        return () => unsubscribe()
+    }, [user_id]);
+
+    useEffect(() => {
+        if (!user_id) return;
+
+        const docRef = doc(db, `users/${user_id}`);
+        const unsubscribe = onSnapshot(docRef, (doc) => {
+            const data = doc.data();
+            if (!data) return;
+            form.setValue('name', data.name);
+            form.setValue('introduction', data?.introduction);
+            form.setValue('about', data?.about);
+            form.setValue('country', data?.country);
+            form.setValue('city', data?.city);
+            form.setValue('softwareSkills', data?.softwareSkills ?? []);
+            form.setValue('specializedIn', data?.specializedIn ?? []);
+            setProfilePic(data?.profilePicture);
+            setCoverPic(data?.coverPicture);
+            setSocialLinks({
+                twitter: data?.socials?.twitter ?? '',
+                linkedin: data?.socials?.linkedin ?? '',
+                instagram: data?.socials?.instagram ?? '',
+                website: data?.socials?.website ?? ''
+            })
+        });
+        return () => unsubscribe()
+
+    }, [user_id]);
 
 
     return (
-        <>
-            <div className="fixed top-0 left-0 right-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
+        <div className="absolute top-0 left-0 right-0 bottom-0 z-50">
+            {isLoading && <Overlay />}
+            <div className="sticky top-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
                 <div className="flex items-center justify-between py-1">
                     <p className="text-white text-lg">Edit Profile</p>
 
@@ -215,7 +211,7 @@ const EditProfile = () => {
 
                         <Button className="bg-orange-500 hover:bg-orange-600"
                             onClick={form.handleSubmit(onSubmit)}
-                        >Update Profile</Button>
+                        >{isLoading ? "Updating..." : "Update Profile"}</Button>
                     </div>
                 </div>
             </div>
@@ -224,20 +220,12 @@ const EditProfile = () => {
 
             <div className="container max-w-3xl py-4">
 
-                <div className='flex items-center justify-center flex-col my-2'>
-
-                    {/* {profilePic && <Image  src={{uri:profilePic}} width={200} height={200} />} */}
-
-                    {/* <Avatar src={profilePic} /> */}
+                <div className='flex items-center justify-center flex-col mt-2'>
 
 
-                    <label htmlFor="avatar">Change Picture</label>
+                    <p>Profile Picture</p>
 
-                    <Input id="avatar" type="file" className='hidden' onChange={handleImageSelect} accept=".jpg,.jpeg,.png" />
-
-
-
-
+                    <ProfilePicUploader pic={profilePic} ratio={1} canvasWidth={150} type='profile' handleSave={setProfilePic} />
 
                 </div>
 
@@ -287,6 +275,12 @@ const EditProfile = () => {
                         />
 
 
+
+                        <div className="my-2">
+                            <p className="">Cover photo</p>
+                            <ProfilePicUploader pic={coverPic} handleSave={setCoverPic} />
+                        </div>
+
                         <div className="flex gap-5 flex-col sm:flex-row">
                             <FormField
                                 control={form.control}
@@ -295,7 +289,7 @@ const EditProfile = () => {
                                     <FormItem className='sm:w-1/2'>
                                         <FormLabel>Location</FormLabel>
                                         <FormControl>
-                                            <SelectWithSearch data={countries} type="country" onSelect={field.onChange} />
+                                            <SelectWithSearch data={countries} type="country" defaultValue={field.value.trim()} onSelect={field.onChange} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -404,14 +398,15 @@ const EditProfile = () => {
                 <div className="social my-2">
                     <h1>Links on the web</h1>
                     <div>
-                        {SocialLinks.map(({ placeholder, Icon }, index) => {
+                        {SocialLinks.map((data, index) => {
+                            const { Icon, name, placeholder } = data;
                             socialsRef.current[index] = React.createRef<HTMLInputElement>();
                             return (
                                 <InputGroup key={placeholder} className='my-3'>
                                     <InputElement>
                                         <Icon />
                                     </InputElement>
-                                    <InputItem ref={socialsRef.current[index]} placeholder={placeholder} type="text" className='pr-2' />
+                                    <InputItem defaultValue={socialLinks[name]} ref={socialsRef.current[index]} placeholder={placeholder} type="text" className='pr-2' />
                                 </InputGroup>
                             )
                         })}
@@ -419,7 +414,7 @@ const EditProfile = () => {
                 </div>
 
             </div>
-        </>
+        </div>
     )
 }
 

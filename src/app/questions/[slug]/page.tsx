@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Metadata } from 'next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import CommentList from '@/components/comments/comment-list';
@@ -9,6 +9,7 @@ import AnswerForm from '@/components/answers/answer-form';
 import AnswerItem from '@/components/answers/answer-item';
 import { Button } from '@/components/ui/button';
 import { FileDetails } from '@/lib/types/types';
+import DataInfo from '@/components/questions/data-info';
 
 type Props = {
   params: { slug: string };
@@ -39,7 +40,7 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
   if (data?.error) return <div>Error</div>
   if (!data?.question) return <div>Question not found</div>
 
-  const { question, user } = data;
+  const { question } = data;
 
   const { answers } = await fetch(`http://localhost:3001/api/answers`, {
     method: 'POST',
@@ -49,53 +50,13 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
     body: JSON.stringify({ question_id: question.id })
   }).then(res => res.json())
 
-
   return (
     <>
       <div className="container max-w-[46rem] py-2">
 
-        <div className='my-2'>
-          <h1 className='text-2xl font-bold'>{question.question}</h1>
-        </div>
 
-        <div className='flex gap-4 my-2'>
-          <div className='inline-flex self-start'>
-            <Avatar className='w-12 h-12'>
-              <AvatarImage src={user.profilePicture} />
-              <AvatarFallback>{user.name[0].toUpperCase()}</AvatarFallback>
-            </Avatar>
-          </div>
+        <DataInfo data={question} title={question.question} />
 
-          <div className='flex-1'>
-            <div className="info">
-              <Link href={`/users/${user.id}`} className='text-orange-400 font-semibold'>{user.name}</Link>
-              <p className='text-gray-400 text-sm'>{new Date(question.createdAt).toLocaleString()}</p>
-            </div>
-
-            <div className="deails my-1">
-              <p>{question.description}</p>
-              {question.file_details?.map((file: FileDetails) => (
-                <a
-                  href={file.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  key={file.name}
-                  className='px-4 py-2 bg-slate-200 rounded-md text-sm w-full inline-block mt-2'
-                >
-                  {file.name}
-                </a>
-              ))}
-            </div>
-
-            <div className='comments'>
-              <CommentList id={question.id} />
-
-              {session &&
-                <CommentForm association_id={question.id} />
-              }
-            </div>
-          </div>
-        </div>
 
         <div className="flex-flex-col gap-3">
           <div className="answers my-2 flex flex-col gap-2">
@@ -110,7 +71,7 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
                 <h1 className='text-2xl font-bold'>Drop your answer</h1>
                 <AnswerForm question_id={question.id} />
               </>
-            ):
+            ) :
               <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500">Login to answer</Button>
             }
           </div>

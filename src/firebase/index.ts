@@ -6,7 +6,7 @@ import 'firebase/firestore';
 import { getStorage } from "firebase/storage";
 import { getDatabase } from "firebase/database";
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyD9vltFxfAqbdHVZZKJQFp_4-D5iXAtWos",
   authDomain: "cadwonder-c86e5.firebaseapp.com",
   projectId: "cadwonder-c86e5",

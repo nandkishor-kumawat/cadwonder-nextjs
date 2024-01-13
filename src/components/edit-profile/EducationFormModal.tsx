@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
+import React, { startTransition, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
@@ -22,6 +22,10 @@ import { Button } from '../ui/button'
 import { ScrollArea } from '../ui/scroll-area'
 import { Education } from '@/lib/types/types'
 import { YEARS } from '@/lib/data/time-period'
+import { addEducation, deleteEducation } from '@/app/dashboard/action'
+import { useSession } from 'next-auth/react'
+import { useFormStatus } from 'react-dom'
+import Overlay from '../loaders/overlay'
 
 const formSchema = z.object({
     school: z.string().min(1, 'Required'),
@@ -36,24 +40,62 @@ interface EducationFormProps {
     data?: Education
 }
 
+
 const EducationFormModal = ({ data }: EducationFormProps) => {
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            school: data?.school ?? "",
-            field: data?.field ?? "",
-            degree: data?.degree ?? "",
-            startYear: data?.startYear ?? "",
-            endYear: data?.endYear ?? "",
-            description: data?.description ?? "",
+            school: "",
+            field: "",
+            degree: "",
+            startYear: "",
+            endYear: "",
+            description: "",
         }
-    })
+    });
+
+    useEffect(() => {
+        if (data) {
+            form.reset({
+                school: data?.school,
+                field: data?.field,
+                degree: data?.degree,
+                startYear: data?.startYear,
+                endYear: data?.endYear,
+                description: data?.description
+            })
+        }
+    }, [data])
+
+    const { data: session } = useSession();
+    const [isLoading, setIsLoading] = React.useState(false);
+    const closeBtnRef = React.useRef<HTMLButtonElement>(null);
 
     function onSubmit(values: z.infer<typeof formSchema>) {
         //save to db
-
         console.table(values)
+        setIsLoading(true);
+        startTransition(() => {
+            addEducation({ id: data?.id, ...values }, session?.user)
+                .then((data) => {
+                    form.reset()
+                    console.table(data);
+                    setIsLoading(false);
+                    closeBtnRef.current?.click();
+                });
+        })
+    }
+
+
+    const DeleteButton = () => {
+        const { pending } = useFormStatus()
+        return (
+            <>
+            {pending&& <Overlay />}
+             <Button variant="destructive" disabled={pending}>{pending ? "Deleting..." : "Delete"}</Button>
+            </>
+         )
     }
 
     return (
@@ -63,6 +105,7 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-md">
+                {isLoading && <Overlay />}
                 <DialogHeader>
                     <DialogTitle>Add Education</DialogTitle>
                 </DialogHeader>
@@ -122,7 +165,7 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
                                         <FormItem className='sm:w-1/2'>
                                             <FormLabel>From Year</FormLabel>
                                             <FormControl>
-                                            <SelectWithSearch data={YEARS} type='Year' defaultValue={field.value} onSelect={field.onChange} />
+                                                <SelectWithSearch data={YEARS} type='Year' defaultValue={field.value} onSelect={field.onChange} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -136,7 +179,7 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
                                         <FormItem className='sm:w-1/2'>
                                             <FormLabel>To Year</FormLabel>
                                             <FormControl>
-                                            <SelectWithSearch data={YEARS} type='Year' defaultValue={field.value} onSelect={field.onChange} />
+                                                <SelectWithSearch data={YEARS} type='Year' defaultValue={field.value} onSelect={field.onChange} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -163,12 +206,21 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
 
                 <DialogFooter className="sm:justify-end px-3">
                     <div className="flex gap-2">
-                        {data && <Button variant="destructive">Delete</Button>}
-                        <Button type="submit" variant="outline" onClick={form.handleSubmit(onSubmit)}>Save</Button>
+                        {data &&
+                            <form action={deleteEducation}>
+                                <Input type="hidden" name='id' value={data.id} />
+                                <Input type="hidden" name='user_id' value={session?.user?.id} />
+                                <DeleteButton />
+                            </form>}
+                        <Button
+                            type="submit"
+                            variant="outline"
+                            disabled={isLoading}
+                            onClick={form.handleSubmit(onSubmit)}>{isLoading ? 'Saving...' : 'Save'}</Button>
                     </div>
 
                     <DialogClose asChild>
-                        <Button type="reset" variant="secondary" onClick={() => form.reset()} >
+                        <Button ref={closeBtnRef} type="reset" variant="secondary" onClick={() => form.reset()} >
                             Close
                         </Button>
                     </DialogClose>

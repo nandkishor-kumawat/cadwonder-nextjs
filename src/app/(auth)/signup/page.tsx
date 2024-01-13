@@ -21,6 +21,9 @@ import { SelectWithSearch } from "@/components/form/SelectWithSearch";
 import countries from "@/lib/data/countries";
 import roles from "@/lib/data/roles";
 import { useState } from "react";
+import Spinner from "@/components/loaders/Spinner";
+import Overlay from "@/components/loaders/overlay";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -47,8 +50,7 @@ const formSchema = z.object({
 
 export default function ProfileForm() {
 
-  // form.setValue("location", language.value)
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,18 +67,25 @@ export default function ProfileForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-
+    const username = values.name
+      .toLowerCase()
+      .replace(/[^\w\s]/g, ' ')
+      .trim()
+      .replace(/\s+/g, '-')
     setIsLoading(true);
-    fetch('/api/auth/signup',{
+
+    fetch('http://localhost:3001/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(values)
-    }).then(res=>res.json()).then(data=>{
+      body: JSON.stringify({ ...values, username })
+    }).then(res => res.json()).then(data => {
       console.table(data.user);
-      if(data.error){
+      if (data.error) {
         alert(data.error);
+      } else {
+        router.push('/login');
       }
       setIsLoading(false)
     })
@@ -85,6 +94,7 @@ export default function ProfileForm() {
 
   return (
     <div className="container max-w-md m-auto my-2">
+      {isLoading && <Overlay />}
       <h1 className="text-3xl font-bold my-4">Create your account</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
@@ -150,7 +160,7 @@ export default function ProfileForm() {
               <FormItem>
                 <FormLabel>Location</FormLabel>
                 <FormControl>
-                  <SelectWithSearch data={countries} type="country" onSelect={field.onChange} />
+                  <SelectWithSearch defaultValue={field.value} data={countries} type="country" onSelect={field.onChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -178,7 +188,7 @@ export default function ProfileForm() {
               <FormItem>
                 <FormLabel>Role</FormLabel>
                 <FormControl>
-                  <SelectWithSearch data={roles} type="role" onSelect={field.onChange} />
+                  <SelectWithSearch defaultValue={field.value} data={roles} type="role" onSelect={field.onChange} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -187,7 +197,8 @@ export default function ProfileForm() {
 
 
           <div className="mt-3">
-            <Button type="submit" className="text-lg w-full bg-orange-500 mt-3 hover:bg-orange-600">SignUp</Button>
+            <Button type="submit" className="text-lg w-full bg-orange-500 mt-3 hover:bg-orange-600">
+              {isLoading && <Spinner className='w-5 h-5 mr-2' />}SignUp</Button>
           </div>
         </form>
       </Form>

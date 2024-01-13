@@ -1,6 +1,6 @@
 "use client"
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 import {
     DropdownMenu,
@@ -17,6 +17,7 @@ import { useTheme } from 'next-themes';
 const MenuItems = ({ session }: { session: any }) => {
     const { theme } = useTheme()
     const pathname = usePathname();
+    const router = useRouter()
 
     const navLinks = [
         {
@@ -42,7 +43,8 @@ const MenuItems = ({ session }: { session: any }) => {
     ]
 
     const handleLogout = async () => {
-        await signOut()
+        await signOut();
+        router.push('/login');
     }
 
     const {data } = useSession()

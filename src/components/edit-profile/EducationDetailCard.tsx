@@ -10,11 +10,12 @@ interface EducationDetailCardProps {
 }
 
 export default function EducationDetailCard({ data }: EducationDetailCardProps) {
+
     return (
         <Card className='my-2 p-4' style={{ backgroundColor: color2 }}>
             <CardHeader className='border-b p-0 px-2 flex-row items-center justify-between'>
                 <CardTitle className='text-lg'>{data.school}</CardTitle>
-                <EducationFormModal data={data} />
+                <EducationFormModal data={data} key={data.id} />
             </CardHeader>
 
             <CardContent className='flex flex-col p-2 gap-1 text-sm'>

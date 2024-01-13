@@ -4,6 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { Providers } from '@/components/providers/session-provider'
 import Navbar from '@/components/navbar/Navbar'
+import GoogleAnalytics from '@/components/google-analytics'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,6 +28,10 @@ export default function RootLayout({
             // enableSystem
             disableTransitionOnChange
           >
+            {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ? (
+              <GoogleAnalytics ga_id=
+                {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
+            ) : null}
             <Navbar />
             {children}
           </ThemeProvider>

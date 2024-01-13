@@ -21,6 +21,7 @@ import { FcGoogle } from "react-icons/fc";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Spinner from "@/components/loaders/Spinner";
+import Overlay from "@/components/loaders/overlay"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -41,9 +42,6 @@ export default function ProfileForm() {
     },
   })
 
-
-  const { data: session } = useSession();
-  console.log(session)
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams?.get("callbackUrl") ?? '/';
@@ -78,12 +76,15 @@ export default function ProfileForm() {
       // callbackUrl
     })
 
+
+
     console.log(res)
 
   }
 
   return (
     <div className="container max-w-md m-auto sm:my-32 my-28">
+      {isLoading && <Overlay />}
       <h1 className="text-3xl font-bold my-4">Login to your account</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
