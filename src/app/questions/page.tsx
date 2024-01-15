@@ -1,9 +1,7 @@
 import SearchBar from '@/components/form/SearchBar';
-import QuestionCard from '@/components/questions/QuestionCard';
 import Questions from '@/components/questions/question-list';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import React, { Suspense } from 'react'
 
@@ -15,12 +13,8 @@ export default async function Page({
     page?: string;
   };
 }) {
-  const session = await getServerSession();
-  console.log(session)
 
-  const data = await fetch(`http://localhost:3001/api/questions?query=${searchParams?.query ?? ""}`).then(res => res.json())
-
-  const { questions } = data;
+  const { questions } = await fetch(`http://localhost:3001/api/questions?query=${searchParams?.query ?? ""}`).then(res => res.json())
 
   return (
     <div className="container max-w-3xl mx-auto px-2 mb-2">

@@ -1,18 +1,14 @@
 import React from 'react'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import Image from 'next/image'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { MdDownload } from 'react-icons/md';
 import { AiFillLike } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
+import { likeModel } from '@/app/library/action';
+import LikeButton from './like-button';
+import { getServerSession } from 'next-auth';
+import { getUserByEmail } from '@/app/dashboard/action';
 
 
 const ModelItem = async ({ model: data }: any) => {
@@ -25,8 +21,11 @@ const ModelItem = async ({ model: data }: any) => {
         modelName
     } = data;
 
-    const { user } = await fetch('http://localhost:3001/api/users/' + user_id).then(res => res.json());
-    const { followers } = await fetch('http://localhost:3001/api/users/' + user_id + '/followers').then(res => res.json());
+    const session = await getServerSession();
+
+    const { user: owner } = await fetch('http://localhost:3001/api/users/' + user_id).then(res => res.json());
+
+    const user = await getUserByEmail(session?.user?.email as string);
 
     return (
         <div className="rounded border bg-card text-card-foreground shadow-sm group">
@@ -53,7 +52,7 @@ const ModelItem = async ({ model: data }: any) => {
                 <div className="flex justify-between gap-2">
                     <div>
                         <Link href={`/library/${slug}`} className='break-all'>{modelName.length > 25 ? `${modelName.slice(0, 25)}...` : modelName}</Link>
-                        <Link href={`/${user?.username}`}><p className="text-sm text-muted-foreground">By {user?.name}</p></Link>
+                        <Link href={`/${owner?.username}`}><p className="text-sm text-muted-foreground">By {owner?.name}</p></Link>
                     </div>
                     <div>
                         <Avatar className='w-[32px] h-[32px]'>
@@ -63,18 +62,19 @@ const ModelItem = async ({ model: data }: any) => {
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <button className='flex items-center gap-1 py-2 rounded-md px-3 hover:bg-[#EDF2F7] active:scale-90 active:bg-[#E2E8F0] transition-all ease-out duration-300'>
-                        <AiFillLike />
-                        <p>{followers?.length}</p>
-                    </button>
-                    <button className='flex items-center gap-1 py-2 rounded-md px-3 hover:bg-[#EDF2F7] active:scale-90 active:bg-[#E2E8F0] transition-all ease-out duration-300'>
+
+                    <form action={likeModel}>
+                        <LikeButton id={id} user_id={user?.id} />
+                    </form>
+
+                    {/* <button className='flex items-center gap-1 py-2 rounded-md px-3 hover:bg-[#EDF2F7] active:scale-90 active:bg-[#E2E8F0] transition-all ease-out duration-300'>
                         <MdDownload />
                         <p>{followers?.length}</p>
                     </button>
                     <button className='flex items-center gap-1 py-2 rounded-md px-3 hover:bg-[#EDF2F7] active:scale-90 active:bg-[#E2E8F0] transition-all ease-out duration-300'>
                         <BiCommentDetail />
                         <p>{followers?.length}</p>
-                    </button>
+                    </button> */}
                 </div>
                 <hr className='border-gray-200' />
             </div>

@@ -100,7 +100,7 @@ const EditProfile = () => {
         }
     });
 
-    const user_id = session?.user?.id as string;
+    const user_id = session?.user?.uid as string;
     
     const [profilePic, setProfilePic] = useState('');
     const [coverPic, setCoverPic] = useState('');
@@ -377,7 +377,7 @@ const EditProfile = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                         {Experience.map((data, index) => (
-                            <ExperienceDetailCard key={index} data={data} />
+                            <ExperienceDetailCard key={index} data={data} edit/>
                         ))}
                     </div>
                 </div>
@@ -389,7 +389,7 @@ const EditProfile = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                         {Education.map((data, index) => (
-                            <EducationDetailCard key={index} data={data} />
+                            <EducationDetailCard key={index} data={data} edit/>
                         ))}
                     </div>
                 </div>

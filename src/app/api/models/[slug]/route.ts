@@ -1,4 +1,5 @@
 import { getData, getUser } from "@/lib/functions"
+import { NextResponse } from "next/server";
 
 export const GET = async (request: Request, { params }: { params: { slug: string } }) => {
 
@@ -14,7 +15,8 @@ export const GET = async (request: Request, { params }: { params: { slug: string
 
     const model = models[0];
 
-    if (!model) return new Response(JSON.stringify({ error: "Model not found" }), { status: 404 });
+
+    if (!model) return NextResponse.json({ error: "No Model found" }, { status: 404 });
 
     const user = await getUser(model.user_id as string) as {
         username: string;
@@ -23,16 +25,15 @@ export const GET = async (request: Request, { params }: { params: { slug: string
         id: string
     };
 
-
-    return new Response(JSON.stringify({
-        model: {
-            ...model,
-            user: {
-                username: user?.username,
-                profilePicture: user?.profilePicture,
-                name: user?.name,
-                id: user?.id
-            }
+    const modelData = {
+        ...model,
+        user: {
+            username: user?.username,
+            profilePicture: user?.profilePicture,
+            name: user?.name,
+            id: user?.id
         }
-    }), { status: 200 })
+    }
+
+    return NextResponse.json({ model: modelData }, { status: 200 });
 }

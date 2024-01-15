@@ -137,12 +137,12 @@ export default function ProfileForm() {
           <Link href="/signup">Don&apos;t have an account? </Link>
         </div>
       </div>
-      <div className="my-4">
+      {/* <div className="my-4">
         <Button type="button" className="w-full text-lg mt-3 bg-slate-50 hover:bg-slate-100 text-black py-5" onClick={handleGoogleSignIn}>
           <FcGoogle className="mx-2" size={24} />
           <p className="font-medium">Sign In with Google</p>
         </Button>
-      </div>
+      </div> */}
     </div>
   )
 }

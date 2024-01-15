@@ -53,13 +53,13 @@ export default async function AnswerItem({ answer }: Props) {
             ))}
           </div>
 
-          <div className='comments'>
+          {/* <div className='comments'>
             <CommentList id={answer.id} />
 
             {session &&
               <CommentForm association_id={answer.id} />
             }
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

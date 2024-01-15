@@ -29,19 +29,21 @@ export default async function Page({
       <SearchBar />
 
 
-      <div className="grid gap-2 pb-2" style={{
-        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-      }}>
-        <Suspense fallback={<>
-          <Skeleton className="w-full h-[300px] rounded" />
-          <Skeleton className="w-full h-[300px] rounded" />
-          <Skeleton className="w-full h-[300px] rounded" />
-        </>}>
-          {/* <Skeleton className="w-full h-[300px] rounded" /> */}
-          <ModelList models={models} />
-        </Suspense>
-      </div>
+      {models.length === 0 ? <p className="text-center text-gray-500">No models found</p> : (
 
+        <div className="grid gap-2 pb-2" style={{
+          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+        }}>
+          <Suspense fallback={<>
+            <Skeleton className="w-full h-[300px] rounded" />
+            <Skeleton className="w-full h-[300px] rounded" />
+            <Skeleton className="w-full h-[300px] rounded" />
+          </>}>
+            {/* <Skeleton className="w-full h-[300px] rounded" /> */}
+            <ModelList models={models} />
+          </Suspense>
+        </div>
+      )}
     </div>
   )
 }

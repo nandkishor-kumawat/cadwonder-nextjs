@@ -6,14 +6,15 @@ import ExperienceFormModal from './ExperienceFormModal'
 
 interface ExperienceDetailCardProps {
     data: Experience
+    edit?: boolean
 }
 
-export default function ExperienceDetailCard({ data }: ExperienceDetailCardProps) {
+export default function ExperienceDetailCard({ data, edit }: ExperienceDetailCardProps) {
     return (
         <Card className='my-2 p-4' style={{ backgroundColor: color2 }}>
             <CardHeader className='border-b p-0 px-2 flex-row items-center justify-between'>
                 <CardTitle className='text-lg'>{data.position}</CardTitle>
-                <ExperienceFormModal data={data} key={data.id} />
+                {edit && <ExperienceFormModal data={data} key={data.id} />}
             </CardHeader>
 
             <CardContent className='flex flex-col p-2 gap-1 text-sm'>

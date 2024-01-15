@@ -1,16 +1,21 @@
 import UserCard from '@/components/users/user-card';
+import { getUsers } from '@/lib/functions';
 import { User } from '@/lib/types/types';
 import React from 'react'
 
 export default async function Users() {
 
-  const data = await fetch('http://localhost:3001/api/users').then(res => res.json());
+  // const data = await fetch('http://localhost:3001/api/users',{
+  //   next : { revalidate : 100 }
+  // }).then(res => res.json());
 
-  if(data.error) return <div>Error</div>;
+  // if(data.error) return <div>Error</div>;
 
-  const { users } = data as {
-    users : User[]
-  };
+  // const { users } = data as {
+  //   users : User[]
+  // };
+
+  const users = await getUsers();
 
   return (
       <div className="container max-w-2xl">

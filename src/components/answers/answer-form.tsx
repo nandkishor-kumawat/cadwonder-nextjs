@@ -38,7 +38,7 @@ export default function AnswerForm({ question_id }: Props) {
   const { data: session } = useSession();
 
   const user = session?.user as {
-    id: string;
+    uid: string;
     name: string;
     profilePicture: string;
   };
@@ -81,7 +81,7 @@ export default function AnswerForm({ question_id }: Props) {
       file_details = await handleUploadFiles(files) as FileDetails[];
     }
     formData.append('question_id', question_id);
-    formData.append('user_id', session?.user?.id as string);
+    formData.append('user_id', session?.user?.uid as string);
     formData.append('file_details', JSON.stringify(file_details));
     await postAnswer(formData);
 

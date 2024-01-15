@@ -60,13 +60,13 @@ export default async function DataInfo({ data, title }: Props) {
                         ))}
                     </div>
 
-                    <div className='comments'>
+                    {/* <div className='comments'>
                         <CommentList id={data.id} />
 
                         {session &&
                             <CommentForm association_id={data.id} />
                         }
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

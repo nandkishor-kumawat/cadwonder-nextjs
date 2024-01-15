@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Metadata } from 'next';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import CommentList from '@/components/comments/comment-list';
@@ -21,7 +21,7 @@ export async function generateMetadata({
   const { slug } = params;
 
   const data = await fetch(`http://localhost:3001/api/models/${slug}`).then(res => res.json())
-  
+
   const model = data?.model;
 
   return {
@@ -31,15 +31,10 @@ export async function generateMetadata({
 }
 
 
-async function Question({ params: { slug } }: { params: { slug: string } }) {
+async function Question({ params: { slug } }: Props) {
 
   const data = await fetch(`http://localhost:3001/api/models/${slug}`).then(res => res.json())
-  const session = await getServerSession()
 
-
-  if (!data) return <div>Loading...</div>
-  if (data?.error) return <div>Error</div>
-  if (!data?.model) return <div>Model not found</div>
 
   const { model } = data;
 
@@ -51,12 +46,13 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
   //   body: JSON.stringify({ question_id: question.id })
   // }).then(res => res.json())
 
-
   return (
     <>
       <div className="container max-w-[46rem] py-2">
 
-        <DataInfo data={model} title={model.modelName} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <DataInfo data={model} title={model?.modelName} />
+        </Suspense>
 
         {/* <div className="flex-flex-col gap-3">
           <div className="answers my-2 flex flex-col gap-2">

@@ -118,7 +118,7 @@ export default function NewQuestion() {
       ...other,
       file_details,
       slug,
-      user_id: session?.user?.id,
+      user_id: session?.user?.uid,
     }
 
     try {

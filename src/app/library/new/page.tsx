@@ -13,7 +13,6 @@ import { createSlug } from '@/lib/functions'
 import { FileDetails } from '@/lib/types/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
-import { revalidatePath, revalidateTag } from 'next/cache'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -29,7 +28,9 @@ const formSchema = z.object({
     message: "Must be at least 10 characters"
   }),
   category: z.array(z.string()),
-  files: z.array(z.instanceof(File)),
+  files: z.array(z.instanceof(File)).refine((files) => files.length > 0, {
+    message: "Please select at least one file"
+  })
 })
 
 function NewModal() {
@@ -93,7 +94,7 @@ function NewModal() {
       ...other,
       file_details,
       slug,
-      user_id: session?.user?.id,
+      user_id: session?.user?.uid,
     }
 
     try {
@@ -121,7 +122,7 @@ function NewModal() {
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-50">
       {isLoading && <Overlay />}
-      <div className="top-0 left-0 right-0 px-4 py-2 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
+      <div className="sticky top-0 left-0 right-0 px-4 py-2 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
         <div className="flex items-center justify-between">
           <p className="text-white text-lg">New Model</p>
 
@@ -135,7 +136,7 @@ function NewModal() {
           </div>
         </div>
       </div>
-      <div className="container max-w-[640px] m-auto my-12">
+      <div className="container max-w-[640px] m-auto my-2">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <FormField

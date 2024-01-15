@@ -1,8 +1,9 @@
 "use server"
 
 import { db } from "@/firebase"
+import { getData } from "@/lib/functions"
 import { Education, Experience } from "@/lib/types/types"
-import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore"
+import { addDoc, collection, deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
@@ -60,4 +61,16 @@ export const updateProfile = async (data: any, user_id: string) => {
     revalidatePath("/dashboard");
     redirect("/dashboard");
     return data;
+}
+
+
+export const getUserByEmail = async (email: string) => {
+    if (!email) return null;
+    const users = await getData({
+        coll: "users",
+        key: "email",
+        value: email
+    });
+
+    return users[0];
 }

@@ -5,7 +5,7 @@ import { Progress } from './ui/progress'
 
 export default function UploadFileCard({ file, index, handleRemoveFile, progress }: any) {
     return (
-        <div key={index} className="py-1 flex flex-col" >
+        <div key={index} className="py-1 flex flex-col mb-2" >
             <div className="flex items-center justify-between gap-2 border-t border-gray-500 py-2">
                 <p className="text-sm">{file.name}</p>
                 <Button
