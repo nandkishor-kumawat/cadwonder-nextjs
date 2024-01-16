@@ -10,6 +10,7 @@ const LikeButton = ({ id, user_id }: { id: string, user_id: string | undefined }
     const [likes, setLikes] = React.useState(0);
 
     useEffect(() => {
+        if (!id || !user_id) return;
         const q = collection(db, `models/${id}/likes`);
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -17,7 +18,7 @@ const LikeButton = ({ id, user_id }: { id: string, user_id: string | undefined }
             setIsLiked(!!snapshot.docs.map((doc) => doc.data()).find((doc: any) => doc.user_id === user_id));
         });
         return () => unsubscribe()
-    }, []);
+    }, [id, user_id]);
 
 
     return (

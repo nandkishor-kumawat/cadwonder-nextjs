@@ -4,6 +4,8 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase';
+
+
 interface User {
     id: string;
     name?: string | null | undefined;
@@ -15,7 +17,6 @@ export const options: NextAuthOptions = {
     providers: [
         GoogleProvider({
             profile(profile) {
-                console.log(profile)
                 return {
                     id: profile.sub,
                     name: profile.name,

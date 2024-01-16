@@ -58,7 +58,7 @@ const ProfilePicUploader = ({
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [bxref.current]);
+  }, [canvasWidth, image]);
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0];

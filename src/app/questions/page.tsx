@@ -17,23 +17,29 @@ export default async function Page({
   const { questions } = await fetch(`http://localhost:3001/api/questions?query=${searchParams?.query ?? ""}`).then(res => res.json())
 
   return (
-    <div className="container max-w-3xl mx-auto px-2 mb-2">
-      <Link href={'/questions/new'}>
-        <Button className="text-lg my-4 bg-orange-400 hover:bg-orange-500">Ask Question</Button>
-      </Link>
+    <div className="h-full">
+      <div className="container max-w-3xl mx-auto px-2 mb-2 h-full">
+        <div className="h-full">
 
-      <SearchBar />
+          <Link href={'/questions/new'}>
+            <Button className="text-lg my-4 bg-orange-400 hover:bg-orange-500">Ask Question</Button>
+          </Link>
 
-      <Suspense fallback={
-        <div className='flex flex-col gap-2'>
-          <Skeleton className="w-full h-[100px] rounded" />
-          <Skeleton className="w-full h-[100px] rounded" />
-          <Skeleton className="w-full h-[100px] rounded" />
+          <SearchBar />
+
+          <Suspense fallback={
+            <div className='flex flex-col gap-2'>
+              <Skeleton className="w-full h-[100px] rounded" />
+              <Skeleton className="w-full h-[100px] rounded" />
+              <Skeleton className="w-full h-[100px] rounded" />
+            </div>
+          }>
+            <Questions questions={questions} />
+          </Suspense>
+          {questions.length === 0 && <p className="text-center text-gray-500">No questions found</p>}
         </div>
-      }>
-        <Questions questions={questions} />
-      </Suspense>
 
+      </div>
     </div>
   )
 }

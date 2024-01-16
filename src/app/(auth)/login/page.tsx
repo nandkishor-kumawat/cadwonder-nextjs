@@ -42,7 +42,6 @@ export default function ProfileForm() {
     },
   })
 
-
   const searchParams = useSearchParams();
   const callbackUrl = searchParams?.get("callbackUrl") ?? '/';
   const [isLoading, setIsLoading] = useState(false);
@@ -60,7 +59,7 @@ export default function ProfileForm() {
     })
 
     setIsLoading(false);
-    console.log(res?.error)
+    console.log(res)
     if (res?.error) {
       setErrorMessage("Invalid credentials");
       setTimeout(() => setErrorMessage(""), 2000);

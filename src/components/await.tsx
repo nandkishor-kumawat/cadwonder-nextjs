@@ -1,7 +1,7 @@
 "use client"
 import { useSession } from "next-auth/react"
 
-export default async function Await<T>({
+export default function Await<T>({
   children
 }: {
   children: (value: any) => JSX.Element

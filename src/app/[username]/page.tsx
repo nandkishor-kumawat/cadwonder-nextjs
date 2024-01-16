@@ -2,11 +2,10 @@ import EducationDetailCard from '@/components/edit-profile/EducationDetailCard';
 import ExperienceDetailCard from '@/components/edit-profile/ExperienceDetailCard';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import FollowButton from '@/components/user-profile/follow-button';
 import { getData, getDataFromCollection } from '@/lib/functions'
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
-import { FaEdit } from 'react-icons/fa';
 import { MdOutlineLocationOn } from 'react-icons/md';
 
 export default async function Page({ params: { username } }: { params: { username: string } }) {
@@ -29,7 +28,7 @@ export default async function Page({ params: { username } }: { params: { usernam
         coll: "models",
         key: "user_id",
         value: user.id
-    })
+    });
 
     const softwareSkills: string[] = user?.softwareSkills ?? [];
     const specializedIn: string[] = user?.specializedIn ?? [];
@@ -63,19 +62,15 @@ export default async function Page({ params: { username } }: { params: { usernam
                             <div>
                                 <h1 className='text-lg font-bold mb-3'>{user.name}</h1>
                                 <div className='flex gap-4 items-end'>
-                                    <Button variant={'outline'}>Follow</Button>
-                                    <Link href='#'>
-                                        <p>0</p>
-                                        <p>Followers</p>
-                                    </Link>
+                                    <FollowButton following_id={user.id} />
 
-                                    <Link href='./questions'>
+                                    <Link href='./questions' className='text-center'>
                                         <p>{userQuestions.length}</p>
                                         <p>Questions</p>
                                     </Link>
 
                                     <div>
-                                        <MdOutlineLocationOn />
+                                        <MdOutlineLocationOn className='text-xl' />
                                         <p>{user?.country}</p>
                                     </div>
                                 </div>

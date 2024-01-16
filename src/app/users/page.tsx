@@ -5,16 +5,6 @@ import React from 'react'
 
 export default async function Users() {
 
-  // const data = await fetch('http://localhost:3001/api/users',{
-  //   next : { revalidate : 100 }
-  // }).then(res => res.json());
-
-  // if(data.error) return <div>Error</div>;
-
-  // const { users } = data as {
-  //   users : User[]
-  // };
-
   const users = await getUsers();
 
   return (

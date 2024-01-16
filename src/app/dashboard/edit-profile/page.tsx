@@ -40,29 +40,39 @@ import Overlay from '@/components/loaders/overlay'
 interface linkType {
     name: string
     placeholder: string
-    Icon: any
+    Icon: React.FC<React.SVGProps<SVGSVGElement>>
+    regex: RegExp
+    pattern: string
 }
 
 const SocialLinks: linkType[] = [
     {
         name: 'twitter',
         placeholder: "Twitter URL",
-        Icon: FaTwitterSquare
+        Icon: FaTwitterSquare,
+        regex: /https?:\/\/(?:www\.)?twitter\.com\/(?:#!\/)?(\w+)\/?$/,
+        pattern: "https?:\/\/(?:www\.)?twitter\.com\/(?:#!\/)?(\w+)\/?$"
     },
     {
         name: 'linkedin',
         placeholder: "LinkedIn URL",
-        Icon: FaLinkedin
+        Icon: FaLinkedin,
+        regex: /https?:\/\/(?:www\.)?linkedin\.com\/in\/([\w-]+)\/?$/,
+        pattern: "https?:\/\/(?:www\.)?linkedin\.com\/in\/([\w-]+)\/?$"
     },
     {
         name: 'instagram',
         placeholder: "Instagram URL",
-        Icon: FaInstagram
+        Icon: FaInstagram,
+        regex: /https?:\/\/(?:www\.)?instagram\.com\/([\w.-]+)\/?$/,
+        pattern: "https?:\/\/(?:www\.)?instagram\.com\/([\w.-]+)\/?$"
     },
     {
         name: 'website',
         placeholder: "Your Website Link",
-        Icon: FaLink
+        Icon: FaLink,
+        regex: /https?:\/\/(?:www\.)?([a-zA-Z0-9.-]+)\.[a-zA-Z]{2,}(\/[^\s]*)?$/,
+        pattern: "https?:\/\/(?:www\.)?([a-zA-Z0-9.-]+)\.[a-zA-Z]{2,}(\/[^\s]*)?$"
     }
 ]
 
@@ -101,7 +111,7 @@ const EditProfile = () => {
     });
 
     const user_id = session?.user?.uid as string;
-    
+
     const [profilePic, setProfilePic] = useState('');
     const [coverPic, setCoverPic] = useState('');
 
@@ -377,7 +387,7 @@ const EditProfile = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                         {Experience.map((data, index) => (
-                            <ExperienceDetailCard key={index} data={data} edit/>
+                            <ExperienceDetailCard key={index} data={data} edit />
                         ))}
                     </div>
                 </div>
@@ -389,7 +399,7 @@ const EditProfile = () => {
                     </div>
                     <div className="flex flex-col gap-2">
                         {Education.map((data, index) => (
-                            <EducationDetailCard key={index} data={data} edit/>
+                            <EducationDetailCard key={index} data={data} edit />
                         ))}
                     </div>
                 </div>
@@ -399,14 +409,14 @@ const EditProfile = () => {
                     <h1>Links on the web</h1>
                     <div>
                         {SocialLinks.map((data, index) => {
-                            const { Icon, name, placeholder } = data;
+                            const { Icon, name, placeholder, pattern } = data;
                             socialsRef.current[index] = React.createRef<HTMLInputElement>();
                             return (
                                 <InputGroup key={placeholder} className='my-3'>
                                     <InputElement>
                                         <Icon />
                                     </InputElement>
-                                    <InputItem defaultValue={socialLinks[name]} ref={socialsRef.current[index]} placeholder={placeholder} type="text" className='pr-2' />
+                                    <InputItem pattern={pattern} defaultValue={socialLinks[name]} ref={socialsRef.current[index]} placeholder={placeholder} type="text" className='pr-2' />
                                 </InputGroup>
                             )
                         })}

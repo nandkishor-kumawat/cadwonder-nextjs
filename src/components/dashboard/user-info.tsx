@@ -7,7 +7,7 @@ import { getData } from '@/lib/functions'
 import { getServerSession } from 'next-auth'
 import { getUserByEmail } from '@/app/dashboard/action'
 
-const UserInfo = async() => {
+const UserInfo = async () => {
 
     const session = await getServerSession();
     const user = await getUserByEmail(session?.user?.email as string);
@@ -18,7 +18,7 @@ const UserInfo = async() => {
         value: user.id
     });
 
-    const userModels  = await getData({
+    const userModels = await getData({
         coll: "models",
         key: "user_id",
         value: user.id
@@ -45,9 +45,11 @@ const UserInfo = async() => {
                 padding: '1rem',
                 marginTop: '10rem',
             }}>
-                <div className='absolute top-0 right-0 p-4 cursor-pointer'>
-                    <Link href='/dashboard/edit-profile'><FaEdit className='text-orange-400' /></Link>
-                </div>
+                <Link href='/dashboard/edit-profile'>
+                    <div className='absolute top-0 right-0 p-4 cursor-pointer'>
+                        <FaEdit className='text-orange-400' />
+                    </div>
+                </Link>
 
                 <div className='w-full h-full flex items-center justify-between gap-4 flex-col'>
                     <Avatar className='w-20 h-20 -mt-14'>
@@ -64,7 +66,7 @@ const UserInfo = async() => {
                     <div className='flex items-center justify-center gap-2 flex-wrap'>
                         <p>0 Follower(s), </p>
                         <p>{userQuestions.length} Question(s), </p>
-                        <p>{userModels.length} Models, </p>
+                        <p>{userModels.length} Model(s), </p>
                         {/* <p>1 Badge received</p> */}
                     </div>
 
