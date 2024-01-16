@@ -31,7 +31,7 @@ export default async function AnswerItem({ answer }: Props) {
         <div className='flex-1'>
           <div className="info flex">
             <div className='flex-1'>
-              <Link href={`/users/${user?.id}`} className='text-orange-400 font-semibold'>{user?.name}</Link>
+              <Link href={`/${user?.username}`} className='text-orange-400 font-semibold'>{user?.name}</Link>
               <p className='text-gray-500 text-sm'>{new Date(answer.createdAt).toLocaleString()}</p>
             </div>
 
