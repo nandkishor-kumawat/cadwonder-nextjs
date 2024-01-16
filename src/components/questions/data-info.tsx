@@ -15,6 +15,7 @@ interface Props {
             id: number;
             name: string;
             profilePicture: string;
+            username: string;
         };
         file_details: FileDetails[];
     };
@@ -41,7 +42,7 @@ export default async function DataInfo({ data, title }: Props) {
 
                 <div className='flex-1'>
                     <div className="info">
-                        <Link href={`/users/${user?.id}`} className='text-orange-400 font-semibold'>{user?.name}</Link>
+                        <Link href={`/${user?.username}`} className='text-orange-400 font-semibold'>{user?.name}</Link>
                         <p className='text-gray-400 text-sm'>{new Date(data.createdAt).toLocaleString()}</p>
                     </div>
 
