@@ -14,7 +14,7 @@ export default async function Page({
   };
 }) {
 
-  const { questions } = await fetch(`http://localhost:3001/api/questions?query=${searchParams?.query ?? ""}`).then(res => res.json())
+  const { questions } = await fetch(`${process.env.API_URL}/api/questions?query=${searchParams?.query ?? ""}`).then(res => res.json())
 
   return (
     <div className="h-full">

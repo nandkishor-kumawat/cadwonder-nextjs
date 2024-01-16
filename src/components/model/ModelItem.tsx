@@ -23,7 +23,7 @@ const ModelItem = async ({ model: data }: any) => {
 
     const session = await getServerSession();
 
-    const { user: owner } = await fetch('http://localhost:3001/api/users/' + user_id).then(res => res.json());
+    const { user: owner } = await fetch(`${process.env.API_URL}/api/users/${user_id}`).then(res => res.json());
 
     const user = await getUserByEmail(session?.user?.email as string);
 

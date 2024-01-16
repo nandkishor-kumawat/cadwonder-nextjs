@@ -3,7 +3,7 @@ import CommentItem from './comment-item'
 import { Comment } from '@/lib/types/types';
 
 export default async function CommentList({ id }: { id: string }) {
-    const data = await fetch(`http://localhost:3001/api/comments/${id}`).then(res => res.json())
+    const data = await fetch(`${process.env.API_URL}/api/comments/${id}`).then(res => res.json())
 
     const comments: Comment[] = data?.comments ?? [];
 

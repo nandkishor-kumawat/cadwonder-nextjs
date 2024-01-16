@@ -74,7 +74,7 @@ export default function ProfileForm() {
       .replace(/\s+/g, '-')
     setIsLoading(true);
 
-    fetch('http://localhost:3001/api/auth/signup', {
+    fetch(process.env.API_URL + '/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

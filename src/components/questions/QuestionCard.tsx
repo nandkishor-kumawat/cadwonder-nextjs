@@ -25,9 +25,9 @@ const QuestionCard = async ({ question: data }: any) => {
 
 
 
-    const { user } = await fetch('http://localhost:3001/api/users/' + user_id).then(res => res.json());
-    const { followers } = await fetch('http://localhost:3001/api/users/' + user_id + '/followers').then(res => res.json());
-    const {answer_count} = await fetch(`http://localhost:3001/api/answers/${id}`).then(res => res.json());
+    const { user } = await fetch(`${process.env.API_URL}/api/users/${user_id}`).then(res => res.json());
+    const { followers } = await fetch(`${process.env.API_URL}/api/users/${user_id}/followers`).then(res => res.json());
+    const { answer_count } = await fetch(`${process.env.API_URL}/api/answers/${id}`).then(res => res.json());
 
 
     return (

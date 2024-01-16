@@ -5,7 +5,7 @@ import { Comment } from '@/lib/types/types'
 
 export default async function CommentItem({ comment }: { comment: Comment }) {
 
-    const { user } = await fetch(`http://localhost:3001/api/users/${comment.user_id}`).then(res => res.json())
+    const { user } = await fetch(`${process.env.API_URL}/api/users/${comment.user_id}`).then(res => res.json())
 
     return (
         <div className="flex border-t border-gray-400 py-1 mt-2">

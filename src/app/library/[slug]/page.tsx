@@ -20,7 +20,7 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { slug } = params;
 
-  const data = await fetch(`http://localhost:3001/api/models/${slug}`).then(res => res.json())
+  const data = await fetch(`${process.env.API_URL}/api/models/${slug}`).then(res => res.json())
 
   const model = data?.model;
 
@@ -33,12 +33,12 @@ export async function generateMetadata({
 
 async function Question({ params: { slug } }: Props) {
 
-  const data = await fetch(`http://localhost:3001/api/models/${slug}`).then(res => res.json())
+  const data = await fetch(`${process.env.API_URL}/api/models/${slug}`).then(res => res.json())
 
 
   const { model } = data;
 
-  // const { answers } = await fetch(`http://localhost:3001/api/answers`, {
+  // const { answers } = await fetch(`${process.env.API_URL}/api/answers`, {
   //   method: 'POST',
   //   headers: {
   //     'Content-Type': 'application/json'

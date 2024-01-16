@@ -15,7 +15,7 @@ export default async function Page({
   };
 }) {
 
-  const data = await fetch(`http://localhost:3001/api/models?query=${searchParams?.query ?? ""}`).then(res => res.json())
+  const data = await fetch(`${process.env.API_URL}/api/models?query=${searchParams?.query ?? ""}`).then(res => res.json())
 
   const { models } = data;
 

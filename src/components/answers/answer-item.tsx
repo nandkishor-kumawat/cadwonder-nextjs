@@ -15,7 +15,7 @@ export default async function AnswerItem({ answer }: Props) {
 
   const session = await getServerSession();
 
-  const { user } = await fetch(`http://localhost:3001/api/users/${answer.user_id}`).then(res => res.json());
+  const { user } = await fetch(`${process.env.API_URL}/api/users/${answer.user_id}`).then(res => res.json());
 
 
   return (

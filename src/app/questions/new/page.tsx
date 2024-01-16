@@ -122,7 +122,7 @@ export default function NewQuestion() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/questions/new', {
+      const response = await fetch(`${process.env.API_URL}/api/questions/new`, {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {

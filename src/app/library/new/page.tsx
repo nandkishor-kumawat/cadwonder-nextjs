@@ -98,7 +98,7 @@ function NewModal() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/models/new', {
+      const response = await fetch(`${process.env.API_URL}/api/models/new`, {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
