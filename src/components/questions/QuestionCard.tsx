@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card"
 import { color1, color2 } from '@/lib/data/colors';
 import Link from 'next/link';
+import { getData, getUser } from '@/lib/functions';
 
 
 const QuestionCard = async ({ question: data }: any) => {
@@ -24,11 +25,21 @@ const QuestionCard = async ({ question: data }: any) => {
     } = data;
 
 
+    const user = await getUser(user_id);
 
-    const { user } = await fetch(`${process.env.API_URL}/api/users/${user_id}`).then(res => res.json());
-    const { followers } = await fetch(`${process.env.API_URL}/api/users/${user_id}/followers`).then(res => res.json());
-    const { answer_count } = await fetch(`${process.env.API_URL}/api/answers/${id}`).then(res => res.json());
+    const followers = await getData({
+        coll: "followers",
+        key: "following",
+        value: user_id
+    })
+    
+    const answers = await getData({
+        coll: "answers",
+        key: "question_id",
+        value: id
+    });
 
+    const answer_count = answers.length;
 
     return (
         <Card className='my-2 py-2' style={{ backgroundColor: color2 }}>

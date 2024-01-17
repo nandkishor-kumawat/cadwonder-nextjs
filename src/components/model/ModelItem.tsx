@@ -9,6 +9,7 @@ import { likeModel } from '@/app/library/action';
 import LikeButton from './like-button';
 import { getServerSession } from 'next-auth';
 import { getUserByEmail } from '@/app/dashboard/action';
+import { getUser } from '@/lib/functions';
 
 
 const ModelItem = async ({ model: data }: any) => {
@@ -23,7 +24,7 @@ const ModelItem = async ({ model: data }: any) => {
 
     const session = await getServerSession();
 
-    const { user: owner } = await fetch(`${process.env.API_URL}/api/users/${user_id}`).then(res => res.json());
+    const owner = await getUser(user_id);
 
     const user = await getUserByEmail(session?.user?.email as string);
 

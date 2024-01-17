@@ -1,16 +1,15 @@
-// "use client"
-// import { useSession } from "next-auth/react"
+"use client"
 
-import { auth } from "@/firebase"
+import { useSession } from "next-auth/react";
 
 
 export default function Home() {
 
-  // const { data } = useSession();
+  const { data } = useSession();
 
   return (
     <pre>
-      {JSON.stringify(auth.currentUser, null, 2)}
+      {JSON.stringify(data, null, 2)}
     </pre>
   )
 }

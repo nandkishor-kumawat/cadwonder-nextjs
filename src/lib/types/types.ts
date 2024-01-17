@@ -32,7 +32,7 @@ export interface User {
     specializedIn: string[]
     college: string
     role: string
-    profilePic: string
+    profilePicture: string
     experiences: Experience[]
     education: Education[]
 }

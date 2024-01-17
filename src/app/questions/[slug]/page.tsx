@@ -10,6 +10,7 @@ import AnswerItem from '@/components/answers/answer-item';
 import { Button } from '@/components/ui/button';
 import { FileDetails } from '@/lib/types/types';
 import DataInfo from '@/components/questions/data-info';
+import { getData } from '@/lib/functions';
 
 type Props = {
   params: { slug: string };
@@ -42,13 +43,12 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
 
   const { question } = data;
 
-  const { answers } = await fetch(`${process.env.API_URL}/api/answers`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ question_id: question.id })
-  }).then(res => res.json())
+  const answers = await getData({
+    coll: "answers",
+    key: "question_id",
+    value: question.id
+  });
+
 
   return (
     <>
@@ -58,7 +58,7 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
         <DataInfo data={question} title={question.question} />
 
 
-        <div className="flex-flex-col gap-3">
+        <div className="flex flex-col gap-3">
           <div className="answers my-2 flex flex-col gap-2">
             {answers.map((answer: any) => (
               <AnswerItem key={answer.id} answer={answer} />

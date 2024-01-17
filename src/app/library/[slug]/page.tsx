@@ -38,13 +38,6 @@ async function Question({ params: { slug } }: Props) {
 
   const { model } = data;
 
-  // const { answers } = await fetch(`${process.env.API_URL}/api/answers`, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify({ question_id: question.id })
-  // }).then(res => res.json())
 
   return (
     <>

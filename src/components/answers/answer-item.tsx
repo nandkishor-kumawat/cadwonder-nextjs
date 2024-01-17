@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { getServerSession } from 'next-auth'
 import { Answer } from '@/lib/types/types'
 import { Button } from '../ui/button'
+import { getUser } from '@/lib/functions'
 
 interface Props {
   answer: Answer
@@ -15,7 +16,7 @@ export default async function AnswerItem({ answer }: Props) {
 
   const session = await getServerSession();
 
-  const { user } = await fetch(`${process.env.API_URL}/api/users/${answer.user_id}`).then(res => res.json());
+  const user = await getUser(answer.user_id);
 
 
   return (

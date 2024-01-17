@@ -1,12 +1,13 @@
 import { db } from "@/firebase";
 import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import { User } from "./types/types";
 
 
-
-export const getData = async ({ coll, key, value }) => {
+export const getData = async ({ coll, key, value }: { coll: string, key: string, value: string }) => {
+    if(!coll || !key || !value) return []
     const q = query(collection(db, coll), where(key, "==", value));
 
-    const data = []
+    const data = [] as any[]
 
     const querySnapshot = await getDocs(q);
 
@@ -19,7 +20,7 @@ export const getData = async ({ coll, key, value }) => {
 
 export const getUsers = async () => {
     const q = query(collection(db, "users"));
-    const users = []
+    const users = [] as any[]
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
         users.push({ id: doc.id, ...doc.data() })
@@ -27,9 +28,9 @@ export const getUsers = async () => {
     return users
 }
 
-export const getDataFromCollection = async (Collection) => {
+export const getDataFromCollection = async (Collection:string) => {
     const q = query(collection(db, Collection));
-    const d = []
+    const d = [] as any[]
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
         d.push({ id: doc.id, ...doc.data() })
@@ -38,11 +39,11 @@ export const getDataFromCollection = async (Collection) => {
 }
 
 
-export const getFollowers = (user_id, callback, type = "following") => {
+export const getFollowers = (user_id: string, callback: (data: any) => void, type = "following") => {
     const q = query(collection(db, "followers"), where(type, "==", user_id));
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
-        let d = []
+        let d = [] as any[]
         snapshot.forEach((doc) => {
             d.push({ id: doc.id, ...doc.data() })
         })
@@ -53,13 +54,14 @@ export const getFollowers = (user_id, callback, type = "following") => {
 }
 
 
-export const getUser = async id => {
+export const getUser = async (id: string) => {
+    if (!id) return null;
     const user = await getDoc(doc(db, "users", id));
     if (!user.exists()) return null;
-    return { id: user.id, ...user.data() }
+    return { id: user.id, ...user.data() } as User;
 }
 
-export const getRegex = (search) => {
+export const getRegex = (search: string) => {
     const searchWords = search.trim().split(/\s+/).map(word => `(?=.*${word})`).join('|');
     const regexPattern = `^(?=.*${searchWords}).*`;
     const regex = new RegExp(regexPattern, 'i');
@@ -67,7 +69,7 @@ export const getRegex = (search) => {
 }
 
 
-export const createSlug = (text) => {
+export const createSlug = (text:string) => {
     const slug = text
         .toLowerCase()
         .trim()
