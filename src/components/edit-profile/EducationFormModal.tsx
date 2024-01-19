@@ -67,7 +67,7 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
                 description: data?.description
             })
         }
-    }, [data])
+    }, [data, form])
 
     const { data: session } = useSession();
     const [isLoading, setIsLoading] = React.useState(false);

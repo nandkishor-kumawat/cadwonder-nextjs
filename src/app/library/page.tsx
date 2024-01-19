@@ -5,6 +5,11 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Model } from '@/lib/types/types'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'CadWonder - Models',
+}
 
 export default async function Page({
   searchParams,

@@ -6,11 +6,16 @@ import Link from 'next/link'
 import React from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { getUserByEmail } from './action'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'CadWonder - Dashboard',
+}
 
 async function Dashboard() {
 
-    const session = await getServerSession();
-    const user = await getUserByEmail(session?.user?.email as string);
+  const session = await getServerSession();
+  const user = await getUserByEmail(session?.user?.email as string);
 
   return (
     <div className="h-full overflow-hidden">

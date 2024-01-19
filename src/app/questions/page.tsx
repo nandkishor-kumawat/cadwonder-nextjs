@@ -2,8 +2,13 @@ import SearchBar from '@/components/form/SearchBar';
 import Questions from '@/components/questions/question-list';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import React, { Suspense } from 'react'
+
+export const metadata: Metadata = {
+  title: 'CadWonder - Questions',
+}
 
 export default async function Page({
   searchParams,

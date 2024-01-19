@@ -71,7 +71,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
                 description: data?.description
             })
         }
-    }, [data])
+    }, [data, form])
 
     const [isLoading, setIsLoading] = React.useState(false);
     const closeBtnRef = React.useRef<HTMLButtonElement>(null);

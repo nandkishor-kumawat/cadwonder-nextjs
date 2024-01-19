@@ -10,6 +10,7 @@ import LikeButton from './like-button';
 import { getServerSession } from 'next-auth';
 import { getUserByEmail } from '@/app/dashboard/action';
 import { getUser } from '@/lib/functions';
+import { options } from '@/app/api/auth/[...nextauth]/options';
 
 
 const ModelItem = async ({ model: data }: any) => {
@@ -22,7 +23,7 @@ const ModelItem = async ({ model: data }: any) => {
         modelName
     } = data;
 
-    const session = await getServerSession();
+    const session = await getServerSession(options);
 
     const owner = await getUser(user_id);
 

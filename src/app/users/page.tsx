@@ -1,7 +1,12 @@
 import UserCard from '@/components/users/user-card';
 import { getUsers } from '@/lib/functions';
 import { User } from '@/lib/types/types';
+import { Metadata } from 'next';
 import React from 'react'
+
+export const metadata: Metadata = {
+  title: 'CadWonder - Users',
+}
 
 export default async function Users() {
 

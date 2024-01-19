@@ -206,7 +206,7 @@ const EditProfile = () => {
         });
         return () => unsubscribe()
 
-    }, [user_id]);
+    }, [user_id, form]);
 
 
     return (
