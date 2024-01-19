@@ -24,6 +24,8 @@ import { useState } from "react";
 import Spinner from "@/components/loaders/Spinner";
 import Overlay from "@/components/loaders/overlay";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { loginUser } from "../login/action";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -66,7 +68,7 @@ export default function ProfileForm() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     const username = values.name
       .toLowerCase()
       .replace(/[^\w\s]/g, ' ')
@@ -74,21 +76,31 @@ export default function ProfileForm() {
       .replace(/\s+/g, '-')
     setIsLoading(true);
 
-    fetch(process.env.API_URL + '/api/auth/signup', {
+    const data = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ ...values, username })
-    }).then(res => res.json()).then(data => {
-      console.table(data.user);
-      if (data.error) {
-        alert(data.error);
-      } else {
-        router.push('/login');
-      }
+    }).then(res => res.json())
+
+    console.table(data.user);
+    
+
+    if (data.error) {
+      alert(data.error);
       setIsLoading(false)
+      return
+    }
+
+    const res = await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: false,
     })
+    await loginUser("/");
+    setIsLoading(false)
+
   }
 
 

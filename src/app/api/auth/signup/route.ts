@@ -10,7 +10,8 @@ export async function POST(request: Request) {
         password,
         country,
         college,
-        role
+        role,
+        username
     } = await request.json();
 
 
@@ -24,6 +25,7 @@ export async function POST(request: Request) {
 
         const userDetails = {
             uid: user.uid,
+            username,
             name,
             email,
             country,

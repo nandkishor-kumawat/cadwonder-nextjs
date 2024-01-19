@@ -17,6 +17,7 @@ export default async function Page({ params: { username } }: { params: { usernam
     });
 
     const user = users[0];
+    console.log(user)
 
     const userQuestions = await getData({
         coll: "questions",

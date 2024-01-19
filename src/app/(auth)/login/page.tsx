@@ -15,13 +15,14 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import PasswordInput from "@/components/form/PasswordInput";
 import { FcGoogle } from "react-icons/fc";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Spinner from "@/components/loaders/Spinner";
 import Overlay from "@/components/loaders/overlay"
+import { loginUser } from "./action"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -47,10 +48,12 @@ export default function ProfileForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { email, password } = values
-    setIsLoading(true)
+    setIsLoading(true);
+
     const res = await signIn("credentials", {
       email,
       password,
@@ -59,13 +62,15 @@ export default function ProfileForm() {
     })
 
     setIsLoading(false);
-    console.log(res)
     if (res?.error) {
       setErrorMessage("Invalid credentials");
       setTimeout(() => setErrorMessage(""), 2000);
-    } else {
-      router.push(callbackUrl);
+      return;
     }
+
+    startTransition(async () => {
+      await loginUser(callbackUrl)
+    })
   }
 
   const handleGoogleSignIn = async () => {
