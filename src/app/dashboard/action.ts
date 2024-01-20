@@ -62,15 +62,3 @@ export const updateProfile = async (data: any, user_id: string) => {
     redirect("/dashboard");
     return data;
 }
-
-
-export const getUserByEmail = async (email: string) => {
-    if (!email) return null;
-    const users = await getData({
-        coll: "users",
-        key: "email",
-        value: email
-    });
-
-    return users[0];
-}

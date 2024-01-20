@@ -1,22 +1,27 @@
-import type { DefaultUser, NextAuthOptions } from 'next-auth'
+import { getServerSession, type DefaultUser, type NextAuthOptions } from 'next-auth'
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials"
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase';
+import { getUserByEmail } from '@/lib/functions';
+import { redirect } from 'next/navigation';
 
-
-interface User {
-    id: string;
-    name?: string | null | undefined;
-    email?: string | null | undefined;
-    image?: string | null | undefined;
-}
 
 export const options: NextAuthOptions = {
     providers: [
         GoogleProvider({
-            profile(profile) {
+            async profile(profile) {
+                // const user = await getUserByEmail(profile.email);
+
+                // if (user) {
+                //     return user
+                // } else {
+                //     redirect(`/signup?email=${profile.email}&name=${profile.name}`);
+                // }
+
+                // return user;
+
                 return {
                     id: profile.sub,
                     name: profile.name,
@@ -73,14 +78,25 @@ export const options: NextAuthOptions = {
             }
             return { ...token, ...user };
         },
-        
+
         async session({ session, token }) {
             session.user = token as any;
             return session
-        }
+        },
+        // async signIn({ account, profile }) {
+        //     console.log({account})
+        //     if (account?.provider === "google") {
+        //         const user = await getUserByEmail(profile?.email as string);
+        //         return user;
+        //     }
+        //     return true // Do different verification for other providers that don't have `email_verified`
+        // },
+
     },
     pages: {
         signIn: "/login",
     },
     secret: process.env.NEXTAUTH_SECRET
 }
+
+export const getAuth = () => getServerSession(options);

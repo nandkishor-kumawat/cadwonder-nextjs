@@ -33,6 +33,7 @@ export interface User {
     college: string
     role: string
     profilePicture: string
+    coverPicture: string
     experiences: Experience[]
     education: Education[]
 }

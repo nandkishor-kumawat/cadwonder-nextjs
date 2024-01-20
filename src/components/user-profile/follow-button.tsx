@@ -2,7 +2,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from '../ui/button'
 import { useSession } from 'next-auth/react'
-import { getData } from '@/lib/functions'
 import { addDoc, collection, deleteDoc, doc, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '@/firebase'
 import Link from 'next/link'

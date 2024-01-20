@@ -3,7 +3,6 @@ import SearchBar from '@/components/form/SearchBar'
 import ModelList from '@/components/model/model-list'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Model } from '@/lib/types/types'
 import Link from 'next/link'
 import { Metadata } from 'next'
 

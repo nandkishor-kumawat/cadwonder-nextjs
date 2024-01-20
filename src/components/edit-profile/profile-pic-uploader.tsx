@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import React, { useState, useRef, useEffect, use } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import AvatarEditor from 'react-avatar-editor';
-import { AiOutlinePlusCircle, AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai'
+import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai'
 import { Slider } from '../ui/slider';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -93,7 +93,7 @@ const ProfilePicUploader = ({
   const handleZoomChange = ([value]: number[]) => {
     setScale(value);
   };
-  
+
   return (
     <div className='my-2'>
       {pic && !image && (
@@ -102,9 +102,9 @@ const ProfilePicUploader = ({
             className={`m-auto ${ratio === 1 ? 'rounded-full' : 'rounded-lg'}`}
             style={{
               border: '1px solid silver',
-              width:ratio === 1 ? canvasWidth : '100%',
+              width: ratio === 1 ? canvasWidth : '100%',
               objectFit: 'cover',
-              height:'auto'
+              height: 'auto'
             }}
             priority={true}
             width={200}

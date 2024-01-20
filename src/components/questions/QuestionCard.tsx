@@ -2,12 +2,8 @@ import React from 'react'
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
 } from "@/components/ui/card"
-import { color1, color2 } from '@/lib/data/colors';
+import { color2 } from '@/lib/data/colors';
 import Link from 'next/link';
 import { getData, getUser } from '@/lib/functions';
 import QuestionStates from './question-states';
@@ -27,7 +23,7 @@ const QuestionCard = async ({ question: data }: any) => {
 
 
     const user = await getUser(user_id);
-    
+
     const answers = await getData({
         coll: "answers",
         key: "question_id",
@@ -40,7 +36,7 @@ const QuestionCard = async ({ question: data }: any) => {
         <Card className='my-2 py-2' style={{ backgroundColor: color2 }}>
             <CardContent className='flex p-2 gap-3'>
 
-            <QuestionStates question_id={id} user_id={user_id} />
+                <QuestionStates question_id={id} user_id={user_id} />
 
                 <div className="flex flex-1">
                     <div className='flex flex-col flex-1'>

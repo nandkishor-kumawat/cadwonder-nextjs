@@ -1,12 +1,8 @@
 import UserInfo from '@/components/dashboard/user-info'
-import ModelItem from '@/components/model/ModelItem'
 import { getServerSession } from 'next-auth'
-import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
-import { FaEdit } from 'react-icons/fa'
-import { getUserByEmail } from './action'
 import { Metadata } from 'next'
+import { getUserByEmail } from '@/lib/functions'
 
 export const metadata: Metadata = {
   title: 'CadWonder - Dashboard',

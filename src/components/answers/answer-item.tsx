@@ -1,6 +1,4 @@
 import React from 'react'
-import CommentList from '../comments/comment-list'
-import CommentForm from '../comments/comment-form'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Link from 'next/link'
 import { getServerSession } from 'next-auth'

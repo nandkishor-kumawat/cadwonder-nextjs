@@ -61,6 +61,17 @@ export const getUser = async (id: string) => {
     return { id: user.id, ...user.data() } as User;
 }
 
+export const getUserByEmail = async (email: string) => {
+    if (!email) return null;
+    const users = await getData({
+        coll: "users",
+        key: "email",
+        value: email
+    });
+
+    return users[0];
+}
+
 export const getRegex = (search: string) => {
     const searchWords = search.trim().split(/\s+/).map(word => `(?=.*${word})`).join('|');
     const regexPattern = `^(?=.*${searchWords}).*`;

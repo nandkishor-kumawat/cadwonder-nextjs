@@ -10,7 +10,6 @@ import { Skeleton } from '../ui/skeleton'
 import { uploadFileWithProgress } from '@/firebase/functions'
 import { FileDetails } from '@/lib/types/types'
 import UploadFileCard from '../upload-file-card'
-import { revalidatePath, revalidateTag } from 'next/cache'
 import Overlay from '../loaders/overlay'
 
 

@@ -3,12 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { IoMdClose } from "react-icons/io";
 import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,15 +19,13 @@ import { Textarea } from "@/components/ui/textarea";
 import categories, { category1 } from "@/lib/data/category";
 import SoftwareSkills from "@/lib/data/SoftwareSkills";
 import TagsInput from "@/components/ui/tags-input";
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { Progress } from "@/components/ui/progress";
 import { uploadFileWithProgress } from "@/firebase/functions";
 import { FileDetails } from "@/lib/types/types";
 import { useSession } from "next-auth/react";
 import { createSlug } from "@/lib/functions";
-import { redirect, useRouter } from "next/navigation";
-import { revalidateTag } from "next/cache";
+import { useRouter } from "next/navigation";
 import UploadFileCard from "@/components/upload-file-card";
 import Overlay from "@/components/loaders/overlay";
 import { postModel } from "@/app/library/action";
@@ -132,7 +128,7 @@ export default function NewQuestion() {
 
       await postModel('/questions');
 
-      router.replace(`/questions/${response.slug}`,{
+      router.replace(`/questions/${response.slug}`, {
         scroll: true
       });
     } catch (error) {
@@ -156,7 +152,7 @@ export default function NewQuestion() {
             <Button
               className="bg-orange-500 text-lg hover:bg-orange-600"
               onClick={form.handleSubmit(onSubmit)}
-            >{isLoading?'Publishing...':'Publish'}</Button>
+            >{isLoading ? 'Publishing...' : 'Publish'}</Button>
           </div>
         </div>
       </div>

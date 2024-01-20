@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,8 +16,7 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useState, useTransition } from "react";
 import PasswordInput from "@/components/form/PasswordInput";
-import { FcGoogle } from "react-icons/fc";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Spinner from "@/components/loaders/Spinner";
 import Overlay from "@/components/loaders/overlay"
@@ -74,16 +72,10 @@ export default function ProfileForm() {
   }
 
   const handleGoogleSignIn = async () => {
-
     const res = await signIn("google", {
       redirect: false,
       // callbackUrl
     })
-
-
-
-    console.log(res)
-
   }
 
   return (

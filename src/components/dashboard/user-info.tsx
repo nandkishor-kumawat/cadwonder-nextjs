@@ -3,9 +3,8 @@ import Link from 'next/link'
 import React from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { getData } from '@/lib/functions'
+import { getData, getUserByEmail } from '@/lib/functions'
 import { getServerSession } from 'next-auth'
-import { getUserByEmail } from '@/app/dashboard/action'
 
 const UserInfo = async () => {
 
@@ -27,14 +26,14 @@ const UserInfo = async () => {
 
     return (
         <div className={`coverPicture flex items-center justify-center h-full relative`}>
-            <Image
+            {user.coverPicture && <Image
                 src={user.coverPicture as string}
                 alt="coverPicture"
                 className='w-full h-1/3 object-cover absolute top-0 left-0'
                 width={1280}
                 height={920}
                 priority={true}
-            />
+            />}
 
             <div className='detail w-[32rem] h-[12rem] m-auto relative' style={{
                 background: 'rgb(255 255 255 / 10%)',

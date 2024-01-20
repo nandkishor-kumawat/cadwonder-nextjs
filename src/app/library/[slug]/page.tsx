@@ -1,14 +1,5 @@
 import React, { Suspense } from 'react'
 import { Metadata } from 'next';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import CommentList from '@/components/comments/comment-list';
-import Link from 'next/link';
-import CommentForm from '@/components/comments/comment-form';
-import { getServerSession } from 'next-auth';
-import AnswerForm from '@/components/answers/answer-form';
-import AnswerItem from '@/components/answers/answer-item';
-import { Button } from '@/components/ui/button';
-import { FileDetails } from '@/lib/types/types';
 import DataInfo from '@/components/questions/data-info';
 
 type Props = {

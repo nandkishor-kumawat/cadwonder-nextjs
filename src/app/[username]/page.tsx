@@ -10,14 +10,13 @@ import { MdOutlineLocationOn } from 'react-icons/md';
 
 export default async function Page({ params: { username } }: { params: { username: string } }) {
 
-    const users = await getData({
+    const [user] = await getData({
         coll: "users",
         key: "username",
         value: username
     });
 
-    const user = users[0];
-    console.log(user)
+    if (!user) return null;
 
     const userQuestions = await getData({
         coll: "questions",

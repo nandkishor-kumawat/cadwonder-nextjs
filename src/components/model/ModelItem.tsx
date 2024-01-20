@@ -3,13 +3,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { MdDownload } from 'react-icons/md';
-import { AiFillLike } from 'react-icons/ai'
 import { BiCommentDetail } from 'react-icons/bi'
 import { likeModel } from '@/app/library/action';
 import LikeButton from './like-button';
 import { getServerSession } from 'next-auth';
-import { getUserByEmail } from '@/app/dashboard/action';
-import { getUser } from '@/lib/functions';
+import { getUser, getUserByEmail } from '@/lib/functions';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 
 

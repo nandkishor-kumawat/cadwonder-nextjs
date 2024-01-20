@@ -28,7 +28,7 @@ const QuestionStates = ({
 
     useEffect(() => {
         if (!user_id) return;
-        const q = query(collection(db, `followers`), where("following", "==", user_id));
+        const q = query(collection(db, `followers`), where("following_id", "==", user_id));
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setFollowerCount(snapshot.docs.length);
         });

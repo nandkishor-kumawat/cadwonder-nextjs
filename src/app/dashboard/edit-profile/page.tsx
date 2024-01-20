@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button'
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -34,7 +33,6 @@ import { db } from '@/firebase'
 import { useSession } from 'next-auth/react'
 import ProfilePicUploader from '@/components/edit-profile/profile-pic-uploader'
 import { updateProfile } from '../action'
-import { useRouter } from 'next/navigation'
 import Overlay from '@/components/loaders/overlay'
 
 interface linkType {

@@ -1,20 +1,13 @@
-import { CopyIcon } from "@radix-ui/react-icons"
-
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import BoxModel from "./BoxModel"
-import SoftwareSkills from "@/lib/data/SoftwareSkills"
 import { ScrollArea } from "./ui/scroll-area"
 import { FaEdit } from "react-icons/fa"
 import { AiOutlineAppstoreAdd } from "react-icons/ai"
