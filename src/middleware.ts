@@ -10,6 +10,7 @@ export function middleware(request: NextRequest) {
 
   const token = request.cookies.get("next-auth.session-token")?.value || "";
   const callback = request.cookies.get("next-auth.callback-url")?.value || "";
+  console.log(request.cookies)
 
   if (isPublicPath && token) {
     return NextResponse.redirect(new URL('/', request.nextUrl));
