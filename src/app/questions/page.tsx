@@ -22,9 +22,9 @@ export default async function Page({
   const { questions } = await fetch(`${process.env.API_URL}/api/questions?query=${searchParams?.query ?? ""}`).then(res => res.json())
 
   return (
-    <div className="h-full">
-      <div className="container max-w-3xl mx-auto px-2 mb-2 h-full">
-        <div className="h-full">
+    <div className="h-full overflow-hidden">
+      <div className="h-full overflow-y-auto scrollbar">
+        <div className="container max-w-3xl mx-auto px-2 mb-2 h-full">
 
           <Link href={'/questions/new'}>
             <Button className="text-lg my-4 bg-orange-400 hover:bg-orange-500">Ask Question</Button>

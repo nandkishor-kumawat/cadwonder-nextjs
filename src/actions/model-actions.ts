@@ -2,10 +2,21 @@
 import { revalidatePath } from "next/cache"
 
 import { db } from "@/firebase";
-import { deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { Model } from "@/lib/types/types";
 
-export const postModel = async (path:string) => {
-    revalidatePath(path)
+export const postModel = async (body: Omit<Model, "id">) => {
+    try {
+        const docRef = await addDoc(collection(db, 'models'), {
+            ...body,
+            createdAt: Date.now(),
+        });
+        revalidatePath('/library')
+        return { id: docRef.id, ...body, error: null };
+    } catch (error) {
+        console.error('Error creating Model:', error);
+        return { error: "Error creating Model" }
+    }
 }
 
 export const likeModel = async (formData: FormData) => {

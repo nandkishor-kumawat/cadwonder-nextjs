@@ -24,6 +24,7 @@ import Overlay from "@/components/loaders/overlay";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { loginUser } from "@/actions";
+import { createSlug } from "@/lib/functions"
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -67,11 +68,9 @@ export default function ProfileForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const username = values.name
-      .toLowerCase()
-      .replace(/[^\w\s]/g, ' ')
-      .trim()
-      .replace(/\s+/g, '-')
+
+    const username = await createSlug("users", "username", values.name);
+
     setIsLoading(true);
 
     const data = await fetch('/api/auth/signup', {
@@ -83,7 +82,7 @@ export default function ProfileForm() {
     }).then(res => res.json())
 
     console.table(data.user);
-    
+
 
     if (data.error) {
       alert(data.error);

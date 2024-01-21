@@ -12,13 +12,17 @@ export default async function Users() {
   const users = await getUsers();
 
   return (
-      <div className="container max-w-2xl">
-        <h1 className="text-2xl mt-4 mb-2 font-bold">Users</h1>
-        <div className="flex flex-col gap-1">
-          {users?.map(user => (
+    <div className="h-full overflow-hidden">
+      <div className="h-full overflow-y-auto scrollbar">
+        <div className="container max-w-2xl py-3">
+          <h1 className="text-2xl font-bold">Users</h1>
+          <div className="flex flex-col gap-1">
+            {users?.map(user => (
               <UserCard key={user.id} user={user} />
-          ))}
+            ))}
+          </div>
         </div>
       </div>
+    </div>
   )
 }

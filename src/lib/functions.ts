@@ -4,7 +4,7 @@ import { User } from "./types/types";
 
 
 export const getData = async ({ coll, key, value }: { coll: string, key: string, value: string }) => {
-    if(!coll || !key || !value) return []
+    if (!coll || !key || !value) return []
     const q = query(collection(db, coll), where(key, "==", value));
 
     const data = [] as any[]
@@ -28,7 +28,7 @@ export const getUsers = async () => {
     return users
 }
 
-export const getDataFromCollection = async (Collection:string) => {
+export const getDataFromCollection = async (Collection: string) => {
     const q = query(collection(db, Collection));
     const d = [] as any[]
     const querySnapshot = await getDocs(q);
@@ -80,7 +80,7 @@ export const getRegex = (search: string) => {
 }
 
 
-export const createSlug = (text:string) => {
+export const createSlug = async (Collection: string, field: string, text: string): Promise<string> => {
     const slug = text
         .toLowerCase()
         .trim()
@@ -88,5 +88,10 @@ export const createSlug = (text:string) => {
         .replace(/[\s_-]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
-    return slug + '-' + Date.now().toString().slice(-2);
+    const data = await getData({ coll: Collection, key: field, value: slug });
+    if (data.length === 0) return slug;
+
+    const data2 = await getDataFromCollection(Collection);
+    const count = data2.length;
+    return `${slug}-${count}`;
 }

@@ -20,7 +20,6 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { postModel } from '@/actions'
 
-export const dynamic = 'force-static'
 
 const formSchema = z.object({
   modelName: z.string().min(5, {
@@ -90,34 +89,24 @@ function NewModal() {
       file_details = await handleUploadFiles(files) as FileDetails[];
     }
 
-    const slug = createSlug(other.modelName);
+    const slug = await createSlug('models', 'slug', other.modelName);
 
     const body = {
       ...other,
       file_details,
       slug,
-      user_id: session?.user?.uid,
+      user_id: session?.user.uid as string,
     }
 
-    try {
-      const response = await fetch(`${process.env.API_URL}/api/models/new`, {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(res => res.json());
-      
-      await postModel('/library');
-      
-      router.replace(`/library/${response.slug}`,{
-        scroll:false
-      });
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsLoading(false)
-    }
+    const response = await postModel(body);
+    setIsLoading(false);
+    if (response?.error) return alert(response.error);
+
+    router.replace(`/library/${slug}`, {
+      scroll: false
+    });
+
+
   }
 
 

@@ -28,9 +28,8 @@ import { createSlug } from "@/lib/functions";
 import { useRouter } from "next/navigation";
 import UploadFileCard from "@/components/upload-file-card";
 import Overlay from "@/components/loaders/overlay";
-import { postModel } from "@/actions";
+import { postModel, postQuestion } from "@/actions";
 
-export const dynamic = 'force-static'
 
 const formSchema = z.object({
   question: z.string().min(10, {
@@ -109,34 +108,23 @@ export default function NewQuestion() {
       file_details = await handleUploadFiles(files) as FileDetails[];
     }
 
-    const slug = createSlug(other.question);
+    const slug = await createSlug('questions', 'slug', other.question);
+    console.log(slug)
 
     const body = {
       ...other,
       file_details,
       slug,
-      user_id: session?.user?.uid,
+      user_id: session?.user?.uid as string,
     }
 
-    try {
-      const response = await fetch(`${process.env.API_URL}/api/questions/new`, {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then(res => res.json());
+    const response = await postQuestion(body);
+    setIsLoading(false);
+    if (response?.error) return alert(response.error);
 
-      await postModel('/questions');
-
-      router.replace(`/questions/${response.slug}`, {
-        scroll: true
-      });
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsLoading(false);
-    }
+    router.replace(`/questions/${slug}`, {
+      scroll: false
+    });
   }
 
 

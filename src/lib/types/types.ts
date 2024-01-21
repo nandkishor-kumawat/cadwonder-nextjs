@@ -52,10 +52,10 @@ export interface Question {
     category: string
     software?: string
     file_details?: FileDetails[]
-    views: number
-    answer_count: number
+    views?: number
+    answer_count?: number
     tags?: string[]
-    createdAt: number
+    createdAt?: number
 }
 
 export interface Answer {
@@ -84,5 +84,5 @@ export interface Model {
     slug: string
     category: string[]
     file_details: FileDetails[]
-    createdAt: number
+    createdAt?: number
 }

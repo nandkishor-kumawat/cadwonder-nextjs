@@ -33,7 +33,9 @@ export default function RootLayout({
                 {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
             ) : null}
             <Navbar />
-            {children}
+            <div style={{ height: 'calc(100% - 3.5rem)' }}>
+              {children}
+            </div>
           </ThemeProvider>
         </Providers>
       </body>

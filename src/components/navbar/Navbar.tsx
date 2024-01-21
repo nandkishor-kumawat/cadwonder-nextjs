@@ -11,7 +11,7 @@ async function Navbar() {
 
 
     return (
-        <header className="text-gray-600 body-font sticky top-0  z-10 border-b-[silver] border-b" style={{ backgroundColor: bg1 }}>
+        <header className="text-gray-600 body-font sticky top-0 flex h-14 z-10 border-b-[silver] border-b" style={{ backgroundColor: bg1 }}>
             <div className="w-full flex px-4 py-2 items-center justify-between">
                 <Link href="/" className="text-2xl title-font font-medium items-center text-white flex gap-1">
                     <Image style={{

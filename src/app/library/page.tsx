@@ -25,29 +25,33 @@ export default async function Page({
 
 
   return (
-    <div className="container max-w-4xl mx-auto px-2 mb-2">
-      <Link href={'/library/new'}>
-        <Button className="text-lg my-4 bg-orange-400 hover:bg-orange-500">New Model</Button>
-      </Link>
+    <div className="h-full overflow-hidden">
+      <div className="h-full overflow-y-auto scrollbar">
+        <div className="container max-w-4xl mx-auto px-2 mb-2">
+          <Link href={'/library/new'}>
+            <Button className="text-lg my-4 bg-orange-400 hover:bg-orange-500">New Model</Button>
+          </Link>
 
-      <SearchBar />
+          <SearchBar />
 
 
-      {models.length === 0 ? <p className="text-center text-gray-500">No models found</p> : (
+          {models.length === 0 ? <p className="text-center text-gray-500">No models found</p> : (
 
-        <div className="grid gap-2 pb-2" style={{
-          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-        }}>
-          <Suspense fallback={<>
-            <Skeleton className="w-full h-[300px] rounded" />
-            <Skeleton className="w-full h-[300px] rounded" />
-            <Skeleton className="w-full h-[300px] rounded" />
-          </>}>
-            {/* <Skeleton className="w-full h-[300px] rounded" /> */}
-            <ModelList models={models} />
-          </Suspense>
+            <div className="grid gap-2 pb-2" style={{
+              gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+            }}>
+              <Suspense fallback={<>
+                <Skeleton className="w-full h-[300px] rounded" />
+                <Skeleton className="w-full h-[300px] rounded" />
+                <Skeleton className="w-full h-[300px] rounded" />
+              </>}>
+                {/* <Skeleton className="w-full h-[300px] rounded" /> */}
+                <ModelList models={models} />
+              </Suspense>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }

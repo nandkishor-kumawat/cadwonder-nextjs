@@ -14,6 +14,7 @@ async function Dashboard() {
   const session = await getServerSession();
   const user = await getUserByEmail(session?.user?.email as string);
 
+  if (!session || !user) return null;
   return (
     <div className="h-full overflow-hidden">
       <div className="top h-full overflow-hidden">
