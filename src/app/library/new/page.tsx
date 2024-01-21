@@ -14,7 +14,7 @@ import { FileDetails } from '@/lib/types/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -105,10 +105,9 @@ function NewModal() {
     router.replace(`/library/${slug}`, {
       scroll: false
     });
-
-
   }
 
+  if(!session) redirect('/login?callbackUrl=/library/new');
 
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-50">

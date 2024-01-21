@@ -25,7 +25,7 @@ import { uploadFileWithProgress } from "@/firebase/functions";
 import { FileDetails } from "@/lib/types/types";
 import { useSession } from "next-auth/react";
 import { createSlug } from "@/lib/functions";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import UploadFileCard from "@/components/upload-file-card";
 import Overlay from "@/components/loaders/overlay";
 import { postModel, postQuestion } from "@/actions";
@@ -127,6 +127,7 @@ export default function NewQuestion() {
     });
   }
 
+  if(!session) redirect('/login?callbackUrl=/questions/new');
 
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-50">

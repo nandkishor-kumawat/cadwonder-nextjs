@@ -34,7 +34,11 @@ export default function RootLayout({
             ) : null}
             <Navbar />
             <div style={{ height: 'calc(100% - 3.5rem)' }}>
-              {children}
+              <div className="h-full overflow-hidden">
+                <div className="h-full overflow-y-auto scrollbar">
+                  {children}
+                </div>
+              </div>
             </div>
           </ThemeProvider>
         </Providers>
