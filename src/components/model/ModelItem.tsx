@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { MdDownload } from 'react-icons/md';
 import { BiCommentDetail } from 'react-icons/bi'
-import { likeModel } from '@/app/library/action';
+import { likeModel } from '@/actions';
 import LikeButton from './like-button';
 import { getServerSession } from 'next-auth';
 import { getUser, getUserByEmail } from '@/lib/functions';

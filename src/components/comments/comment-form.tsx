@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useFormStatus } from 'react-dom'
-import { postComment } from '@/app/questions/[slug]/action'
+import { postComment } from '@/actions'
 import { Skeleton } from '../ui/skeleton'
 
 

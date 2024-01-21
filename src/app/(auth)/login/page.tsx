@@ -20,7 +20,7 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Spinner from "@/components/loaders/Spinner";
 import Overlay from "@/components/loaders/overlay"
-import { loginUser } from "./action"
+import { loginUser } from "@/actions"
 
 const formSchema = z.object({
   email: z.string().email({

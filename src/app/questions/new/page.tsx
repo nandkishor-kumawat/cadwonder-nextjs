@@ -28,8 +28,9 @@ import { createSlug } from "@/lib/functions";
 import { useRouter } from "next/navigation";
 import UploadFileCard from "@/components/upload-file-card";
 import Overlay from "@/components/loaders/overlay";
-import { postModel } from "@/app/library/action";
+import { postModel } from "@/actions";
 
+export const dynamic = 'force-static'
 
 const formSchema = z.object({
   question: z.string().min(10, {
@@ -268,8 +269,5 @@ export default function NewQuestion() {
         </div>
 
       </div>
-
-
-
     </div>)
 }

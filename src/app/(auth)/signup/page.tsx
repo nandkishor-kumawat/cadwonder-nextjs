@@ -23,7 +23,7 @@ import Spinner from "@/components/loaders/Spinner";
 import Overlay from "@/components/loaders/overlay";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { loginUser } from "../login/action";
+import { loginUser } from "@/actions";
 
 const formSchema = z.object({
   name: z.string().min(3, {

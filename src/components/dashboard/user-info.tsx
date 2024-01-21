@@ -10,6 +10,7 @@ const UserInfo = async () => {
 
     const session = await getServerSession();
     const user = await getUserByEmail(session?.user?.email as string);
+    if (!session || !user) return null;
 
     const userQuestions = await getData({
         coll: "questions",

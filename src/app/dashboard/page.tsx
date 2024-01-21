@@ -3,13 +3,14 @@ import { getServerSession } from 'next-auth'
 import React from 'react'
 import { Metadata } from 'next'
 import { getUserByEmail } from '@/lib/functions'
+import { checkProtected } from '@/actions'
 
 export const metadata: Metadata = {
   title: 'CadWonder - Dashboard',
 }
 
 async function Dashboard() {
-
+  await checkProtected("/dashboard");
   const session = await getServerSession();
   const user = await getUserByEmail(session?.user?.email as string);
 

@@ -18,7 +18,9 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { postModel } from '../action'
+import { postModel } from '@/actions'
+
+export const dynamic = 'force-static'
 
 const formSchema = z.object({
   modelName: z.string().min(5, {

@@ -25,6 +25,13 @@ export const addExperience = async (experience: Experience, user: any) => {
     }
 }
 
+export const deleteExperience = async (formData: FormData) => {
+    const id = formData.get("id") as string;
+    const user_id = formData.get("user_id");
+    const docRef = doc(db, `users/${user_id}/workExperience`, id);
+    await deleteDoc(docRef);
+}
+
 export const addEducation = async (education: Education, user: any) => {
 
     const { id, ...rest } = education;
@@ -39,13 +46,6 @@ export const addEducation = async (education: Education, user: any) => {
         id: docRef.id,
         ...education
     }
-}
-
-export const deleteExperience = async (formData: FormData) => {
-    const id = formData.get("id") as string;
-    const user_id = formData.get("user_id");
-    const docRef = doc(db, `users/${user_id}/workExperience`, id);
-    await deleteDoc(docRef);
 }
 
 export const deleteEducation = async (formData: FormData) => {

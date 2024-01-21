@@ -12,7 +12,7 @@ export const likeModel = async (formData: FormData) => {
     const id = formData.get("id") as string;
     const user_id = formData.get("user_id") as string;
     const docRef = doc(db, `models/${id}/likes`, user_id);
-    const docSnap = await getDoc(docRef)
+    const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
         await deleteDoc(docRef);
     } else {
