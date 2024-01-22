@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 async function Dashboard() {
-  // await checkProtected("/dashboard");
+  await checkProtected("/dashboard");
   const session = await getServerSession();
   const user = await getUserByEmail(session?.user?.email as string);
 
