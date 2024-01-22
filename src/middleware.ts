@@ -11,4 +11,5 @@ export default function middleware(req: any) {
     if (!verify && is_protected) {
         return NextResponse.redirect(new URL(`/login?callbackUrl=${req.nextUrl.pathname}`, req.nextUrl.origin));
     }
+    return true;
 }
