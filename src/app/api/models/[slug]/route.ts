@@ -7,14 +7,11 @@ export const GET = async (request: Request, { params }: { params: { slug: string
 
     if (!slug) return new Response(JSON.stringify({ error: "Wrong Url" }), { status: 404 })
 
-    const models = await getData({
+    const [model] = await getData({
         coll: "models",
         key: "slug",
         value: slug
     })
-
-    const model = models[0];
-
 
     if (!model) return NextResponse.json({ error: "No Model found" }, { status: 404 });
 

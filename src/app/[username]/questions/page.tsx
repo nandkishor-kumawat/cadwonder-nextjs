@@ -12,7 +12,8 @@ const Page = async ({ params: { username } }: { params: { username: string } }) 
   const questions = await getData({
     coll: "questions",
     key: "user_id",
-    value: user.id
+    value: user.id,
+    order: "desc"
   }) as Question[];
 
   return (

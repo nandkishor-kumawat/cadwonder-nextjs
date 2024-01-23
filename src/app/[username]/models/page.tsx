@@ -12,7 +12,8 @@ const Page = async ({ params: { username } }: { params: { username: string } }) 
   const models = await getData({
     coll: "models",
     key: "user_id",
-    value: user.id
+    value: user.id,
+    order: "desc"
   }) as Model[];
 
   return (

@@ -41,7 +41,8 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
   const answers = await getData({
     coll: "answers",
     key: "question_id",
-    value: question.id
+    value: question.id,
+    order: "asc"
   });
 
 

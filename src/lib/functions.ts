@@ -3,9 +3,10 @@ import { OrderByDirection, collection, doc, getDoc, getDocs, onSnapshot, orderBy
 import { User } from "./types/types";
 
 
-export const getData = async ({ coll, key, value, order = "desc" }: { coll: string, key: string, value: string, order?: OrderByDirection }) => {
+export const getData = async ({ coll, key, value, order }: { coll: string, key: string, value: string, order?: OrderByDirection }) => {
     if (!coll || !key || !value) return []
-    let q = query(collection(db, coll), where(key, "==", value), orderBy("createdAt", order));
+    let q = query(collection(db, coll), where(key, "==", value));
+    if (order) q = query(collection(db, coll), where(key, "==", value), orderBy("createdAt", order));
 
     const data = [] as any[]
 
