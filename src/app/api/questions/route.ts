@@ -1,13 +1,16 @@
 import { db } from "@/firebase";
 import { getRegex } from "@/lib/functions";
 import { Question } from "@/lib/types/types";
-import { collection, getDocs, orderBy, query as que } from "firebase/firestore";
+import { collection, getDocs, orderBy, query as que, where } from "firebase/firestore";
 
 export const GET = async (request: Request) => {
     const {searchParams} = new URL(request.url);
     const query = searchParams.get('query');
+    const category = searchParams.get('category');
+    const software = searchParams.get('software');
 
-    const q = que(collection(db, 'questions'), orderBy('createdAt', 'desc'));
+    let q = que(collection(db, 'questions'), orderBy('createdAt', 'desc'));
+    
     const questions = [] as Question[];
 
     const querySnapshot = await getDocs(q);

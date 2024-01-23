@@ -13,20 +13,27 @@ export const metadata: Metadata = {
 export default async function Page({
   searchParams,
 }: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
+  searchParams?: Record<string, string>;
 }) {
 
-  const { questions } = await fetch(`${process.env.API_URL}/api/questions?query=${searchParams?.query ?? ""}`).then(res => res.json())
+  const filteredSearchParams = Object.fromEntries(
+    Object.entries(searchParams ?? {}).filter(([key, value]) => value !== undefined)
+  );
+
+  const params = new URLSearchParams(filteredSearchParams);
+  const queryString = params.toString();
+
+  const { questions } = await fetch(`${process.env.API_URL}/api/questions?${queryString}`).then(res => res.json())
 
   return (
     <div className="container max-w-3xl mx-auto px-2 mb-2 h-full">
 
-      <Link href={'/questions/new'}>
-        <Button className="text-lg my-4 bg-orange-400 hover:bg-orange-500">Ask Question</Button>
-      </Link>
+      <div className="flex items-center justify-between">
+        <h1 className='text-3xl font-semibold'>Questions</h1>
+        <Link href={'/questions/new'}>
+          <Button size={'sm'} className="text-base text-white my-4 bg-orange-400 hover:bg-orange-500 rounded-sm">Ask Question</Button>
+        </Link>
+      </div>
 
       <SearchBar />
 

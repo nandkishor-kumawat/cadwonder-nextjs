@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 import logo from '../../../public/logo.png'
-import MenuItems from './MenuItems';
+import MenuItems from './menu-items';
 
 async function Navbar() {
     const session = await getServerSession();

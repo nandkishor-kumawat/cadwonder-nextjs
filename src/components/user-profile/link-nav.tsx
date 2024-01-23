@@ -16,10 +16,10 @@ function LinkNav({ username }: { username: string }) {
             name: 'Models',
             path: `/${username}/models`,
         },
-        {
-            name: 'Questions',
-            path: `/${username}/questions`,
-        },
+        // {
+        //     name: 'Questions',
+        //     path: `/${username}/questions`,
+        // },
     ]
 
     return (

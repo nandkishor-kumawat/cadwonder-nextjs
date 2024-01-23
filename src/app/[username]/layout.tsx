@@ -12,7 +12,7 @@ export default function Layout({ children, params: { username } }: Props) {
         <div className='h-full'>
             <UserDetailsBanner username={username} />
             <LinkNav username={username} />
-            <div className="container max-w-3xl mx-auto px-2 my-2">
+            <div className="container max-w-3xl mx-auto p-2">
                 {children}
             </div>
         </div>

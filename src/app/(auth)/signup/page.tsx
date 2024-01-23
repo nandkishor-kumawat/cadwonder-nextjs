@@ -14,12 +14,12 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import PasswordInput from "@/components/form/PasswordInput";
+import PasswordInput from "@/components/form/password-input";
 import { SelectWithSearch } from "@/components/form/SelectWithSearch";
 import countries from "@/lib/data/countries";
 import roles from "@/lib/data/roles";
 import { useState } from "react";
-import Spinner from "@/components/loaders/Spinner";
+import Spinner from "@/components/loaders/spinner";
 import Overlay from "@/components/loaders/overlay";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";

@@ -15,10 +15,10 @@ import {
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useState, useTransition } from "react";
-import PasswordInput from "@/components/form/PasswordInput";
+import PasswordInput from "@/components/form/password-input";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Spinner from "@/components/loaders/Spinner";
+import Spinner from "@/components/loaders/spinner";
 import Overlay from "@/components/loaders/overlay"
 import { loginUser } from "@/actions"
 

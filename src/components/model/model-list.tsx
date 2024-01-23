@@ -1,5 +1,5 @@
 import React from 'react'
-import ModelItem from './ModelItem'
+import ModelItem from './model-item'
 import { Model } from '@/lib/types/types'
 
 export default function ModelList({ models }: { models: Model[] }) {
