@@ -1,11 +1,11 @@
 import { db } from "@/firebase";
-import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import { OrderByDirection, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { User } from "./types/types";
 
 
-export const getData = async ({ coll, key, value }: { coll: string, key: string, value: string }) => {
+export const getData = async ({ coll, key, value, order = "desc" }: { coll: string, key: string, value: string, order?: OrderByDirection }) => {
     if (!coll || !key || !value) return []
-    const q = query(collection(db, coll), where(key, "==", value));
+    let q = query(collection(db, coll), where(key, "==", value), orderBy("createdAt", order));
 
     const data = [] as any[]
 
@@ -27,6 +27,7 @@ export const getUsers = async () => {
     });
     return users
 }
+
 
 export const getDataFromCollection = async (Collection: string) => {
     const q = query(collection(db, Collection));
@@ -61,14 +62,12 @@ export const getUser = async (id: string) => {
     return { id: user.id, ...user.data() } as User;
 }
 
-export const getUserByEmail = async (email: string) => {
-    if (!email) return null;
-    const users = await getData({
-        coll: "users",
-        key: "email",
-        value: email
-    });
 
+export const getUserBy = async (key: string, value: string) => {
+    if (!value || !key) return null;
+    let q = query(collection(db, "users"), where(key, "==", value));
+    const querySnapshot = await getDocs(q);
+    const users = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as User[];
     return users[0];
 }
 

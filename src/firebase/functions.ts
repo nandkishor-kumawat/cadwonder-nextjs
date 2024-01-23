@@ -25,7 +25,6 @@ export const uploadFileWithProgress = async (file: File, index: number, onProgre
                 onProgress(index, progress);
             },
             (error) => {
-                console.log(error);
                 reject(error);
             },
             async () => {
@@ -33,7 +32,6 @@ export const uploadFileWithProgress = async (file: File, index: number, onProgre
                     const url = await getDownloadURL(uploadTask.snapshot.ref);
                     resolve({ name: file.name, url });
                 } catch (error) {
-                    console.log(error);
                     reject(error);
                 }
             }

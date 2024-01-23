@@ -39,7 +39,7 @@ export default async function AnswerItem({ answer }: Props) {
 
           <div className="deails my-1">
             <p>{answer.answer}</p>
-            {answer.file_details?.map((file: any) => (
+            {answer.file_details?.map((file) => (
               <a
                 href={file.url}
                 target="_blank"

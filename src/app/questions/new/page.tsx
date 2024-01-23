@@ -109,7 +109,6 @@ export default function NewQuestion() {
     }
 
     const slug = await createSlug('questions', 'slug', other.question);
-    console.log(slug)
 
     const body = {
       ...other,

@@ -4,15 +4,13 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase';
-import { getUserByEmail } from '@/lib/functions';
-import { redirect } from 'next/navigation';
 
 
 export const options: NextAuthOptions = {
     providers: [
         GoogleProvider({
             async profile(profile) {
-                // const user = await getUserByEmail(profile.email);
+                // const user = await getUserBy("email", profile.email);
 
                 // if (user) {
                 //     return user
@@ -84,9 +82,8 @@ export const options: NextAuthOptions = {
             return session
         },
         // async signIn({ account, profile }) {
-        //     console.log({account})
         //     if (account?.provider === "google") {
-        //         const user = await getUserByEmail(profile?.email as string);
+        //         const user = await getUserBy("email", profile?.email as string);
         //         return user;
         //     }
         //     return true // Do different verification for other providers that don't have `email_verified`

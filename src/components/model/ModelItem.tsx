@@ -7,7 +7,7 @@ import { BiCommentDetail } from 'react-icons/bi'
 import { likeModel } from '@/actions';
 import LikeButton from './like-button';
 import { getServerSession } from 'next-auth';
-import { getUser, getUserByEmail } from '@/lib/functions';
+import { getUser, getUserBy } from '@/lib/functions';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 
 
@@ -25,7 +25,7 @@ const ModelItem = async ({ model: data }: any) => {
 
     const owner = await getUser(user_id);
 
-    const user = await getUserByEmail(session?.user?.email as string);
+    const user = await getUserBy("email", session?.user?.email as string);
 
     return (
         <div className="rounded border bg-card text-card-foreground shadow-sm group">

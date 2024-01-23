@@ -76,7 +76,6 @@ const ProfilePicUploader = ({
       const dataURI = canvas.toDataURL('image/jpeg')
       const blob = await fetch(dataURI).then((res) => res.blob());
       const { url } = await uploadFile(blob, `${session?.user?.id}-${type}.jpg`);
-      console.log(url)
       handleSave(url);
       await updateDoc(doc(db, 'users', session?.user?.id as string), {
         [`${type}Picture`]: url

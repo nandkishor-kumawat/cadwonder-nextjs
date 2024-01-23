@@ -1,6 +1,6 @@
+import React from 'react'
 import { checkProtected } from '@/actions'
 import EditProfile from '@/components/edit-profile/edit-profile'
-import React from 'react'
 
 const Page = async () => {
 

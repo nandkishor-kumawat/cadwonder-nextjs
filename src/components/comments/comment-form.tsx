@@ -33,8 +33,6 @@ export default function CommentForm({ association_id }: Props) {
         name: string;
         profilePicture: string;
     };
-    const ref = React.useRef<HTMLFormElement>(null);
-
 
     if (!user) return (
         <div className="flex gap-2 items-center">
@@ -46,12 +44,9 @@ export default function CommentForm({ association_id }: Props) {
 
     return (
         <form
-            ref={ref}
-            action={async (formData) => {
-                await postComment(formData);
-                ref.current?.reset();
-            }}>
-
+            key={Math.random()}
+            action={postComment}
+        >
             <input type="hidden" name="association_id" value={association_id} />
             <input type="hidden" name="user_id" value={user?.id} />
             <div className="my-3">

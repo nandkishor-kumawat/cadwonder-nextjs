@@ -41,7 +41,6 @@ export default function AnswerForm({ question_id }: Props) {
     name: string;
     profilePicture: string;
   };
-  const ref = React.useRef<HTMLFormElement>(null);
 
   const [uploadProgress, setUploadProgress] = useState<Record<number, number>>({});
   const [files, setFiles] = useState<File[]>([]);
@@ -66,7 +65,6 @@ export default function AnswerForm({ question_id }: Props) {
 
     try {
       const results = await Promise.all(uploadPromises);
-
       return results;
     } catch (error) {
       console.error('Error uploading files:', error);
@@ -86,7 +84,6 @@ export default function AnswerForm({ question_id }: Props) {
 
     setFiles([]);
     setUploadProgress({});
-    ref.current?.reset();
   }
 
 
@@ -105,14 +102,9 @@ export default function AnswerForm({ question_id }: Props) {
 
 
   return (
-    <>
-
       <form
-        ref={ref}
-        // onSubmit={handleSubmit}
-
+        key={Math.random()}
         action={handleSubmit}
-
       >
 
         <div className="py-2 my-1">
@@ -148,6 +140,5 @@ export default function AnswerForm({ question_id }: Props) {
 
         </div>
       </form>
-    </>
   )
 }

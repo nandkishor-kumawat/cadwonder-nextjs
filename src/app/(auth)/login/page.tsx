@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { useState, useTransition } from "react";
 import PasswordInput from "@/components/form/PasswordInput";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Spinner from "@/components/loaders/Spinner";
 import Overlay from "@/components/loaders/overlay"
@@ -67,7 +67,7 @@ export default function ProfileForm() {
     }
 
     startTransition(async () => {
-      await loginUser(callbackUrl)
+      await loginUser(callbackUrl);
     })
   }
 
@@ -77,6 +77,13 @@ export default function ProfileForm() {
       // callbackUrl
     })
   }
+
+  // const { data: session } = useSession()
+  // if (session?.user) {
+  //   router.replace(callbackUrl);
+  // }
+  // if(session?.user) return null;
+
 
   return (
     <div className="container max-w-md m-auto sm:my-32 my-28">
@@ -111,7 +118,7 @@ export default function ProfileForm() {
               )}
             />
             <div className="text-right mt-2">
-              <Link href="/forgot-password">Forgot your password?</Link>
+              <Link href="/reset-password">Forgot your password?</Link>
             </div>
           </div>
 

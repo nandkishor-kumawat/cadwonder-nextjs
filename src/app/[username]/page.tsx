@@ -1,34 +1,15 @@
+import React from 'react'
 import EducationDetailCard from '@/components/edit-profile/EducationDetailCard';
 import ExperienceDetailCard from '@/components/edit-profile/ExperienceDetailCard';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import FollowButton from '@/components/user-profile/follow-button';
-import { getData, getDataFromCollection } from '@/lib/functions'
-import Link from 'next/link';
-import React from 'react'
-import { MdOutlineLocationOn } from 'react-icons/md';
+import { getDataFromCollection, getUserBy } from '@/lib/functions'
 
 export default async function Page({ params: { username } }: { params: { username: string } }) {
 
-    const [user] = await getData({
-        coll: "users",
-        key: "username",
-        value: username
-    });
+    const user = await getUserBy("username", username);
 
     if (!user) return null;
 
-    const userQuestions = await getData({
-        coll: "questions",
-        key: "user_id",
-        value: user.id
-    });
-
-    const userModels = await getData({
-        coll: "models",
-        key: "user_id",
-        value: user.id
-    });
 
     const softwareSkills: string[] = user?.softwareSkills ?? [];
     const specializedIn: string[] = user?.specializedIn ?? [];
@@ -36,52 +17,7 @@ export default async function Page({ params: { username } }: { params: { usernam
     const workExperience = await getDataFromCollection(`users/${user.id}/workExperience`);
 
     return (
-        <div className='h-full'>
-            <div className={`coverPicture h-1/3  relative`}>
-                <div className="h-full w-full" style={{
-                    backgroundImage: `url(${user.coverPicture})`,
-                    backgroundSize: 'cover',
-                    backfaceVisibility: 'hidden'
-                }}>
-                    <div className="h-full w-full flex items-center justify-center" style={{
-
-                    }}>
-                        <div className="flex gap-4 items-center p-4" style={{
-                            background: 'rgb(255 255 255 / 10%)',
-                            boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-                            backdropFilter: 'blur(16px)',
-                            border: '1px solid rgba(255, 255, 255, 0.47)',
-                            borderRadius: '16px'
-                        }}>
-                            <div>
-                                <Avatar className='w-20 h-20 border border-gray-300'>
-                                    <AvatarImage src={user?.profilePicture as string} />
-                                    <AvatarFallback className='text-3xl'>{user?.name[0].toUpperCase()}</AvatarFallback>
-                                </Avatar>
-                            </div>
-                            <div>
-                                <h1 className='text-lg font-bold mb-3'>{user.name}</h1>
-                                <div className='flex gap-4 items-end'>
-                                    <FollowButton following_id={user.id} />
-
-                                    <Link href='./questions' className='text-center'>
-                                        <p>{userQuestions.length}</p>
-                                        <p>Questions</p>
-                                    </Link>
-
-                                    <div>
-                                        <MdOutlineLocationOn className='text-xl' />
-                                        <p>{user?.country}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div className='p-4 max-w-3xl m-auto space-y-3'>
+            <div className='max-w-3xl m-auto space-y-3'>
                 <div className='my-3 space-y-3'>
                     {user?.about && <p>About: {user?.about}</p>}
                     {user?.introduction && <p>Introduction: {user?.introduction}</p>}
@@ -131,6 +67,5 @@ export default async function Page({ params: { username } }: { params: { usernam
                 </div>
 
             </div>
-        </div>
     )
 }

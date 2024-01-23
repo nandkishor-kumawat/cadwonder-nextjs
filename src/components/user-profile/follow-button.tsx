@@ -5,12 +5,14 @@ import { useSession } from 'next-auth/react'
 import { addDoc, collection, deleteDoc, doc, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '@/firebase'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 interface Props {
     following_id: string
+    username: string
 }
 
-const FollowButton = ({ following_id }: Props) => {
+const FollowButton = ({ following_id, username }: Props) => {
     const { data, status } = useSession();
 
     const user_id = data?.user?.id as string;
@@ -48,7 +50,8 @@ const FollowButton = ({ following_id }: Props) => {
     return (
         <>
             {!unVisible && <Button onClick={doFollowUnfollow} variant={'outline'}>{isFollowing ? 'Unfollow' : 'Follow'}</Button>}
-            <Link href='#' className='text-center'>
+            {isSameUser && <Button variant={'outline'} onClick={() => { redirect('/dashboard/edit-profile') }}>Edit Profile</Button>}
+            <Link href={`/${username}/followers`} className='text-center'>
                 <p>{followers.length}</p>
                 <p>Followers</p>
             </Link>
