@@ -19,12 +19,12 @@ import { SelectWithSearch } from "@/components/form/SelectWithSearch";
 import countries from "@/lib/data/countries";
 import roles from "@/lib/data/roles";
 import { useState } from "react";
-import Spinner from "@/components/loaders/spinner";
 import Overlay from "@/components/loaders/overlay";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { loginUser } from "@/actions";
 import { createSlug } from "@/lib/functions"
+import Spinner from "@/components/loaders/spinner"
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -207,7 +207,7 @@ export default function ProfileForm() {
 
           <div className="mt-3">
             <Button type="submit" className="text-lg w-full bg-orange-500 mt-3 hover:bg-orange-600">
-              {isLoading && <Spinner className='w-5 h-5 mr-2' />}SignUp</Button>
+              {isLoading && <Spinner className='w-5 h-5 mr-2 fill-blue-600' />}SignUp</Button>
           </div>
         </form>
       </Form>
