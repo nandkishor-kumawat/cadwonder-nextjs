@@ -18,9 +18,9 @@ import { useState, useTransition } from "react";
 import PasswordInput from "@/components/form/password-input";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Spinner from "@/components/loaders/spinner";
 import Overlay from "@/components/loaders/overlay"
 import { loginUser } from "@/actions"
+import Spinner from "@/components/loaders/spinner"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -128,7 +128,7 @@ export default function ProfileForm() {
 
           <div className="">
             <Button type="submit" disabled={isLoading} className="w-full bg-orange-500 text-lg tracking-wider disabled:bg-orange-400 hover:bg-orange-600">
-              {isLoading && <Spinner className='w-5 h-5 mr-2' />} Login
+              {isLoading && <Spinner className='fill-blue-500 w-5 h-5 mr-2' />} Login
             </Button>
           </div>
 
