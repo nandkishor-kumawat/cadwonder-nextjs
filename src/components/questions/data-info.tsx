@@ -25,7 +25,6 @@ interface Props {
 export default async function DataInfo({ data, title }: Props) {
     const user = data.user;
     const session = await getServerSession()
-
     return (
         <div className="info">
             <div className='my-2'>

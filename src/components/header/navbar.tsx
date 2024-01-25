@@ -1,17 +1,17 @@
 import { bg1 } from '@/lib/data/colors';
-import { getServerSession } from 'next-auth'
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 import logo from '../../../public/logo.png'
 import MenuItems from './menu-items';
+import { getAuth } from '@/app/api/auth/[...nextauth]/options';
 
 async function Navbar() {
-    const session = await getServerSession();
+    const session = await getAuth();
 
 
     return (
-        <header className="text-gray-600 body-font sticky top-0 flex h-14 z-10 border-b-[silver] border-b" style={{ backgroundColor: bg1 }}>
+        <header className="text-gray-600 body-font sticky top-0 flex h-14 z-10" style={{ backgroundColor: bg1 }}>
             <div className="w-full flex px-4 py-2 items-center justify-between">
                 <Link href="/" className="text-2xl title-font font-medium items-center text-white flex gap-1">
                     <Image style={{

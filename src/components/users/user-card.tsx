@@ -7,7 +7,7 @@ import { User } from '@/lib/types/types'
 export default function UserCard({ user }:{ user: User }) {
 
     return (
-        <Card className='my-2 py-2 px-4' style={{ backgroundColor: color2 }}>
+        <Card className='my-2 py-2 px-4 rounded-sm' style={{ backgroundColor: color2 }}>
             <Link href={`/${user.username}`}>
             <CardHeader className='border-b py-1 px-2 flex-row items-center justify-between'>
                 <CardTitle className='text-lg'>{user.name}</CardTitle>

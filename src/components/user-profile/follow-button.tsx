@@ -9,10 +9,11 @@ import { redirect } from 'next/navigation'
 
 interface Props {
     following_id: string
-    username: string
+    username?: string
+    className?: string
 }
 
-const FollowButton = ({ following_id, username }: Props) => {
+const FollowButton = ({ following_id, username, className }: Props) => {
     const { data, status } = useSession();
 
     const user_id = data?.user?.id as string;
@@ -49,12 +50,16 @@ const FollowButton = ({ following_id, username }: Props) => {
 
     return (
         <>
-            {!unVisible && <Button onClick={doFollowUnfollow} variant={'outline'}>{isFollowing ? 'Unfollow' : 'Follow'}</Button>}
-            {isSameUser && <Button variant={'outline'} onClick={() => { redirect('/dashboard/edit-profile') }}>Edit Profile</Button>}
-            <Link href={`/${username}/followers`} className='text-center'>
-                <p>{followers.length}</p>
-                <p>Followers</p>
-            </Link>
+            {!unVisible && <Button onClick={doFollowUnfollow} variant={className ? 'ghost' : 'outline'} className={className}>{isFollowing ? 'Unfollow' : 'Follow'}</Button>}
+            {isSameUser && (<Link href='/dashboard/edit-profile'>
+                <Button onClick={doFollowUnfollow} variant={className ? 'ghost' : 'outline'} className={className}>Edit Profile</Button>
+            </Link>)}
+            {username && (
+                <Link href={`/${username}/followers`} className='text-center'>
+                    <p>{followers.length}</p>
+                    <p>Followers</p>
+                </Link>
+            )}
         </>
     )
 }

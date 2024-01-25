@@ -44,6 +44,7 @@ export default function AnswerForm({ question_id }: Props) {
 
   const [uploadProgress, setUploadProgress] = useState<Record<number, number>>({});
   const [files, setFiles] = useState<File[]>([]);
+  const formRef = React.useRef<HTMLFormElement>(null);
 
 
   const handleRemoveFile = (fileToRemove: File) => {
@@ -81,64 +82,64 @@ export default function AnswerForm({ question_id }: Props) {
     formData.append('user_id', session?.user?.uid as string);
     formData.append('file_details', JSON.stringify(file_details));
     await postAnswer(formData);
-
+    formRef.current?.reset();
     setFiles([]);
     setUploadProgress({});
   }
 
 
   if (!user) return (
-    <div className="flex gap-2 items-start my-2">
+    <div className="flex gap-2 items-start mt-5 mb-2">
       <Skeleton className='w-10 h-10 rounded-full' />
       <div className="flex-col flex flex-1 gap-2">
         <Skeleton className='flex-grow h-32' />
         <div className='flex gap-2 items-center'>
           <Skeleton className='w-20 h-7' />
-          <Skeleton className='w-20 h-4' />
+          <Skeleton className='w-20 h-5' />
         </div>
       </div>
     </div>
-  );
+  )
 
 
   return (
-      <form
-        key={Math.random()}
-        action={handleSubmit}
-      >
+    <form
+      ref={formRef}
+      action={handleSubmit}
+    >
 
-        <div className="py-2 my-1">
-          <div className="flex gap-2 items-start">
-            <Avatar className='w-10 h-10'>
-              <AvatarImage src={user?.profilePicture} />
-              <AvatarFallback>{user?.name[0]?.toUpperCase()}</AvatarFallback>
-            </Avatar>
-            <div className="flex-col flex w-full gap-2">
-              <Textarea
-                name='answer'
-                placeholder="Write your answer"
-                className="rounded-none w-full"
-                rows={8}
-                required
-              />
-              <div className='flex gap-2 items-center'>
-                <SubmitButton />
-                <div>
-                  <label htmlFor='fileInput' className="font-medium cursor-pointer">Attach a file</label>
-                  <input type="file" id='fileInput' className="hidden" name='files' multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2 my-2">
-                {files.map((file, index) => (
-                  <UploadFileCard key={index} file={file} index={index} handleRemoveFile={handleRemoveFile} progress={uploadProgress[index]} />
-                ))}
+      <div className="py-2 my-1">
+        <div className="flex gap-2 items-start">
+          <Avatar className='w-10 h-10'>
+            <AvatarImage src={user?.profilePicture} />
+            <AvatarFallback>{user?.name[0]?.toUpperCase()}</AvatarFallback>
+          </Avatar>
+          <div className="flex-col flex w-full gap-2">
+            <Textarea
+              name='answer'
+              placeholder="Write your answer"
+              className="rounded-none w-full"
+              rows={8}
+              required
+            />
+            <div className='flex gap-2 items-center'>
+              <SubmitButton />
+              <div>
+                <label htmlFor='fileInput' className="font-medium cursor-pointer">Attach a file</label>
+                <input type="file" id='fileInput' className="hidden" name='files' multiple onChange={(e) => setFiles(Array.from(e.target.files || []))} />
               </div>
             </div>
 
+            <div className="flex flex-col gap-2 my-2">
+              {files.map((file, index) => (
+                <UploadFileCard key={index} file={file} index={index} handleRemoveFile={handleRemoveFile} progress={uploadProgress[index]} />
+              ))}
+            </div>
           </div>
 
         </div>
-      </form>
+
+      </div>
+    </form>
   )
 }

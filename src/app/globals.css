@@ -25,9 +25,9 @@ html, body{
       /* border: 3px solid #dcf500; */
   }
 
-  .scrollbar::-webkit-scrollbar-thumb:hover {
+  /* .scrollbar::-webkit-scrollbar-thumb:hover {
       background: #0e0f2e;
-  }
+  } */
 }
  
 @layer base {

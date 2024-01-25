@@ -34,7 +34,7 @@ export default async function AnswerItem({ answer }: Props) {
               <p className='text-gray-500 text-sm'>{new Date(answer.createdAt).toLocaleString()}</p>
             </div>
 
-            {user?.id === answer.user_id && <Button variant='ghost' className='ml-auto'>:</Button>}
+            {/* {user?.id === answer.user_id && <Button variant='ghost' className='ml-auto'>:</Button>} */}
           </div>
 
           <div className="deails my-1">

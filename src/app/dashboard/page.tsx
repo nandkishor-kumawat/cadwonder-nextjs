@@ -6,7 +6,7 @@ import { getUserBy } from '@/lib/functions'
 import { checkProtected } from '@/actions'
 
 export const metadata: Metadata = {
-  title: 'CadWonder - Dashboard',
+  title: 'Dashboard',
 }
 
 async function Dashboard() {

@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'CadWonder - Models',
+  title: 'Models',
 }
 
 export default async function Page({

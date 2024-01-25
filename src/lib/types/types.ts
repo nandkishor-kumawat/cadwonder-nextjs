@@ -55,7 +55,7 @@ export interface Question {
     views?: number
     answer_count?: number
     tags?: string[]
-    createdAt?: number
+    createdAt?: string
 }
 
 export interface Answer {

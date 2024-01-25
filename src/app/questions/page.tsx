@@ -7,7 +7,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'CadWonder - Questions',
+  title: 'Questions',
 }
 
 export default async function Page({
@@ -46,7 +46,6 @@ export default async function Page({
       }>
         <Questions questions={questions} />
       </Suspense>
-      {questions.length === 0 && <p className="text-center text-gray-500">No questions found</p>}
     </div>
   )
 }

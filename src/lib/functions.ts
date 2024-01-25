@@ -81,7 +81,7 @@ export const getRegex = (search: string) => {
 
 
 export const createSlug = async (Collection: string, field: string, text: string): Promise<string> => {
-    const slug = text
+    const slug = text.split(' ').slice(0,12).join(' ')
         .toLowerCase()
         .trim()
         .replace(/[^\w\s-]/g, '')

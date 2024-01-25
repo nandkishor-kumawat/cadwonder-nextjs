@@ -11,7 +11,10 @@ import { Toaster } from '@/components/ui/sonner'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'CadWonder',
+  title: {
+    template: '%s | CadWonder',
+    default: 'CadWonder',
+  },
   description: 'Discover CadWonder, your go-to platform for tackling complex engineering questions. Dive into interactive problem-solving, explore a vast knowledge base, and join a thriving community. Elevate your engineering game with CadWonder – where brilliance meets innovation.',
 }
 

@@ -23,7 +23,7 @@ export async function generateMetadata({
 
 
 async function Question({ params: { slug } }: Props) {
-
+  
   const data = await fetch(`${process.env.API_URL}/api/models/${slug}`).then(res => res.json())
 
 
@@ -34,9 +34,7 @@ async function Question({ params: { slug } }: Props) {
     <>
       <div className="container max-w-[46rem] py-2">
 
-        <Suspense fallback={<div>Loading...</div>}>
-          <DataInfo data={model} title={model?.modelName} />
-        </Suspense>
+        <DataInfo data={model} title={model?.modelName} />
 
         {/* <div className="flex-flex-col gap-3">
           <div className="answers my-2 flex flex-col gap-2">
