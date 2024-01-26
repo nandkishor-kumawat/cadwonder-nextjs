@@ -84,6 +84,7 @@ const MenuItems = ({ session }: { session: Session | null }) => {
             </ul>
         )
     }
+
     return (
         <>
             <div className='sm:hidden block'>
@@ -91,8 +92,8 @@ const MenuItems = ({ session }: { session: Session | null }) => {
                     <DropdownMenuTrigger className='outline-none active:outline-none cursor-pointer'>
                         <MenuIcon className='text-white' />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className='sm:hidden block rounded-none border-none mt-4 p-0 max-w-sm w-48'>
-                        <div className="px-4 py-2 ">
+                    <DropdownMenuContent className='sm:hidden block rounded-none border-none mt-4 p-0 pb-2 max-w-sm w-48'>
+                        <div className="px-4 py-2">
                             {navLinks.map((link, index) => (
                                 <Link key={index} className={`hover:text-orange-400 text-${link.current ? 'white' : ''} dark:text-black`} href={link.href}>
                                     <DropdownMenuItem className={`cursor-pointer my-1  ${link.current ? 'bg-[#3b3b3b]' : ''}`}>
@@ -100,10 +101,12 @@ const MenuItems = ({ session }: { session: Session | null }) => {
                                     </DropdownMenuItem>
                                 </Link>
                             ))}
+                            {!(session || data) && (
+                                <Link href='/login' className="bg-orange-400 text-white m-2 px-3 py-1 focus:outline-none hover:bg-orange-500 rounded text-base">Login</Link>
+                            )}
                         </div>
 
-                        {!(session || data) ? <Link href='/login' className="bg-orange-400 text-white  px-3 py-1 focus:outline-none hover:bg-orange-500 rounded text-base">Login</Link>
-                            : userLinks()}
+                        {(session || data) && userLinks()}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -115,7 +118,9 @@ const MenuItems = ({ session }: { session: Session | null }) => {
                 ))}
 
                 {
-                    !(session || data) ? <Link href='/login' className="bg-orange-400 text-white  px-3 py-1 focus:outline-none hover:bg-orange-500 rounded text-base">Login</Link>
+                    !(session || data) ? (
+                        <Link href='/login' className="bg-orange-400 text-white  px-3 py-1 focus:outline-none hover:bg-orange-500 rounded text-base">Login</Link>
+                    )
                         : (
                             <DropdownMenu >
                                 <DropdownMenuTrigger className='outline-none active:outline-none'>

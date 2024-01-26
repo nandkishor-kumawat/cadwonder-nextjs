@@ -9,16 +9,17 @@ import { getAuth } from '@/app/api/auth/[...nextauth]/options';
 async function Navbar() {
     const session = await getAuth();
 
-
     return (
         <header className="text-gray-600 body-font sticky top-0 flex h-14 z-10" style={{ backgroundColor: bg1 }}>
             <div className="w-full flex px-4 py-2 items-center justify-between">
-                <Link href="/" className="text-2xl title-font font-medium items-center text-white flex gap-1">
-                    <Image style={{
-                        backgroundColor: 'rgb(41, 52, 64)',
-                        borderRadius: '0.575rem',
-                        padding: '0.125rem'
-                    }} src={logo} width={35} height={35} alt='logo' />
+                <Link href="/" className="text-2xl title-font font-medium items-center text-white flex gap-2">
+                    <Image
+                        className='rounded-[.575rem] p-0.5 bg-slate-800'
+                        src={logo}
+                        width={35}
+                        height={35}
+                        alt='logo'
+                    />
                     <p>CadWonder</p>
                 </Link>
 

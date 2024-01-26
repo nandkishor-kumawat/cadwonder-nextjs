@@ -6,6 +6,7 @@ import { addDoc, collection, deleteDoc, doc, onSnapshot, query, where } from 'fi
 import { db } from '@/firebase'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { FaRegEdit } from 'react-icons/fa'
 
 interface Props {
     following_id: string
@@ -52,7 +53,9 @@ const FollowButton = ({ following_id, username, className }: Props) => {
         <>
             {!unVisible && <Button onClick={doFollowUnfollow} variant={className ? 'ghost' : 'outline'} className={className}>{isFollowing ? 'Unfollow' : 'Follow'}</Button>}
             {isSameUser && (<Link href='/dashboard/edit-profile'>
-                <Button onClick={doFollowUnfollow} variant={className ? 'ghost' : 'outline'} className={className}>Edit Profile</Button>
+                <Button onClick={doFollowUnfollow} variant={className ? 'ghost' : 'outline'} className={className}>
+                    <FaRegEdit />&nbsp;Edit Profile
+                </Button>
             </Link>)}
             {username && (
                 <Link href={`/${username}/followers`} className='text-center'>
