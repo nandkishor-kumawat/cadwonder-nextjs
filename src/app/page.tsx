@@ -1,12 +1,12 @@
 import { getServerSession } from "next-auth";
-import { options } from "./api/auth/[...nextauth]/options";
-import { redirect } from "next/navigation";
+import { getAuth } from "./api/auth/[...nextauth]/options";
+import { RedirectType, redirect } from "next/navigation";
 
 
 export default async function Home() {
 
-  redirect('/questions');
-  const session = await getServerSession(options);
+  redirect('/questions', RedirectType.replace);
+  const session = await getAuth();
 
   return (
     <pre>

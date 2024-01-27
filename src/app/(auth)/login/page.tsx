@@ -21,6 +21,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Overlay from "@/components/loaders/overlay"
 import { loginUser } from "@/actions"
 import Spinner from "@/components/loaders/spinner"
+import { FcGoogle } from "react-icons/fc";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -141,7 +142,7 @@ export default function ProfileForm() {
         </div>
       </div>
       {/* <div className="my-4">
-        <Button type="button" className="w-full text-lg mt-3 bg-slate-50 hover:bg-slate-100 text-black py-5" onClick={handleGoogleSignIn}>
+        <Button type="button" className="w-full text-lg mt-3 bg-slate-50 hover:bg-slate-100 text-black py-3 h-auto" onClick={handleGoogleSignIn}>
           <FcGoogle className="mx-2" size={24} />
           <p className="font-medium">Sign In with Google</p>
         </Button>

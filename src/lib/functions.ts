@@ -1,5 +1,5 @@
 import { db } from "@/firebase";
-import { OrderByDirection, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { OrderByDirection, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { User } from "./types/types";
 
 
@@ -94,4 +94,16 @@ export const createSlug = async (Collection: string, field: string, text: string
     const data2 = await getDataFromCollection(Collection);
     const count = data2.length;
     return `${slug}-${count}`;
+}
+
+
+export const updateViewCount = async (id: string) => {
+    const docRef = doc(db, "questions", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        const views = docSnap.data().views ?? 0;
+        await updateDoc(docRef, {
+            views: views + 1
+        });
+    }
 }

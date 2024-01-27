@@ -73,7 +73,7 @@ export default function ProfileForm() {
 
     setIsLoading(true);
 
-    const data = await fetch('/api/auth/signup', {
+    const data = await fetch(`/api/auth/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

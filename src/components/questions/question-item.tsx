@@ -58,7 +58,7 @@ const QuestionCard = async ({ question: data }: any) => {
                         {!!tags.length && <p className='sm:text-base text-sm'>Tags: {tags.join(', ')}</p>}
                     </div>
                 </div>
-                <QuestionStates question_id={id} user_id={user_id} />
+                <QuestionStates question={data} />
 
             </CardContent>
         </Card>

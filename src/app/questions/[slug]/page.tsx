@@ -5,7 +5,7 @@ import AnswerForm from '@/components/answers/answer-form';
 import AnswerItem from '@/components/answers/answer-item';
 import { Button } from '@/components/ui/button';
 import DataInfo from '@/components/questions/data-info';
-import { getData } from '@/lib/functions';
+import { getData, updateViewCount } from '@/lib/functions';
 import QuestionStates from '@/components/questions/question-states';
 import { FaShareSquare } from 'react-icons/fa';
 import FollowButton from '@/components/user-profile/follow-button';
@@ -29,9 +29,10 @@ export async function generateMetadata({
 }
 
 
-async function Question({ params: { slug } }: { params: { slug: string } }) {
+async function Question({ params: { slug } }: Props) {
   const data = await fetch(`${process.env.API_URL}/api/questions/${slug}`).then(res => res.json())
-  const session = await getServerSession()
+  await updateViewCount(data.question.id);
+  const session = await getServerSession();
 
 
   if (!data) return <div>Loading...</div>
@@ -82,41 +83,41 @@ async function Question({ params: { slug } }: { params: { slug: string } }) {
             </div>
           </div>
 
-            <div className='w-full md:w-max md:mt-5 space-y-6'>
-              <div className='flex gap-2'>
-                <FollowButton following_id={question.user.id} className='rounded-none border border-slate-400 w-full font-normal text-sm' />
-                <Button variant={'ghost'} className='rounded-none border border-slate-400 w-full font-normal text-sm space-x-2'>
-                  <FaShareSquare />
-                  <span>Share</span>
-                </Button>
-              </div>
-              <div>
-                <QuestionStates question_id={question.id} user_id={question.user_id} ext />
-              </div>
-
-              <div>
-                <p>Details:</p>
-                <table className='w-full text-left align-baseline'>
-                  <tbody>
-                    <tr>
-                      <th>Created:</th>
-                      <td>{date}</td>
-                    </tr>
-                    <tr>
-                      <th>Category:</th>
-                      <td>{question.category}</td>
-                    </tr>
-                    {question.software && (
-                      <tr>
-                        <th>Software:</th>
-                        <td>{question.software}</td>
-                      </tr>
-                    )}
-
-                  </tbody>
-                </table>
-              </div>
+          <div className='w-full md:w-max md:mt-5 space-y-6'>
+            <div className='flex gap-2'>
+              <FollowButton following_id={question.user.id} className='rounded-none border border-slate-400 w-full font-normal text-sm' />
+              <Button variant={'ghost'} className='rounded-none border border-slate-400 w-full font-normal text-sm space-x-2'>
+                <FaShareSquare />
+                <span>Share</span>
+              </Button>
             </div>
+            <div>
+              <QuestionStates question={question} ext />
+            </div>
+
+            <div>
+              <p>Details:</p>
+              <table className='w-full text-left align-baseline'>
+                <tbody>
+                  <tr>
+                    <th>Created:</th>
+                    <td>{date}</td>
+                  </tr>
+                  <tr>
+                    <th>Category:</th>
+                    <td>{question.category}</td>
+                  </tr>
+                  {question.software && (
+                    <tr>
+                      <th>Software:</th>
+                      <td>{question.software}</td>
+                    </tr>
+                  )}
+
+                </tbody>
+              </table>
+            </div>
+          </div>
 
         </div>
 
