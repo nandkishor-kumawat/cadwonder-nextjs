@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
 
-  redirect('/dashboard');
+  redirect('/questions');
   const session = await getServerSession(options);
 
   return (
