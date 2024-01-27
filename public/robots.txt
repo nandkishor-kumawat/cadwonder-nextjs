@@ -6,4 +6,4 @@ Allow: /
 Host: https://cadwonder.vercel.app
 
 # Sitemaps
-Sitemap: https://cadwonder.vercel.app/api/sitemap
+Sitemap: https://cadwonder.vercel.app/sitemap.xml
