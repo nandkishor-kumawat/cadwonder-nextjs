@@ -7,7 +7,7 @@ export default function Questions({ questions }: { questions: Question[] }) {
   return (
     <div className='pb-2'>
       {questions.length === 0 && <p className="text-center text-gray-500">No questions found</p>}
-      {questions.map((question, index) => <QuestionCard question={question} key={index} />)}
+      {questions.map((question, index) => <QuestionCard question={question} key={question.id} />)}
     </div>
   )
 }

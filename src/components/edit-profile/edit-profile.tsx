@@ -34,6 +34,7 @@ import { useSession } from 'next-auth/react'
 import ProfilePicUploader from '@/components/edit-profile/profile-pic-uploader'
 import Overlay from '@/components/loaders/overlay'
 import { updateProfile } from '@/actions'
+import { toast } from 'sonner'
 
 interface linkType {
     name: string
@@ -141,6 +142,12 @@ const EditProfile = () => {
                 ...values,
                 socials,
             }, user_id).then(() => {
+                toast.success(`Profile updated successfully`, {
+                    position: 'top-right',
+                    style: {
+                        color: 'green'
+                    }
+                });
                 setIsLoading(false);
             })
         })
@@ -206,7 +213,7 @@ const EditProfile = () => {
 
     }, [user_id, form]);
 
-    if(!session) return null;
+    if (!session) return null;
     return (
         <div className="absolute top-0 left-0 right-0 bottom-0 z-50">
             {isLoading && <Overlay />}

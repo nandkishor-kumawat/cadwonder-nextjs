@@ -53,7 +53,7 @@ const MenuItems = ({ session }: { session: Session | null }) => {
     const { data } = useSession();
     const userLinks = () => {
         return (
-            <ul className='flex flex-col gap-2 p-2 bg-slate-600'>
+            <ul className='flex flex-col gap-3 px-4 py-2 bg-slate-600'>
                 <li>
                     <Link href={`/${session?.user?.username}`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
                         <Avatar className='h-5 w-5'>
@@ -92,18 +92,22 @@ const MenuItems = ({ session }: { session: Session | null }) => {
                     <DropdownMenuTrigger className='outline-none active:outline-none cursor-pointer'>
                         <MenuIcon className='text-white' />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className='sm:hidden block rounded-none border-none mt-4 p-0 pb-2 max-w-sm w-48'>
+                    <DropdownMenuContent className='sm:hidden block rounded-none border-none mt-4 p-0 max-w-sm w-48'>
                         <div className="px-4 py-2">
-                            {navLinks.map((link, index) => (
-                                <Link key={index} className={`hover:text-orange-400 text-${link.current ? 'white' : ''} dark:text-black`} href={link.href}>
-                                    <DropdownMenuItem className={`cursor-pointer my-1  ${link.current ? 'bg-[#3b3b3b]' : ''}`}>
-                                        {link.name}
-                                    </DropdownMenuItem>
-                                </Link>
-                            ))}
-                            {!(session || data) && (
-                                <Link href='/login' className="bg-orange-400 text-white m-2 px-3 py-1 focus:outline-none hover:bg-orange-500 rounded text-base">Login</Link>
-                            )}
+                            <ul className='flex flex-col gap-2'>
+                                {navLinks.map((link, index) => (
+                                    <li key={index}>
+                                        <Link className={`hover:text-orange-400 text-${link.current ? 'white' : ''} dark:text-black`} href={link.href}>
+                                            <DropdownMenuItem className={`cursor-pointer  ${link.current ? 'bg-[#3b3b3b]' : ''}`}>
+                                                {link.name}
+                                            </DropdownMenuItem>
+                                        </Link>
+                                    </li>
+                                ))}
+                                {!(session || data) && (
+                                    <Link href='/login' className="bg-orange-400 text-white mb-2 px-3 py-1 focus:outline-none hover:bg-orange-500 rounded text-base">Login</Link>
+                                )}
+                            </ul>
                         </div>
 
                         {(session || data) && userLinks()}
@@ -124,7 +128,7 @@ const MenuItems = ({ session }: { session: Session | null }) => {
                         : (
                             <DropdownMenu >
                                 <DropdownMenuTrigger className='outline-none active:outline-none'>
-                                    <Avatar className='h-8 w-8 border border-gray-300 cursor-pointer static'>
+                                    <Avatar className='h-8 w-8 cursor-pointer static'>
                                         <AvatarImage src={session?.user?.profilePicture as string} />
                                         <AvatarFallback className=''>{session?.user?.name[0].toUpperCase()}</AvatarFallback>
                                     </Avatar>

@@ -19,6 +19,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { postModel } from '@/actions'
+import { toast } from 'sonner'
 
 
 const formSchema = z.object({
@@ -102,6 +103,12 @@ function NewModal() {
     setIsLoading(false);
     if (response?.error) return alert(response.error);
 
+    toast.success(`Model uploaded successfully`, {
+      position: 'top-right',
+      style: {
+        color: 'green'
+      }
+    });
     router.replace(`/library/${slug}`, {
       scroll: false
     });

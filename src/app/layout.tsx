@@ -6,17 +6,47 @@ import { Providers } from '@/components/providers/session-provider'
 import Navbar from '@/components/header/navbar'
 import GoogleAnalytics from '@/components/google-analytics'
 import { Toaster } from '@/components/ui/sonner'
+import { siteMetadata } from '@/lib/siteMetaData'
 
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteMetadata.siteUrl),
   title: {
-    template: '%s | CadWonder',
-    default: 'CadWonder',
+    template: `%s | ${siteMetadata.title}`,
+    default: siteMetadata.title,
   },
-  description: 'Discover CadWonder, your go-to platform for tackling complex engineering questions. Dive into interactive problem-solving, explore a vast knowledge base, and join a thriving community. Elevate your engineering game with CadWonder – where brilliance meets innovation.',
-}
+  description: siteMetadata.description,
+  openGraph: {
+    title: siteMetadata.title,
+    description: siteMetadata.description,
+    url: siteMetadata.siteUrl,
+    siteName: siteMetadata.title,
+    images: [siteMetadata.socialBanner],
+    locale: "en_US",
+    type: "website",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteMetadata.title,
+    // images: [siteMetadata.socialBanner],
+  },
+};
+
+
 
 export default function RootLayout({
   children,

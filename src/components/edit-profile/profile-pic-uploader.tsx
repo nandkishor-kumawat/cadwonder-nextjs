@@ -9,6 +9,7 @@ import { uploadFile } from '@/firebase/functions';
 import { useSession } from 'next-auth/react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
+import { toast } from 'sonner';
 
 interface Props {
   ratio?: number,
@@ -80,6 +81,14 @@ const ProfilePicUploader = ({
       await updateDoc(doc(db, 'users', session?.user?.id as string), {
         [`${type}Picture`]: url
       });
+
+      toast.success(`${type[0].toUpperCase()}${type.slice(1)} Picture updated successfully`, {
+        position: 'top-right',
+        style: {
+          color: 'green'
+        }
+      });
+
       setIsLoading(false);
     }
   };

@@ -11,7 +11,6 @@ export default function Layout({ children, params: { username } }: Props) {
     return (
         <div className='h-full'>
             <UserDetailsBanner username={username} />
-            <LinkNav username={username} />
             <div className="container max-w-3xl mx-auto p-2">
                 {children}
             </div>

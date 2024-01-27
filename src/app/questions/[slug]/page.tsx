@@ -9,6 +9,7 @@ import { getData, updateViewCount } from '@/lib/functions';
 import QuestionStates from '@/components/questions/question-states';
 import { FaShareSquare } from 'react-icons/fa';
 import FollowButton from '@/components/user-profile/follow-button';
+import { siteMetadata } from '@/lib/siteMetaData';
 
 type Props = {
   params: { slug: string };
@@ -21,10 +22,29 @@ export async function generateMetadata({
   const url = `${process.env.API_URL}/api/questions/${slug}`;
 
   const { question } = await fetch(url).then((res) => res.json());
+  const publishedAt = new Date(question.createdAt).toISOString();
 
   return {
-    title: question?.question ?? "Question not found",
-    description: question?.description ?? "",
+    title: question.question,
+    description: question.description ?? siteMetadata.description,
+    openGraph: {
+      title: question.question,
+      description: question.description ?? siteMetadata.description,
+      url: url,
+      siteName: 'CadWonder',
+      locale: "en_US",
+      type: "article",
+      publishedTime: publishedAt,
+      modifiedTime: publishedAt,
+      // images: ogImages,
+      authors: question.user.name,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: question.title,
+      description: question.description ?? siteMetadata.description,
+      // images: ogImages,
+    },
   };
 }
 
@@ -54,8 +74,27 @@ async function Question({ params: { slug } }: Props) {
     year: 'numeric',
   });
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "question",
+    "headline": question.title,
+    "description": question.description ?? siteMetadata.description,
+    // "image": imageList,
+    "datePublished": new Date(question.createdAt).toISOString(),
+    "dateModified": new Date(question.createdAt || question.createdAt).toISOString(),
+    "author": [{
+      "@type": "Person",
+      "name": question.user.name ?? siteMetadata.author,
+      "url": siteMetadata.twitter,
+    }]
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="container max-w-5xl py-2">
 
         <div className="flex md:flex-row flex-col gap-4">

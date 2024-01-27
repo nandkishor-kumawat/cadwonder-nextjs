@@ -4,6 +4,7 @@ import FollowButton from './follow-button'
 import Link from 'next/link'
 import { MdOutlineLocationOn } from 'react-icons/md'
 import { getData, getUserBy } from '@/lib/functions'
+import LinkNav from './link-nav'
 
 const UserDetailsBanner = async ({ username }: { username: string }) => {
 
@@ -65,6 +66,8 @@ const UserDetailsBanner = async ({ username }: { username: string }) => {
                     </div>
                 </div>
             </div>
+            <LinkNav username={username} />
+
         </>
     )
 }

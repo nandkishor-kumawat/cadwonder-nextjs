@@ -22,6 +22,7 @@ import Overlay from "@/components/loaders/overlay"
 import { loginUser } from "@/actions"
 import Spinner from "@/components/loaders/spinner"
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "sonner"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -43,7 +44,7 @@ export default function ProfileForm() {
   })
 
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams?.get("callbackUrl") ?? '/';
+  const callbackUrl = searchParams?.get("callbackUrl") ?? '/questions';
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
@@ -69,6 +70,13 @@ export default function ProfileForm() {
 
     startTransition(async () => {
       await loginUser(callbackUrl);
+
+      toast.success(`Logged in successfully`, {
+        position: 'top-right',
+        style: {
+          color: 'green'
+        }
+      });
     })
   }
 

@@ -81,7 +81,7 @@ export const getRegex = (search: string) => {
 
 
 export const createSlug = async (Collection: string, field: string, text: string): Promise<string> => {
-    const slug = text.split(' ').slice(0,12).join(' ')
+    const slug = text.split(' ').slice(0, 12).join(' ')
         .toLowerCase()
         .trim()
         .replace(/[^\w\s-]/g, '')
@@ -98,6 +98,8 @@ export const createSlug = async (Collection: string, field: string, text: string
 
 
 export const updateViewCount = async (id: string) => {
+    if (process.env.NODE_ENV === "development") return
+    if (!id) return
     const docRef = doc(db, "questions", id);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {

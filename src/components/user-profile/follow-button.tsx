@@ -58,7 +58,7 @@ const FollowButton = ({ following_id, username, className }: Props) => {
                 </Button>
             </Link>)}
             {username && (
-                <Link href={`/${username}/followers`} className='text-center'>
+                <Link href={'#' ?? `/${username}/followers`} className='text-center'>
                     <p>{followers.length}</p>
                     <p>Followers</p>
                 </Link>

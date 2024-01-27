@@ -14,7 +14,7 @@ const SearchBar = () => {
   const { replace } = useRouter();
 
   const handleSearch = useDebouncedCallback((key: string, query: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams ?? {});
     if (query) {
       params.set(key, query);
     } else {
@@ -32,7 +32,7 @@ const SearchBar = () => {
         </div>
         <Input
           onChange={(e) => handleSearch('query', e.target.value)}
-          defaultValue={searchParams.get('query')?.toString()}
+          defaultValue={searchParams?.get('query')?.toString()}
           placeholder="Search"
           className="pl-[40px]" />
       </div>

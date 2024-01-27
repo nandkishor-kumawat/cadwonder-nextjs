@@ -3,12 +3,13 @@ import EducationDetailCard from '@/components/edit-profile/EducationDetailCard';
 import ExperienceDetailCard from '@/components/edit-profile/ExperienceDetailCard';
 import { Button } from '@/components/ui/button';
 import { getDataFromCollection, getUserBy } from '@/lib/functions'
+import { notFound } from 'next/navigation';
 
 export default async function Page({ params: { username } }: { params: { username: string } }) {
 
     const user = await getUserBy("username", username);
 
-    if (!user) return null;
+    if (!user) notFound();
 
 
     const softwareSkills: string[] = user?.softwareSkills ?? [];

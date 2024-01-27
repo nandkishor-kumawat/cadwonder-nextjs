@@ -25,6 +25,7 @@ import { signIn } from "next-auth/react";
 import { loginUser } from "@/actions";
 import { createSlug } from "@/lib/functions"
 import Spinner from "@/components/loaders/spinner"
+import { toast } from "sonner"
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -95,7 +96,14 @@ export default function ProfileForm() {
       password: values.password,
       redirect: false,
     })
-    await loginUser("/");
+    await loginUser("/questions");
+    
+    toast.success(`Logged in successfully`, {
+      position: 'top-right',
+      style: {
+        color: 'green'
+      }
+    });
     setIsLoading(false)
 
   }

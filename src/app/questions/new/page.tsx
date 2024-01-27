@@ -29,6 +29,7 @@ import { redirect, useRouter } from "next/navigation";
 import UploadFileCard from "@/components/upload-file-card";
 import Overlay from "@/components/loaders/overlay";
 import { postModel, postQuestion } from "@/actions";
+import { toast } from "sonner"
 
 
 const formSchema = z.object({
@@ -121,6 +122,13 @@ export default function NewQuestion() {
     setIsLoading(false);
     if (response?.error) return alert(response.error);
 
+    toast.success(`Question created successfully`, {
+      position: 'top-right',
+      style: {
+        color: 'green'
+      }
+    });
+    
     router.replace(`/questions/${slug}`, {
       scroll: false
     });
