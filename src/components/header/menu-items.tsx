@@ -53,33 +53,41 @@ const MenuItems = ({ session }: { session: Session | null }) => {
     const { data } = useSession();
     const userLinks = () => {
         return (
-            <ul className='flex flex-col gap-3 px-4 py-2 bg-slate-600'>
+            <ul className='flex flex-col px-3 py-2 bg-slate-600'>
                 <li>
-                    <Link href={`/${session?.user?.username}`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
-                        <Avatar className='h-5 w-5'>
-                            <AvatarImage src={session?.user?.profilePicture as string} />
-                            <AvatarFallback className='text-xs'>{session?.user?.name[0].toUpperCase()}</AvatarFallback>
-                        </Avatar>
-                        <p>My Profile</p>
-                    </Link>
+                    <DropdownMenuItem className='bg-transparent hover:bg-transparent focus:bg-transparent text-base'>
+                        <Link href={`/${session?.user?.username}`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
+                            <Avatar className='h-5 w-5'>
+                                <AvatarImage src={session?.user?.profilePicture as string} />
+                                <AvatarFallback className='text-xs'>{session?.user?.name[0].toUpperCase()}</AvatarFallback>
+                            </Avatar>
+                            <p>My Profile</p>
+                        </Link>
+                    </DropdownMenuItem>
                 </li>
                 <li>
-                    <Link href={`/${session?.user?.username}/models`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
-                        <BiCube />
-                        My Models
-                    </Link>
+                    <DropdownMenuItem className='bg-transparent hover:bg-transparent focus:bg-transparent text-base'>
+                        <Link href={`/${session?.user?.username}/models`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
+                            <BiCube />
+                            My Models
+                        </Link>
+                    </DropdownMenuItem>
                 </li>
                 <li>
-                    <Link href={`/${session?.user?.username}/likes`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
-                        <AiFillLike />
-                        <p>My Likes</p>
-                    </Link>
+                    <DropdownMenuItem className='bg-transparent hover:bg-transparent focus:bg-transparent text-base'>
+                        <Link href={`/${session?.user?.username}/likes`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
+                            <AiFillLike />
+                            <p>My Likes</p>
+                        </Link>
+                    </DropdownMenuItem>
                 </li>
                 <li>
-                    <button onClick={handleLogout} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
-                        <MdLogout />
-                        <p>Logout</p>
-                    </button>
+                    <DropdownMenuItem className='mb-1 bg-transparent hover:bg-transparent focus:bg-transparent text-base'>
+                        <button onClick={handleLogout} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
+                            <MdLogout />
+                            <p>Logout</p>
+                        </button>
+                    </DropdownMenuItem>
                 </li>
             </ul>
         )
@@ -123,7 +131,7 @@ const MenuItems = ({ session }: { session: Session | null }) => {
 
                 {
                     !(session || data) ? (
-                        <Link href='/login' className="bg-orange-400 text-white  px-3 py-1 focus:outline-none hover:bg-orange-500 rounded text-base">Login</Link>
+                        <Link href='/login' className="bg-orange-400 text-white px-3 py-1 focus:outline-none hover:bg-orange-500 rounded text-base">Login</Link>
                     )
                         : (
                             <DropdownMenu >
@@ -133,7 +141,7 @@ const MenuItems = ({ session }: { session: Session | null }) => {
                                         <AvatarFallback className=''>{session?.user?.name[0].toUpperCase()}</AvatarFallback>
                                     </Avatar>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className='p-2 bg-slate-600 rounded-none border-none mt-2'>
+                                <DropdownMenuContent className='bg-slate-600 rounded-none border-none mt-2'>
                                     {userLinks()}
                                 </DropdownMenuContent>
                             </DropdownMenu>

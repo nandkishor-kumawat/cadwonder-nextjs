@@ -22,6 +22,9 @@ export async function generateMetadata({
   return {
     title: model?.modelName ?? "Model not found",
     description: model?.description ?? siteMetadata.description,
+    alternates: {
+      canonical: url
+    },
     openGraph: {
       title: model.modelName,
       description: model.description ?? siteMetadata.description,

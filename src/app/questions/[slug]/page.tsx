@@ -27,6 +27,9 @@ export async function generateMetadata({
   return {
     title: question.question,
     description: question.description ?? siteMetadata.description,
+    alternates: {
+      canonical: url
+    },
     openGraph: {
       title: question.question,
       description: question.description ?? siteMetadata.description,
