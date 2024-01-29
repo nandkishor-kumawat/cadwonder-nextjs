@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     google: process.env.GOOGLE_VERIFICATION,
   },
   description: siteMetadata.description,
+  keywords: siteMetadata.keywords,
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,

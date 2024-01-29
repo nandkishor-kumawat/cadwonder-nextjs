@@ -6,9 +6,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Metadata } from 'next';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'Questions',
-}
 
 export default async function Page({
   searchParams,

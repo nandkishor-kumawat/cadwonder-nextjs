@@ -14,4 +14,5 @@ export const siteMetadata = {
     twitter: 'https://twitter.com/nandkishor_k7',
     linkedin: 'https://www.linkedin.com/in/nandkishor-kumawat/',
     locale: 'en-US',
+    keywords: "CadWonder, Engineering platform, Problem-solving solutions, Engineering community, Interactive engineering, Knowledge base for engineers, Innovation in engineering, Engineering brilliance, Engineering resources, Engineering forums, CadWonder community, Nandkishor Kumawat,Harsh Kumar Meena, Engineering expertise, Engineering discussions, Engineering collaboration, Engineering networking, Engineering tools, Engineering challenges, Engineering insights, Engineering tutorials"
 }
