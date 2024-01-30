@@ -1,30 +1,25 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import Link from 'next/link';
-import { FileDetails } from '@/lib/types/types';
+import { FileDetails, Question } from '@/lib/types/types';
 import CommentList from '../comments/comment-list';
 import CommentForm from '../comments/comment-form';
-import { getServerSession } from 'next-auth';
 
 interface Props {
-    data: {
-        id: string;
-        description: string;
-        createdAt: string;
+    data: Question & {
+        createdAt: Date;
         user: {
-            id: number;
+            id: string;
             name: string;
             profilePicture: string;
             username: string;
         };
-        file_details: FileDetails[];
-    };
+    }
     title: string;
 }
 
 export default async function DataInfo({ data, title }: Props) {
     const user = data.user;
-    const session = await getServerSession()
     return (
         <div className="info">
             <div className='my-2'>

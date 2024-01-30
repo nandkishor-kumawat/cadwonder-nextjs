@@ -104,7 +104,6 @@ function NewModal() {
     if (response?.error) return alert(response.error);
 
     toast.success(`Model uploaded successfully`, {
-      position: 'top-right',
       style: {
         color: 'green'
       }

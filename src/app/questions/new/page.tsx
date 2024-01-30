@@ -123,7 +123,6 @@ export default function NewQuestion() {
     if (response?.error) return alert(response.error);
 
     toast.success(`Question created successfully`, {
-      position: 'top-right',
       style: {
         color: 'green'
       }

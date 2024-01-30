@@ -1,20 +1,19 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Link from 'next/link'
-import { getServerSession } from 'next-auth'
-import { Answer } from '@/lib/types/types'
-import { Button } from '../ui/button'
-import { getUser } from '@/lib/functions'
+import { Answer, User } from '@/lib/types/types'
+import { getAuth } from '@/app/api/auth/[...nextauth]/options'
+import DeleteAnswerButton from './delete-answer-button'
 
 interface Props {
-  answer: Answer
+  answer: Answer & { user: User }
 }
 
 export default async function AnswerItem({ answer }: Props) {
 
-  const session = await getServerSession();
+  const session = await getAuth();
 
-  const user = await getUser(answer.user_id);
+  const user = answer?.user;
 
 
   return (
@@ -23,7 +22,7 @@ export default async function AnswerItem({ answer }: Props) {
         <div className='inline-flex self-start'>
           <Avatar className='w-12 h-12'>
             <AvatarImage src={user?.profilePicture} />
-            <AvatarFallback>{user?.name[0].toUpperCase()}</AvatarFallback>
+            <AvatarFallback>{user?.name?.[0].toUpperCase()}</AvatarFallback>
           </Avatar>
         </div>
 
@@ -34,7 +33,7 @@ export default async function AnswerItem({ answer }: Props) {
               <p className='text-gray-500 text-sm'>{new Date(answer.createdAt).toLocaleString()}</p>
             </div>
 
-            {/* {user?.id === answer.user_id && <Button variant='ghost' className='ml-auto'>:</Button>} */}
+            {session?.user?.id === answer.user_id && (<DeleteAnswerButton id={answer.id} />)}
           </div>
 
           <div className="deails my-1">

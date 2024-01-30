@@ -3,13 +3,13 @@ import Link from 'next/link'
 import React from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { getData, getUserBy } from '@/lib/functions'
-import { getServerSession } from 'next-auth'
+import { getData } from '@/lib/functions'
+import { getAuth } from '@/app/api/auth/[...nextauth]/options'
 
 const UserInfo = async () => {
 
-    const session = await getServerSession();
-    const user = await getUserBy("email", session?.user?.email as string);
+    const session = await getAuth();
+    const user = session?.user;
     if (!session || !user) return null;
 
     const userQuestions = await getData({

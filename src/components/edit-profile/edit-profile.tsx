@@ -143,7 +143,6 @@ const EditProfile = () => {
                 socials,
             }, user_id).then(() => {
                 toast.success(`Profile updated successfully`, {
-                    position: 'top-right',
                     style: {
                         color: 'green'
                     }

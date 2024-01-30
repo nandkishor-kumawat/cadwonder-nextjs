@@ -51,7 +51,8 @@ const MenuItems = ({ session }: { session: Session | null }) => {
     }
 
     const { data } = useSession();
-    const userLinks = () => {
+    
+    const UserLinks = () => {
         return (
             <ul className='flex flex-col px-3 py-2 bg-slate-600'>
                 <li>
@@ -118,7 +119,7 @@ const MenuItems = ({ session }: { session: Session | null }) => {
                             </ul>
                         </div>
 
-                        {(session || data) && userLinks()}
+                        {(session || data) && <UserLinks />}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -142,7 +143,7 @@ const MenuItems = ({ session }: { session: Session | null }) => {
                                     </Avatar>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className='bg-slate-600 rounded-none border-none mt-2'>
-                                    {userLinks()}
+                                    {<UserLinks />}
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         )

@@ -83,7 +83,6 @@ const ProfilePicUploader = ({
       });
 
       toast.success(`${type[0].toUpperCase()}${type.slice(1)} Picture updated successfully`, {
-        position: 'top-right',
         style: {
           color: 'green'
         }
@@ -115,8 +114,8 @@ const ProfilePicUploader = ({
               height: 'auto'
             }}
             priority={true}
-            width={200}
-            height={200}
+            width={ratio === 1? 200 : 1200}
+            height={ratio === 1? 200 : 600}
             alt='profile'
             src={pic} />
         </div>

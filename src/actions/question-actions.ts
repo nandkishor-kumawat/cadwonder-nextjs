@@ -2,41 +2,8 @@
 
 import { db } from "@/firebase";
 import { Question } from "@/lib/types/types";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import { revalidatePath, revalidateTag } from "next/cache";
-
-export const postComment = async (formData: FormData) => {
-
-  const rowData = {
-    comment: formData.get('comment'),
-    association_id: formData.get('association_id'),
-    user_id: formData.get('user_id')
-  };
-
-  const docRef = await addDoc(collection(db, 'comments'), {
-    ...rowData,
-    createdAt: Date.now(),
-  });
-
-  revalidateTag(`/questions`);
-}
-
-export const postAnswer = async (formData: FormData) => {
-
-  const rowData = {
-    answer: formData.get('answer'),
-    question_id: formData.get('question_id'),
-    user_id: formData.get('user_id'),
-    file_details: JSON.parse(formData.get('file_details') as string),
-  };
-
-  const docRef = await addDoc(collection(db, 'answers'), {
-    ...rowData,
-    createdAt: Date.now(),
-  });
-
-  revalidatePath('/questions', 'page');
-}
 
 
 export const postQuestion = async (body: Omit<Question, "id">) => {
@@ -50,5 +17,18 @@ export const postQuestion = async (body: Omit<Question, "id">) => {
   } catch (error) {
     console.error('Error creating Question:', error);
     return { error: "Error creating Question" }
+  }
+}
+
+export const deleteQuestion = async (id: string) => {
+  try {
+    await deleteDoc(doc(db, 'questions', id));
+    // TODO: also remove Question related data
+    revalidatePath('/questions');
+    revalidatePath('/');
+    return { error: false, message: "Question deleted Successfully" };
+  } catch (error) {
+    console.error('Error deleting Question:', error);
+    return { message: "Error deleting Question", error: true };
   }
 }

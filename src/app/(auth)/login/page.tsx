@@ -72,10 +72,9 @@ export default function ProfileForm() {
       await loginUser(callbackUrl);
 
       toast.success(`Logged in successfully`, {
-        position: 'top-right',
         style: {
           color: 'green'
-        }
+        },
       });
     })
   }

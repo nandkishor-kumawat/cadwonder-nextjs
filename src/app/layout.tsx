@@ -61,7 +61,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
-          <Toaster />
+          <Toaster position="top-right" duration={2000}/>
           <ThemeProvider
             attribute="class"
             defaultTheme="lignt"

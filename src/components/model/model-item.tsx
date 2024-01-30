@@ -6,9 +6,8 @@ import { MdDownload } from 'react-icons/md';
 import { BiCommentDetail } from 'react-icons/bi'
 import { likeModel } from '@/actions';
 import LikeButton from './like-button';
-import { getServerSession } from 'next-auth';
-import { getUser, getUserBy } from '@/lib/functions';
-import { options } from '@/app/api/auth/[...nextauth]/options';
+import { getUser } from '@/lib/functions';
+import { getAuth } from '@/app/api/auth/[...nextauth]/options';
 
 
 const ModelItem = async ({ model: data }: any) => {
@@ -21,11 +20,10 @@ const ModelItem = async ({ model: data }: any) => {
         modelName
     } = data;
 
-    const session = await getServerSession(options);
+    const session = await getAuth();
+    const user = session?.user;
 
     const owner = await getUser(user_id);
-
-    const user = await getUserBy("email", session?.user?.email as string);
 
     return (
         <div className="rounded border bg-card text-card-foreground shadow-sm group">
