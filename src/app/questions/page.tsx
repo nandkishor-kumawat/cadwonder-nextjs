@@ -23,7 +23,7 @@ export default async function Page({
   const params = new URLSearchParams(filteredSearchParams);
   const queryString = params.toString();
 
-  const { questions } = await fetch(`${process.env.API_URL}/api/questions?${queryString}`).then(res => res.json())
+  const { questions } = await fetch(`${process.env.API_URL}/api/questions?${queryString}`,{cache: 'no-store'}).then(res => res.json())
 
   return (
     <div className="container max-w-3xl mx-auto px-2 mb-2 h-full">

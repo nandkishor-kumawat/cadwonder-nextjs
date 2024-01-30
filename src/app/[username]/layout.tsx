@@ -1,5 +1,4 @@
 import React, { PropsWithChildren } from 'react'
-import LinkNav from '@/components/user-profile/link-nav';
 import UserDetailsBanner from '@/components/user-profile/user-details-banner';
 
 interface Props extends PropsWithChildren {
