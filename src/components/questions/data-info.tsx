@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { FileDetails, Question } from '@/lib/types/types';
 import CommentList from '../comments/comment-list';
 import CommentForm from '../comments/comment-form';
+import FilePreview from '../answers/file-preview';
 
 interface Props {
     data: Question & {
@@ -43,15 +44,7 @@ export default async function DataInfo({ data, title }: Props) {
                     <div className="deails my-1 min-h-[3rem]">
                         <p>{data?.description}</p>
                         {data.file_details?.map((file: FileDetails) => (
-                            <a
-                                href={file.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                key={file.name}
-                                className='px-4 py-2 bg-slate-200 rounded-md text-sm w-full inline-block mt-2'
-                            >
-                                {file.name}
-                            </a>
+                            <FilePreview key={file.name} file={file} />
                         ))}
                     </div>
 

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Answer, User } from '@/lib/types/types'
 import { getAuth } from '@/app/api/auth/[...nextauth]/options'
 import DeleteAnswerButton from './delete-answer-button'
+import FilePreview from './file-preview'
 
 interface Props {
   answer: Answer & { user: User }
@@ -39,15 +40,7 @@ export default async function AnswerItem({ answer }: Props) {
           <div className="deails my-1">
             <p>{answer.answer}</p>
             {answer.file_details?.map((file) => (
-              <a
-                href={file.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                key={file.name}
-                className='px-4 py-2 bg-slate-200 rounded-md text-sm w-full inline-block mt-2'
-              >
-                {file.name}
-              </a>
+              <FilePreview key={file.name} file={file} />
             ))}
           </div>
 
