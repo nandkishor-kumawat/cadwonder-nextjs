@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react'
 import { addDoc, collection, deleteDoc, doc, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '@/firebase'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import { FaRegEdit } from 'react-icons/fa'
 
 interface Props {
@@ -53,7 +52,7 @@ const FollowButton = ({ following_id, username, className }: Props) => {
         <>
             {!unVisible && <Button onClick={doFollowUnfollow} variant={className ? 'ghost' : 'outline'} className={className}>{isFollowing ? 'Unfollow' : 'Follow'}</Button>}
             {isSameUser && (<Link href='/dashboard/edit-profile'>
-                <Button onClick={doFollowUnfollow} variant={className ? 'ghost' : 'outline'} className={className}>
+                <Button variant={className ? 'ghost' : 'outline'} className={className}>
                     <FaRegEdit />&nbsp;Edit Profile
                 </Button>
             </Link>)}

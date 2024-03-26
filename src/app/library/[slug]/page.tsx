@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import DataInfo from '@/components/questions/data-info';
 import { siteMetadata } from '@/lib/siteMetaData';
 import { Model } from '@/lib/types/types';
+import { getModelBySlug } from '@/actions';
 
 type Props = {
   params: { slug: string };
@@ -13,10 +14,9 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const { slug } = params;
 
-  const url = `${process.env.API_URL}/api/models/${slug}`
-  const data = await fetch(url).then(res => res.json())
+  const url = `${siteMetadata.siteUrl}/models/${slug}`;
+  const [model, err] = await getModelBySlug(slug);
 
-  const model = data?.model;
   const publishedAt = new Date(model.createdAt).toISOString();
 
   return {
@@ -49,10 +49,7 @@ export async function generateMetadata({
 
 async function Question({ params: { slug } }: Props) {
 
-  const data = await fetch(`${process.env.API_URL}/api/models/${slug}`).then(res => res.json())
-
-
-  const { model } = data;
+  const [model, err] = await getModelBySlug(slug);
 
   const jsonLd = {
     "@context": "https://schema.org",

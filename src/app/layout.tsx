@@ -7,6 +7,7 @@ import Navbar from '@/components/header/navbar'
 import GoogleAnalytics from '@/components/google-analytics'
 import { Toaster } from '@/components/ui/sonner'
 import { siteMetadata } from '@/lib/siteMetaData'
+import NextTopLoader from 'nextjs-toploader';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -60,8 +61,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <NextTopLoader color='rgb(251 146 60)' showSpinner={false} />
         <Providers>
-          <Toaster position="top-right" duration={2000}/>
+          <Toaster position="top-right" duration={2000} />
           <ThemeProvider
             attribute="class"
             defaultTheme="lignt"

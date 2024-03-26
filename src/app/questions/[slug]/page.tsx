@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Metadata } from 'next';
 import AnswerForm from '@/components/answers/answer-form';
 import AnswerItem from '@/components/answers/answer-item';
@@ -12,6 +12,9 @@ import { siteMetadata } from '@/lib/siteMetaData';
 import { MdDeleteForever } from 'react-icons/md';
 import QuestionDeleteButton from '@/components/questions/question-delete-button';
 import { getAuth } from '@/app/api/auth/[...nextauth]/options';
+import AnswerList from '@/components/answers/answer-list';
+import { AnswerFallback } from '@/components/fallbacks';
+import { getQuestionBySlug } from '@/actions';
 
 type Props = {
   params: { slug: string };
@@ -21,9 +24,10 @@ export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
   const { slug } = params;
-  const url = `${process.env.API_URL}/api/questions/${slug}`;
+  
+  const url = `${siteMetadata.siteUrl}/questions/${slug}`;
 
-  const { question } = await fetch(url).then((res) => res.json());
+  const [question, error] = await getQuestionBySlug(slug);
   if (!question) return {};
   const publishedAt = new Date(question.createdAt).toISOString();
 
@@ -56,19 +60,13 @@ export async function generateMetadata({
 
 
 async function Page({ params: { slug } }: Props) {
-  const data = await fetch(`${process.env.API_URL}/api/questions/${slug}`,{cache:'force-cache'}).then(res => res.json())
+  const [question, error] = await getQuestionBySlug(slug);
   const session = await getAuth();
 
+  if (error) return <div>Error</div>
+  if (!question) return <div>Question not found</div>
 
-  if (!data) return <div>Loading...</div>
-  if (data?.error) return <div>Error</div>
-  if (!data?.question) return <div>Question not found</div>
-
-  const { question } = data;
   await updateViewCount(question.id);
-
-  const { answers } = await fetch(`${process.env.API_URL}/api/questions/${slug}/answers`,
-    { cache: 'no-store', next: { tags: ['answers'] } }).then(res => res.json())
 
   const date = new Date(question.createdAt).toLocaleDateString('en-US', {
     day: 'numeric',
@@ -105,9 +103,13 @@ async function Page({ params: { slug } }: Props) {
 
             <div className="flex flex-col gap-3">
               <div className="answers my-2 flex flex-col gap-2">
-                {answers?.map((answer: any) => (
-                  <AnswerItem key={answer.id} answer={answer} />
-                ))}
+                <Suspense fallback={
+                  <>
+                    <AnswerFallback />
+                    <AnswerFallback />
+                  </>}>
+                  <AnswerList question_id={question.id} />
+                </Suspense>
               </div>
 
               <div className='my-2'>

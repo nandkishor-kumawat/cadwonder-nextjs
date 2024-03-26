@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache"
 import { db } from "@/firebase";
 import { addDoc, collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { Model } from "@/lib/types/types";
+import { getData, getUser } from "@/lib/functions";
 
 export const postModel = async (body: Omit<Model, "id">) => {
     try {
@@ -31,5 +32,38 @@ export const likeModel = async (formData: FormData) => {
             user_id: user_id,
             createdAt: Date.now(),
         })
+    }
+}
+
+
+export const getModelBySlug = async (slug: string) => {
+    try {
+        const [model] = await getData({
+            coll: "models",
+            key: "slug",
+            value: slug
+        })
+        if (!model) throw new Error("Model not found")
+
+        const user = await getUser(model.user_id as string) as {
+            username: string;
+            profilePicture: string;
+            name: string;
+            id: string
+        };
+
+        const data = {
+            ...model,
+            user: {
+                username: user?.username,
+                profilePicture: user?.profilePicture,
+                name: user?.name,
+                id: user?.id
+            }
+        }
+        return [data, null]
+    } catch (error) {
+        console.error('Error getting Model:', error);
+        return [null, error]
     }
 }

@@ -34,13 +34,13 @@ export default function CommentForm({ association_id }: Props) {
         profilePicture: string;
     };
 
-    if (!user) return (
-        <div className="flex gap-2 items-center">
-            <Skeleton className='w-7 h-7 rounded-full' />
-            <Skeleton className='flex-grow h-7' />
-            <Skeleton className='w-20 h-7' />
-        </div>
-    );
+    // if (!user) return (
+    //     <div className="flex gap-2 items-center">
+    //         <Skeleton className='w-7 h-7 rounded-full' />
+    //         <Skeleton className='flex-grow h-7' />
+    //         <Skeleton className='w-20 h-7' />
+    //     </div>
+    // );
 
     return (
         <form

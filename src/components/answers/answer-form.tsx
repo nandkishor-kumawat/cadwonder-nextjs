@@ -88,18 +88,18 @@ export default function AnswerForm({ question_id }: Props) {
   }
 
 
-  if (!user) return (
-    <div className="flex gap-2 items-start mt-5 mb-2">
-      <Skeleton className='w-10 h-10 rounded-full' />
-      <div className="flex-col flex flex-1 gap-2">
-        <Skeleton className='flex-grow h-32' />
-        <div className='flex gap-2 items-center'>
-          <Skeleton className='w-20 h-7' />
-          <Skeleton className='w-20 h-5' />
-        </div>
-      </div>
-    </div>
-  )
+  // if (!user) return (
+  //   <div className="flex gap-2 items-start mt-5 mb-2">
+  //     <Skeleton className='w-10 h-10 rounded-full' />
+  //     <div className="flex-col flex flex-1 gap-2">
+  //       <Skeleton className='flex-grow h-32' />
+  //       <div className='flex gap-2 items-center'>
+  //         <Skeleton className='w-20 h-7' />
+  //         <Skeleton className='w-20 h-5' />
+  //       </div>
+  //     </div>
+  //   </div>
+  // )
 
 
   return (

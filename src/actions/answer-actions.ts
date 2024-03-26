@@ -1,7 +1,8 @@
 "use server"
 
 import { db } from "@/firebase";
-import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
+import { getData, getUser } from "@/lib/functions";
+import { addDoc, collection, deleteDoc, doc, query, where } from "firebase/firestore";
 import { revalidateTag } from "next/cache";
 
 export const postAnswer = async (formData: FormData) => {
@@ -33,3 +34,31 @@ export const deleteAnswer = async (id: string) => {
   }
 }
 
+
+export const getAnswersByQuestionId = async (questionId: string) => {
+  try {
+    const ans = await getData({
+      coll: "answers",
+      key: "question_id",
+      value: questionId,
+      order: "asc"
+    });
+
+    const answers = await Promise.all(ans.map(async answer => {
+      const user = await getUser(answer.user_id as string);
+      return {
+        ...answer,
+        user: {
+          username: user?.username,
+          profilePicture: user?.profilePicture,
+          name: user?.name,
+          id: user?.id
+        }
+      };
+    }));
+
+    return [answers, null]
+  } catch (error) {
+    return [null, error]
+  }
+}

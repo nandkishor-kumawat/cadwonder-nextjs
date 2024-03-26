@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { MdOutlineLocationOn } from 'react-icons/md'
 import { getData, getUserBy } from '@/lib/functions'
 import LinkNav from './link-nav'
+import Await from '../await'
 
 const UserDetailsBanner = async ({ username }: { username: string }) => {
 
@@ -12,17 +13,17 @@ const UserDetailsBanner = async ({ username }: { username: string }) => {
 
     if (!user) return null;
 
-    const userQuestions = await getData({
+    const userQuestions = getData({
         coll: "questions",
         key: "user_id",
         value: user.id
     });
 
-    const userModels = await getData({
-        coll: "models",
-        key: "user_id",
-        value: user.id
-    });
+    // const userModels = await getData({
+    //     coll: "models",
+    //     key: "user_id",
+    //     value: user.id
+    // });
 
     return (
         <>
@@ -52,7 +53,11 @@ const UserDetailsBanner = async ({ username }: { username: string }) => {
                                     <FollowButton username={username} following_id={user.id} />
 
                                     <Link href={`/${username}/questions`} className='text-center'>
-                                        <p>{userQuestions.length}</p>
+
+                                        <Await promise={userQuestions}>
+                                            {questions => <p>{questions.length}</p>}
+                                        </Await>
+
                                         <p>Questions</p>
                                     </Link>
 

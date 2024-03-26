@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import { Metadata } from 'next'
 import { getData } from '@/lib/functions'
 import { checkProtected } from '@/actions'
@@ -6,6 +6,8 @@ import { getAuth } from '../api/auth/[...nextauth]/options'
 import Link from 'next/link'
 import { FaEdit } from 'react-icons/fa'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Skeleton } from '@/components/ui/skeleton'
+import Await from '@/components/await'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -18,13 +20,13 @@ async function Dashboard() {
 
   const user = session?.user;
 
-  const userQuestions = await getData({
+  const userQuestions = getData({
     coll: "questions",
     key: "user_id",
     value: user.id
   });
 
-  const userModels = await getData({
+  const userModels = getData({
     coll: "models",
     key: "user_id",
     value: user.id
@@ -79,8 +81,15 @@ async function Dashboard() {
 
               <div className='flex items-center justify-center gap-2 flex-wrap'>
                 <p>0 Follower(s), </p>
-                <p>{userQuestions.length} Question(s), </p>
-                <p>{userModels.length} Model(s), </p>
+
+                <Await promise={userQuestions}>
+                  {questions => <p>{questions.length} Question(s),</p>}
+                </Await>
+
+                <Await promise={userModels}>
+                  {models => <p>{models.length} Model(s),</p>}
+                </Await>
+
                 {/* <p>1 Badge received</p> */}
               </div>
 

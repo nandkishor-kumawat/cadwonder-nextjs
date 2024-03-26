@@ -1,6 +1,7 @@
 "use server"
 
 import { db } from "@/firebase";
+import { getData, getUser } from "@/lib/functions";
 import { Question } from "@/lib/types/types";
 import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import { revalidatePath, revalidateTag } from "next/cache";
@@ -30,5 +31,37 @@ export const deleteQuestion = async (id: string) => {
   } catch (error) {
     console.error('Error deleting Question:', error);
     return { message: "Error deleting Question", error: true };
+  }
+}
+
+
+export const getQuestionBySlug = async (slug: string) => {
+  try {
+    const [question] = await getData({
+      coll: "questions",
+      key: "slug",
+      value: slug
+    })
+    if (!question) throw new Error("Question not found")
+
+    const user = await getUser(question.user_id as string) as {
+      username: string;
+      profilePicture: string;
+      name: string;
+      id: string
+    };
+
+    const data = {
+      ...question, user: {
+        username: user?.username,
+        profilePicture: user?.profilePicture,
+        name: user?.name,
+        id: user?.id
+      }
+    }
+    return [data, null]
+  } catch (error) {
+    console.error('Error getting Question:', error);
+    return [null, error]
   }
 }
