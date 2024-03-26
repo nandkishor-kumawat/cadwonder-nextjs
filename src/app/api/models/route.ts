@@ -19,7 +19,7 @@ export const GET = async (request: Request) => {
     // await new Promise(resolve => setTimeout(resolve, 5000))
 
     if (!query) {
-        return new Response(JSON.stringify({ models }), { status: 200 })
+        return new Response(JSON.stringify(models), { status: 200 })
     }
 
     const regex = getRegex(query);
@@ -27,6 +27,6 @@ export const GET = async (request: Request) => {
         return regex.test(model.modelName);
     });
 
-    return new Response(JSON.stringify({ models: filteredModels }), { status: 200 })
+    return new Response(JSON.stringify(filteredModels), { status: 200 })
 
 }

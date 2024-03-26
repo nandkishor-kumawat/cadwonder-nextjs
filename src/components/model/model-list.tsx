@@ -2,7 +2,8 @@ import React from 'react'
 import ModelItem from './model-item'
 import { Model } from '@/lib/types/types'
 
-export default function ModelList({ models }: { models: Model[] }) {
+export default async function ModelList({ promise }: { promise: Promise<Model[]> }) {
+    const models = await promise;
     return (
         <>
             {models.length === 0 && <p>No models found</p>}

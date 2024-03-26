@@ -19,10 +19,7 @@ export default async function Page({
   };
 }) {
 
-  const data = await fetch(`${process.env.API_URL}/api/models?query=${searchParams?.query ?? ""}`,{cache: 'no-store'}).then(res => res.json())
-
-  const { models } = data;
-
+  const promise = fetch(`${process.env.API_URL}/api/models?query=${searchParams?.query ?? ""}`, { cache: 'no-store' }).then(res => res.json())
 
   return (
     <div className="container max-w-4xl mx-auto px-2 mb-2">
@@ -35,22 +32,18 @@ export default async function Page({
       </div>
       <SearchBar />
 
+      <div className="grid gap-2 pb-2" style={{
+        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+      }}>
+        <Suspense fallback={<>
+          <Skeleton className="w-full h-[300px] rounded" />
+          <Skeleton className="w-full h-[300px] rounded" />
+          <Skeleton className="w-full h-[300px] rounded" />
+        </>}>
+          <ModelList promise={promise} />
+        </Suspense>
+      </div>
 
-      {models.length === 0 ? <p className="text-center text-gray-500">No models found</p> : (
-
-        <div className="grid gap-2 pb-2" style={{
-          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-        }}>
-          <Suspense fallback={<>
-            <Skeleton className="w-full h-[300px] rounded" />
-            <Skeleton className="w-full h-[300px] rounded" />
-            <Skeleton className="w-full h-[300px] rounded" />
-          </>}>
-            {/* <Skeleton className="w-full h-[300px] rounded" /> */}
-            <ModelList models={models} />
-          </Suspense>
-        </div>
-      )}
     </div>
   )
 }

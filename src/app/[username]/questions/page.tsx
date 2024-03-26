@@ -1,5 +1,5 @@
 import React from 'react'
-import Questions from '@/components/questions/question-list';
+import Questions from '@/components/questions/questions';
 import { getData, getUserBy } from '@/lib/functions';
 import { Question } from '@/lib/types/types';
 

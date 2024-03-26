@@ -9,18 +9,18 @@ const Page = async ({ params: { username } }: { params: { username: string } }) 
 
   if (!user) return null;
 
-  const models = await getData({
+  const promise = getData({
     coll: "models",
     key: "user_id",
     value: user.id,
     order: "desc"
-  }) as Model[];
+  });
 
   return (
     <div className="grid gap-2 pb-2" style={{
       gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
     }}>
-      <ModelList models={models} />
+      <ModelList promise={promise} />
     </div>
   )
 }
