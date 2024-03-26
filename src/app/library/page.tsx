@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import Link from 'next/link'
 import { Metadata } from 'next'
+import { getModels } from '@/actions'
+import Await from '@/components/await'
 
 export const metadata: Metadata = {
   title: 'Models',
@@ -19,7 +21,15 @@ export default async function Page({
   };
 }) {
 
-  const promise = fetch(`${process.env.API_URL}/api/models?query=${searchParams?.query ?? ""}`, { cache: 'no-store' }).then(res => res.json())
+  const filteredSearchParams = Object.fromEntries(
+    Object.entries(searchParams ?? {}).filter(([key, value]) => value !== undefined)
+  );
+
+  const params = new URLSearchParams(filteredSearchParams);
+  const queryString = params.toString();
+
+  // const promise = fetch(`${process.env.API_URL}/api/models?query=${searchParams?.query ?? ""}`, { cache: 'no-store' }).then(res => res.json())
+  const promise = getModels(queryString);
 
   return (
     <div className="container max-w-4xl mx-auto px-2 mb-2">
@@ -40,7 +50,9 @@ export default async function Page({
           <Skeleton className="w-full h-[300px] rounded" />
           <Skeleton className="w-full h-[300px] rounded" />
         </>}>
-          <ModelList promise={promise} />
+          <Await promise={promise}>
+            {models => <ModelList models={models} />}
+          </Await>
         </Suspense>
       </div>
 

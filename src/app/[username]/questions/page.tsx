@@ -1,5 +1,5 @@
 import React from 'react'
-import Questions from '@/components/questions/questions';
+import QuestionList from '@/components/questions/question-list';
 import { getData, getUserBy } from '@/lib/functions';
 import { Question } from '@/lib/types/types';
 
@@ -17,7 +17,7 @@ const Page = async ({ params: { username } }: { params: { username: string } }) 
   }) as Question[];
 
   return (
-    <Questions questions={questions} />
+    <QuestionList questions={questions} />
   )
 }
 

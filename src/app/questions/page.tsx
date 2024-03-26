@@ -5,6 +5,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import QuestionList from '@/components/questions/question-list';
+import Await from '@/components/await';
+import { getQuestions } from '@/actions';
+
 
 export const metadata: Metadata = {
   title: 'Questions',
@@ -23,6 +26,7 @@ export default async function Page({
   const params = new URLSearchParams(filteredSearchParams);
   const queryString = params.toString();
 
+  const promise = getQuestions(queryString);
 
   return (
     <div className="container max-w-3xl mx-auto px-2 mb-2 h-full">
@@ -43,7 +47,9 @@ export default async function Page({
           <Skeleton className="w-full h-[100px] rounded" />
         </div>
       }>
-        <QuestionList queryString={queryString} />
+        <Await promise={promise}>
+          {questions => <QuestionList questions={questions} />}
+        </Await>
       </Suspense>
     </div>
   )

@@ -2,9 +2,9 @@
 import { revalidatePath } from "next/cache"
 
 import { db } from "@/firebase";
-import { addDoc, collection, deleteDoc, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc } from "firebase/firestore";
 import { Model } from "@/lib/types/types";
-import { getData, getUser } from "@/lib/functions";
+import { getData, getRegex, getUser } from "@/lib/functions";
 
 export const postModel = async (body: Omit<Model, "id">) => {
     try {
@@ -65,5 +65,27 @@ export const getModelBySlug = async (slug: string) => {
     } catch (error) {
         console.error('Error getting Model:', error);
         return [null, error]
+    }
+}
+
+export const getModels = async (queryString: string) => {
+    try {
+        let q = query(collection(db, 'models'), orderBy('createdAt', 'desc'));
+        const searchParams = new URLSearchParams(queryString);
+        const que = searchParams.get('query');
+        const category = searchParams.get('category');
+        const software = searchParams.get('software');
+
+        const querySnapshot = await getDocs(q);
+        const models = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Model[];
+        if (!que) return models;
+
+        const regex = getRegex(que);
+        const filteredModels = models?.filter(model => regex.test(model.modelName));
+
+        return filteredModels
+    } catch (error) {
+        console.error('Error getting Questions:', error);
+        return []
     }
 }

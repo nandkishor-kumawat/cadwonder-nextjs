@@ -1,9 +1,9 @@
 "use server"
 
 import { db } from "@/firebase";
-import { getData, getUser } from "@/lib/functions";
+import { getData, getRegex, getUser } from "@/lib/functions";
 import { Question } from "@/lib/types/types";
-import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query } from "firebase/firestore";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 
@@ -63,5 +63,27 @@ export const getQuestionBySlug = async (slug: string) => {
   } catch (error) {
     console.error('Error getting Question:', error);
     return [null, error]
+  }
+}
+
+export const getQuestions = async (queryString: string) => {
+  try {
+    let q = query(collection(db, 'questions'), orderBy('createdAt', 'desc'));
+    const searchParams = new URLSearchParams(queryString);
+    const que = searchParams.get('query');
+    const category = searchParams.get('category');
+    const software = searchParams.get('software');
+
+    const querySnapshot = await getDocs(q);
+    const questions = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Question[];
+    if (!que) return questions;
+
+    const regex = getRegex(que);
+    const filteredQuestions = questions?.filter(question => regex.test(question.question));
+
+    return filteredQuestions
+  } catch (error) {
+    console.error('Error getting Questions:', error);
+    return [];
   }
 }

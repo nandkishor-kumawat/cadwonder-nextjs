@@ -1,7 +1,9 @@
+import Await from '@/components/await';
 import ModelList from '@/components/model/model-list';
+import { Skeleton } from '@/components/ui/skeleton';
 import { getData, getUserBy } from '@/lib/functions';
 import { Model } from '@/lib/types/types';
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const Page = async ({ params: { username } }: { params: { username: string } }) => {
 
@@ -20,7 +22,15 @@ const Page = async ({ params: { username } }: { params: { username: string } }) 
     <div className="grid gap-2 pb-2" style={{
       gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
     }}>
-      <ModelList promise={promise} />
+      <Suspense fallback={<>
+        <Skeleton className="w-full h-[300px] rounded" />
+        <Skeleton className="w-full h-[300px] rounded" />
+        <Skeleton className="w-full h-[300px] rounded" />
+      </>}>
+        <Await promise={promise}>
+          {models => <ModelList models={models} />}
+        </Await>
+      </Suspense>
     </div>
   )
 }
