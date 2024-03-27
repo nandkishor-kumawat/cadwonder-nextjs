@@ -90,7 +90,7 @@ dependencies:
     specifier: ^4.12.0
     version: 4.12.0(react@18.2.0)
   sharp:
-    specifier: ^0.33.3
+    specifier: ^0.33.1
     version: 0.33.3
   sonner:
     specifier: ^1.4.41
