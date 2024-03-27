@@ -1,6 +1,6 @@
 "use client"
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { startTransition, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
@@ -74,19 +74,16 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
 
     const [isLoading, setIsLoading] = React.useState(false);
     const closeBtnRef = React.useRef<HTMLButtonElement>(null);
+    const [isPending, startTransition] = React.useTransition();
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        //save to db
-        console.table(values);
-        setIsLoading(true);
-        startTransition(() => {
-            addExperience({ id: data?.id, ...values }, session?.user)
-                .then((data) => {
-                    form.reset()
-                    console.table(data);
-                    setIsLoading(false);
-                    closeBtnRef.current?.click();
-                });
+        startTransition(async () => {
+            setIsLoading(true);
+            const res = await addExperience({ id: data?.id, ...values }, session?.user)
+            form.reset()
+            console.table(res);
+            setIsLoading(false);
+            closeBtnRef.current?.click();
         })
     }
 

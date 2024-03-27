@@ -1,6 +1,6 @@
 "use client"
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { startTransition, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
@@ -71,19 +71,17 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
     const { data: session } = useSession();
     const [isLoading, setIsLoading] = React.useState(false);
     const closeBtnRef = React.useRef<HTMLButtonElement>(null);
+    const [isPending, startTransition] = React.useTransition();
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        //save to db
-        console.table(values)
-        setIsLoading(true);
-        startTransition(() => {
-            addEducation({ id: data?.id, ...values }, session?.user)
-                .then((data) => {
-                    form.reset()
-                    console.table(data);
-                    setIsLoading(false);
-                    closeBtnRef.current?.click();
-                });
+
+        startTransition(async () => {
+            setIsLoading(true);
+            const res = await addEducation({ id: data?.id, ...values }, session?.user)
+            form.reset()
+            console.table(res);
+            setIsLoading(false);
+            closeBtnRef.current?.click();
         })
     }
 
@@ -92,10 +90,10 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
         const { pending } = useFormStatus()
         return (
             <>
-            {pending&& <Overlay />}
-             <Button variant="destructive" disabled={pending}>{pending ? "Deleting..." : "Delete"}</Button>
+                {pending && <Overlay />}
+                <Button variant="destructive" disabled={pending}>{pending ? "Deleting..." : "Delete"}</Button>
             </>
-         )
+        )
     }
 
     return (

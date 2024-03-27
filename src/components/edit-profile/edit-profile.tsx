@@ -22,7 +22,7 @@ import SpecializedIn from '@/lib/data/SpecializedIn'
 import { bg1 } from '@/lib/data/colors'
 import countries from '@/lib/data/countries'
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { startTransition, use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { FaLink, FaLinkedin, FaTwitterSquare, FaInstagram, } from 'react-icons/fa';
@@ -113,6 +113,8 @@ const EditProfile = () => {
 
     const [profilePic, setProfilePic] = useState('');
     const [coverPic, setCoverPic] = useState('');
+    const [isPending, startTransition] = React.useTransition();
+
 
     const socialsRef = React.useRef<React.RefObject<HTMLInputElement>[]>([]);
     const [socialLinks, setSocialLinks] = useState<Record<string, string>>({
@@ -136,19 +138,17 @@ const EditProfile = () => {
             website
         }
 
-        setIsLoading(true);
-        startTransition(() => {
-            updateProfile({
-                ...values,
-                socials,
-            }, user_id).then(() => {
-                toast.success(`Profile updated successfully`, {
-                    style: {
-                        color: 'green'
-                    }
-                });
-                setIsLoading(false);
-            })
+        startTransition(async () => {
+            setIsLoading(true);
+
+            await updateProfile({ ...values, socials }, user_id)
+
+            toast.success(`Profile updated successfully`, {
+                style: {
+                    color: 'green'
+                }
+            });
+            setIsLoading(false);
         })
     }
 
