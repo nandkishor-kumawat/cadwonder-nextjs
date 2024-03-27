@@ -22,6 +22,3 @@ const auth = getAuth()
 const rdb = getDatabase();
 const storage = getStorage(app);
 export { app, auth, db, rdb, storage }
-
-
-
