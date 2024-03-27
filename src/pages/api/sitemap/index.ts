@@ -8,7 +8,6 @@ const handler = async (req: any, res: any) => {
   const questions = await getDataFromCollection('questions');
   const users = await getDataFromCollection('users');
   const library = await getDataFromCollection('models');
-
   const sitemap1 = generateSiteMap('/questions', questions);
   const sitemap2 = generateSiteMap('', users);
   const sitemap3 = generateSiteMap('/library', library);
