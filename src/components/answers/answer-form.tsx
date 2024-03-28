@@ -111,7 +111,7 @@ export default function AnswerForm({ question_id }: Props) {
       <div className="py-2 my-1">
         <div className="flex gap-2 items-start">
           <Avatar className='w-10 h-10'>
-            <AvatarImage src={user?.profilePicture} />
+            <AvatarImage src={user?.profilePicture} width={48} height={48} />
             <AvatarFallback>{user?.name[0]?.toUpperCase()}</AvatarFallback>
           </Avatar>
           <div className="flex-col flex w-full gap-2">

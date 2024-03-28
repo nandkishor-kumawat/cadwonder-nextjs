@@ -4,6 +4,7 @@ import * as React from "react"
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
 
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
@@ -20,17 +21,45 @@ const Avatar = React.forwardRef<
 ))
 Avatar.displayName = AvatarPrimitive.Root.displayName
 
+// const AvatarImage = React.forwardRef<
+//   React.ElementRef<typeof AvatarPrimitive.Image>,
+//   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
+// >(({ className, ...props }, ref) => (
+//   <AvatarPrimitive.Image
+//     ref={ref}
+//     className={cn("aspect-square h-full w-full", className)}
+//     alt="Profile"
+//     {...props}
+//   />
+// ))
+
 const AvatarImage = React.forwardRef<
-  React.ElementRef<typeof AvatarPrimitive.Image>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Image
-    ref={ref}
-    className={cn("aspect-square h-full w-full", className)}
-    alt="Profile"
-    {...props}
-  />
-))
+  React.ElementRef<typeof Image>,
+  Omit<React.ComponentPropsWithoutRef<typeof Image>, 'alt'>
+>(({ className, src, width = 32, height = 32, ...props }, ref) => {
+
+  const [isError, setIsError] = React.useState(false);
+
+  if (isError) return null;
+
+  return (
+    <Image
+      ref={ref}
+      className={cn("aspect-square h-full w-full", className)}
+      src={src}
+      width={width}
+      height={height}
+      {...props}
+      alt="Profile"
+      loading="lazy"
+      onError={(e) => {
+        e.currentTarget.id = "/no-profile.svg";
+        e.currentTarget.srcset = "/no-profile.svg";
+        setIsError(true);
+      }}
+    />
+  )
+})
 AvatarImage.displayName = AvatarPrimitive.Image.displayName
 
 const AvatarFallback = React.forwardRef<

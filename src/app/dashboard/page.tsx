@@ -69,7 +69,7 @@ async function Dashboard() {
 
             <div className='w-full h-full flex items-center justify-between gap-4 flex-col'>
               <Avatar className='w-20 h-20 -mt-14'>
-                <AvatarImage src={user?.profilePicture as string} />
+                <AvatarImage src={user?.profilePicture as string} width={96} height={96} />
                 <AvatarFallback className='text-3xl'>{user?.name[0].toUpperCase()}</AvatarFallback>
               </Avatar>
 

@@ -30,7 +30,7 @@ export default async function DataInfo({ data, title }: Props) {
             <div className='flex gap-4 my-2'>
                 <div className='inline-flex self-start'>
                     <Avatar className='w-12 h-12'>
-                        <AvatarImage src={user?.profilePicture} />
+                        <AvatarImage src={user?.profilePicture} width={96} height={96} />
                         <AvatarFallback>{user?.name[0].toUpperCase()}</AvatarFallback>
                     </Avatar>
                 </div>

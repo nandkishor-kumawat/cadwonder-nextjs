@@ -12,7 +12,7 @@ export default async function CommentItem({ comment }: { comment: Comment }) {
         <div className="flex border-t border-gray-400 py-1 mt-2">
             <div className="flex gap-2 my-1">
                 <Avatar className='w-8 h-8'>
-                    <AvatarImage src={user?.profilePicture} />
+                    <AvatarImage src={user?.profilePicture as string} />
                     <AvatarFallback>{user?.name[0].toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">

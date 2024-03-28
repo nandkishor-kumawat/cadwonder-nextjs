@@ -52,7 +52,7 @@ export default function CommentForm({ association_id }: Props) {
             <div className="my-3">
                 <div className="flex gap-2 items-center">
                     <Avatar className='w-7 h-7'>
-                        <AvatarImage src={user?.profilePicture} />
+                        <AvatarImage src={user?.profilePicture} width={48} height={48} />
                         <AvatarFallback>{user?.name[0]?.toUpperCase()}</AvatarFallback>
                     </Avatar>
                     <Input
