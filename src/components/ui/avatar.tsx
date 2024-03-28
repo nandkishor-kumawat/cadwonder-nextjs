@@ -51,7 +51,6 @@ const AvatarImage = React.forwardRef<
       height={height}
       {...props}
       alt="Profile"
-      loading="lazy"
       onError={(e) => {
         e.currentTarget.id = "/no-profile.svg";
         e.currentTarget.srcset = "/no-profile.svg";

@@ -43,7 +43,7 @@ const UserDetailsBanner = async ({ username }: { username: string }) => {
                         }}>
                             <div>
                                 <Avatar className='h-20 w-20 sm:w-28 sm:h-28 md:w-32 md:h-32 border border-gray-300'>
-                                    <AvatarImage src={user?.profilePicture as string} width={128} height={128} />
+                                    <AvatarImage src={user?.profilePicture as string} width={92} height={92} />
                                     <AvatarFallback className='text-2xl sm:text-3xl md:text-4xl'>{user?.name[0].toUpperCase()}</AvatarFallback>
                                 </Avatar>
                             </div>
