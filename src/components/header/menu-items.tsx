@@ -46,12 +46,11 @@ const MenuItems = ({ session }: { session: Session | null }) => {
     ]
 
     const handleLogout = async () => {
-        await signOut();
-        router.push('/login');
+        await signOut({ callbackUrl: '/login', redirect: true });
     }
 
     const { data } = useSession();
-    
+
     const UserLinks = () => {
         return (
             <ul className='flex flex-col px-3 py-2 bg-slate-600'>
@@ -130,23 +129,23 @@ const MenuItems = ({ session }: { session: Session | null }) => {
                     <Link key={index} href={link.href} className={`hover:text-orange-400 text-white ${link.current ? 'text-orange-400' : ''}`}>{link.name}</Link>
                 ))}
 
-                {
-                    !(session || data) ? (
-                        <Link href='/login' className="bg-orange-400 text-white px-3 py-1 focus:outline-none hover:bg-orange-500 rounded text-base">Login</Link>
-                    )
-                        : (
-                            <DropdownMenu >
-                                <DropdownMenuTrigger className='outline-none active:outline-none'>
-                                    <Avatar className='h-8 w-8 cursor-pointer static'>
-                                        <AvatarImage src={session?.user?.profilePicture as string} />
-                                        <AvatarFallback className=''>{session?.user?.name[0].toUpperCase()}</AvatarFallback>
-                                    </Avatar>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className='bg-slate-600 rounded-none border-none mt-2'>
-                                    {<UserLinks />}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        )
+                {!(session || data) && (
+                    <Link href='/login' className="bg-orange-400 text-white px-3 py-1 focus:outline-none hover:bg-orange-500 rounded text-base">Login</Link>
+                )}
+
+                {(session) && (
+                    <DropdownMenu >
+                        <DropdownMenuTrigger className='outline-none active:outline-none'>
+                            <Avatar className='h-8 w-8 cursor-pointer static'>
+                                <AvatarImage src={session?.user?.profilePicture as string} />
+                                <AvatarFallback className=''>{session?.user?.name[0].toUpperCase()}</AvatarFallback>
+                            </Avatar>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className='bg-slate-600 rounded-none border-none mt-2'>
+                            {<UserLinks />}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )
                 }
 
             </div>

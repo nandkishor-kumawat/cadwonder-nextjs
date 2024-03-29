@@ -44,7 +44,7 @@ export default function ProfileForm() {
   })
 
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams?.get("callbackUrl") ?? '/questions';
+  const callbackUrl = searchParams?.get("callbackUrl") ?? '/';
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
@@ -62,21 +62,20 @@ export default function ProfileForm() {
     })
 
     setIsLoading(false);
+
     if (res?.error) {
       setErrorMessage("Invalid credentials");
       setTimeout(() => setErrorMessage(""), 2000);
       return;
     }
 
-    startTransition(async () => {
-      await loginUser(callbackUrl);
+    toast.success(`Logged in successfully`, {
+      style: {
+        color: 'green'
+      },
+    });
 
-      toast.success(`Logged in successfully`, {
-        style: {
-          color: 'green'
-        },
-      });
-    })
+    await loginUser(callbackUrl);
   }
 
   const handleGoogleSignIn = async () => {
