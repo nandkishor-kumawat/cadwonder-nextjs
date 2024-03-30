@@ -21,13 +21,13 @@ export async function generateMetadata({
 
   return {
     title: model?.modelName ?? "Model not found",
-    description: model?.description ?? siteMetadata.description,
+    description: model?.description || siteMetadata.description,
     alternates: {
       canonical: url
     },
     openGraph: {
       title: model.modelName,
-      description: model.description ?? siteMetadata.description,
+      description: model.description || siteMetadata.description,
       url: url,
       siteName: 'CadWonder',
       locale: "en_US",
@@ -40,7 +40,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: model.modelName,
-      description: model.description ?? siteMetadata.description,
+      description: model.description || siteMetadata.description,
       // images: ogImages,
     },
   };
@@ -55,13 +55,13 @@ async function Question({ params: { slug } }: Props) {
     "@context": "https://schema.org",
     "@type": "question",
     "headline": model.modelName,
-    "description": model.description ?? siteMetadata.description,
+    "description": model.description || siteMetadata.description,
     // "image": imageList,
     "datePublished": new Date(model.createdAt).toISOString(),
     "dateModified": new Date(model.createdAt || model.createdAt).toISOString(),
     "author": [{
       "@type": "Person",
-      "name": model.user.name ?? siteMetadata.author,
+      "name": model.user.name || siteMetadata.author,
       "url": siteMetadata.twitter,
     }]
   }

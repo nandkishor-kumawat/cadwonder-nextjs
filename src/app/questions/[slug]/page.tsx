@@ -15,6 +15,7 @@ import { getAuth } from '@/app/api/auth/[...nextauth]/options';
 import AnswerList from '@/components/answers/answer-list';
 import { AnswerFallback } from '@/components/fallbacks';
 import { getQuestionBySlug } from '@/actions';
+import Link from 'next/link';
 
 type Props = {
   params: { slug: string };
@@ -24,7 +25,7 @@ export async function generateMetadata({
   params,
 }: Props): Promise<Metadata> {
   const { slug } = params;
-  
+
   const url = `${siteMetadata.siteUrl}/questions/${slug}`;
 
   const [question, error] = await getQuestionBySlug(slug);
@@ -33,13 +34,13 @@ export async function generateMetadata({
 
   return {
     title: question.question,
-    description: question.description ?? siteMetadata.description,
+    description: question.description || siteMetadata.description,
     alternates: {
       canonical: url
     },
     openGraph: {
       title: question.question,
-      description: question.description ?? siteMetadata.description,
+      description: question.description || siteMetadata.description,
       url: url,
       siteName: 'CadWonder',
       locale: "en_US",
@@ -52,7 +53,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: question.title,
-      description: question.description ?? siteMetadata.description,
+      description: question.description || siteMetadata.description,
       // images: ogImages,
     },
   };
@@ -78,13 +79,13 @@ async function Page({ params: { slug } }: Props) {
     "@context": "https://schema.org",
     "@type": "question",
     "headline": question.question,
-    "description": question.description ?? siteMetadata.description,
+    "description": question.description || siteMetadata.description,
     // "image": imageList,
     "datePublished": new Date(question.createdAt).toISOString(),
     "dateModified": new Date(question.createdAt).toISOString(),
     "author": [{
       "@type": "Person",
-      "name": question.user.name ?? siteMetadata.author,
+      "name": question.user.name || siteMetadata.author,
       "url": siteMetadata.twitter,
     }]
   }
@@ -119,7 +120,9 @@ async function Page({ params: { slug } }: Props) {
                     <AnswerForm question_id={question.id} />
                   </>
                 ) :
-                  <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500">Login to answer</Button>
+                  <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500" asChild>
+                    <Link href={`/login?callbackUrl=/questions/${slug}`}>Login to answer</Link>
+                  </Button>
                 }
               </div>
             </div>
