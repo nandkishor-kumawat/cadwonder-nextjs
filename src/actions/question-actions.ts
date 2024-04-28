@@ -4,7 +4,7 @@ import { db } from "@/firebase";
 import { getData, getRegex, getUser } from "@/lib/functions";
 import { Question } from "@/lib/types/types";
 import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query } from "firebase/firestore";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 
 export const postQuestion = async (body: Omit<Question, "id">) => {

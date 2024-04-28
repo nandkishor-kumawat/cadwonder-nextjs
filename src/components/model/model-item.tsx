@@ -54,7 +54,7 @@ const ModelItem = async ({ model: data }: any) => {
                     </div>
                     <div>
                         <Avatar className='w-[32px] h-[32px]'>
-                            <AvatarImage src="https://github.com/shadcn.png" />
+                            <AvatarImage src={owner?.profilePicture!} />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                     </div>

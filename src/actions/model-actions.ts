@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache"
 
 import { db } from "@/firebase";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc } from "firebase/firestore";
 import { Model } from "@/lib/types/types";
 import { getData, getRegex, getUser } from "@/lib/functions";
 

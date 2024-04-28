@@ -1,6 +1,36 @@
-export  *  from  './answer-actions';
-export  *  from  './auth-actions';
-export  *  from  './comment-actions';
-export  *  from  './dashboard-actions';
-export  *  from  './model-actions';
-export  *  from  './question-actions';
+export {
+    postAnswer,
+    deleteAnswer,
+    getAnswersByQuestionId
+} from './answer-actions';
+
+export {
+    checkProtected,
+    loginUser
+} from './auth-actions';
+
+export {
+    postComment
+} from './comment-actions';
+
+export {
+    addExperience,
+    deleteExperience,
+    addEducation,
+    deleteEducation,
+    updateProfile
+} from './dashboard-actions';
+
+export {
+    postModel,
+    likeModel,
+    getModelBySlug,
+    getModels
+} from './model-actions';
+
+export {
+    postQuestion,
+    deleteQuestion,
+    getQuestionBySlug,
+    getQuestions
+} from './question-actions';

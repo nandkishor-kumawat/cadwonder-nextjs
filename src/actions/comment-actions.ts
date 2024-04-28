@@ -1,9 +1,8 @@
 "use server"
 
 import { db } from "@/firebase";
-import { Question } from "@/lib/types/types";
 import { addDoc, collection } from "firebase/firestore";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export const postComment = async (formData: FormData) => {
 

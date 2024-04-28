@@ -1,7 +1,9 @@
-import React from 'react'
-import QuestionList from '@/components/questions/question-list';
+import React, { Suspense } from 'react'
 import { getData, getUserBy } from '@/lib/functions';
 import { Question } from '@/lib/types/types';
+import { Skeleton } from '@/components/ui/skeleton';
+import Await from '@/components/await';
+import QuestionList from '@/components/questions/question-list';
 
 const Page = async ({ params: { username } }: { params: { username: string } }) => {
 
@@ -9,15 +11,25 @@ const Page = async ({ params: { username } }: { params: { username: string } }) 
 
   if (!user) return null;
 
-  const questions = await getData({
+  const promise = getData({
     coll: "questions",
     key: "user_id",
     value: user.id,
     order: "desc"
-  }) as Question[];
+  }) as Promise<Question[]>;
 
   return (
-    <QuestionList questions={questions} />
+    <Suspense fallback={
+      <div className='flex flex-col gap-2'>
+        <Skeleton className="w-full h-[100px] rounded" />
+        <Skeleton className="w-full h-[100px] rounded" />
+        <Skeleton className="w-full h-[100px] rounded" />
+      </div>
+    }>
+      <Await promise={promise}>
+        {questions => <QuestionList questions={questions} />}
+      </Await>
+    </Suspense>
   )
 }
 

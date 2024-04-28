@@ -2,7 +2,7 @@
 
 import { db } from "@/firebase";
 import { getData, getUser } from "@/lib/functions";
-import { addDoc, collection, deleteDoc, doc, query, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
 import { revalidateTag } from "next/cache";
 
 export const postAnswer = async (formData: FormData) => {
