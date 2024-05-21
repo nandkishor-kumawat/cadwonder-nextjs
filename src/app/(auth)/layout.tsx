@@ -8,13 +8,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession()
   const [isPending, startTransition] = useTransition();
 
-  useLayoutEffect(() => {
-    if (session?.user) {
-      startTransition(() => {
-        loginUser('/');
-      })
-    }
-  }, [session])
+  // useLayoutEffect(() => {
+  //   if (session?.user) {
+  //     startTransition(() => {
+  //       loginUser('/');
+  //     })
+  //   }
+  // }, [session])
 
   return <Suspense>{children}</Suspense>
 }
