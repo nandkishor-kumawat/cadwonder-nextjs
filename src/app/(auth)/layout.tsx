@@ -1,11 +1,20 @@
-import { redirect } from 'next/navigation';
-import React from 'react'
-import { getAuth } from '../api/auth/[...nextauth]/options';
+"use client"
+import { loginUser } from '@/actions';
+import { useSession } from 'next-auth/react';
+import React, { Suspense, useLayoutEffect, useTransition } from 'react'
+
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const { data: session } = useSession()
+  const [isPending, startTransition] = useTransition();
 
- return getAuth().then((session) => {
-    if (session?.user) redirect('/');
-    return children
-  });
+  useLayoutEffect(() => {
+    if (session?.user) {
+      startTransition(() => {
+        loginUser('/');
+      })
+    }
+  }, [session])
+
+  return <Suspense>{children}</Suspense>
 }

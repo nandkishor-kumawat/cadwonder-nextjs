@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 }
 
 async function Dashboard() {
-  await checkProtected("/dashboard");
+  // await checkProtected("/dashboard");
   const session = await getAuth();
   if (!session) return null;
 

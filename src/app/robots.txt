@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://cadwonder.vercel.app
-
-# Sitemaps
-Sitemap: https://cadwonder.vercel.app/api/sitemap

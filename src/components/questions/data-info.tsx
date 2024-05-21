@@ -23,8 +23,8 @@ export default async function DataInfo({ data, title }: Props) {
     const user = data.user;
     return (
         <div className="info">
-            <div className='my-2'>
-                <h1 className='text-2xl font-bold'>{title}</h1>
+            <div className='my-2 mb-4'>
+                <h1 className='text-2xl font-bold text-justify'>{title}</h1>
             </div>
 
             <div className='flex gap-4 my-2'>

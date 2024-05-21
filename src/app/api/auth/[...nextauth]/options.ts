@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase';
+import { GetServerSidePropsContext, NextApiRequest, NextApiResponse } from 'next';
 
 
 export const options: NextAuthOptions = {
@@ -97,3 +98,12 @@ export const options: NextAuthOptions = {
 }
 
 export const getAuth = () => getServerSession(options);
+
+export function getAuthSession(
+    ...args:
+      | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+      | [NextApiRequest, NextApiResponse]
+      | []
+  ) {
+    return getServerSession(...args, options)
+  }

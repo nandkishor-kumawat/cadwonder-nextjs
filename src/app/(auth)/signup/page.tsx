@@ -96,7 +96,7 @@ export default function ProfileForm() {
       password: values.password,
       redirect: false,
     })
-    await loginUser("/questions");
+    await loginUser("/");
     
     toast.success(`Logged in successfully`, {
       style: {

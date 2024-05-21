@@ -113,8 +113,6 @@ function NewModal() {
     });
   }
 
-  if(!session) redirect('/login?callbackUrl=/library/new');
-
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-50">
       {isLoading && <Overlay />}

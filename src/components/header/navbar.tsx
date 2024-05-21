@@ -4,10 +4,8 @@ import Link from 'next/link';
 import React from 'react'
 import logo from '../../../public/logo.png'
 import MenuItems from './menu-items';
-import { getAuth } from '@/app/api/auth/[...nextauth]/options';
 
 async function Navbar() {
-    const session = await getAuth();
 
     return (
         <header className="text-gray-600 body-font sticky top-0 flex h-14 z-10" style={{ backgroundColor: bg1 }}>
@@ -25,7 +23,7 @@ async function Navbar() {
 
                 <div className='relative' >
                     <div className='flex items-center gap-4 px-3'>
-                        <MenuItems session={session} />
+                        <MenuItems />
                     </div>
                 </div>
             </div>

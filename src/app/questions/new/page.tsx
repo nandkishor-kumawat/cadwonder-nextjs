@@ -127,13 +127,11 @@ export default function NewQuestion() {
         color: 'green'
       }
     });
-    
+
     router.replace(`/questions/${slug}`, {
       scroll: false
     });
   }
-
-  if(!session) redirect('/login?callbackUrl=/questions/new');
 
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-50">

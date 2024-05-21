@@ -14,10 +14,10 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import PasswordInput from "@/components/form/password-input";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import Overlay from "@/components/loaders/overlay"
 import { loginUser } from "@/actions"
 import Spinner from "@/components/loaders/spinner"
@@ -33,7 +33,7 @@ const formSchema = z.object({
   })
 })
 
-export default function ProfileForm() {
+export default function Page() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,10 +45,9 @@ export default function ProfileForm() {
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams?.get("callbackUrl") ?? '/';
+
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { email, password } = values
@@ -84,13 +83,6 @@ export default function ProfileForm() {
       // callbackUrl
     })
   }
-
-  // const { data: session } = useSession()
-  // if (session?.user) {
-  //   router.replace(callbackUrl);
-  // }
-  // if(session?.user) return null;
-
 
   return (
     <div className="container max-w-md m-auto sm:my-32 my-28">
