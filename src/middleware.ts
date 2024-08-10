@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
-import { cookies } from "next/headers"
 
 export default async function middleware(request: NextRequest) {
-    
+
     const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/session`, {
         headers: {
             cookie: request.headers.get('cookie') as string
@@ -17,7 +16,7 @@ export default async function middleware(request: NextRequest) {
         }
         return NextResponse.redirect(new URL(`/login?callbackUrl=${request.nextUrl.pathname}`, request.url))
     }
-    
+
     if (['/login', '/signup'].includes(request.nextUrl.pathname)) {
         return NextResponse.redirect(new URL('/', request.url))
     }

@@ -65,14 +65,14 @@ const ModelItem = async ({ model: data }: any) => {
                         <LikeButton id={id} user_id={user?.id} />
                     </form>
 
-                    {/* <button className='flex items-center gap-1 py-2 rounded-md px-3 hover:bg-[#EDF2F7] active:scale-90 active:bg-[#E2E8F0] transition-all ease-out duration-300'>
+                    <button className='flex items-center gap-1 py-2 rounded-md px-3 hover:bg-[#EDF2F7] active:scale-90 active:bg-[#E2E8F0] transition-all ease-out duration-300'>
                         <MdDownload />
-                        <p>{followers?.length}</p>
+                        {/* <p>{followers?.length}</p> */}
                     </button>
                     <button className='flex items-center gap-1 py-2 rounded-md px-3 hover:bg-[#EDF2F7] active:scale-90 active:bg-[#E2E8F0] transition-all ease-out duration-300'>
                         <BiCommentDetail />
-                        <p>{followers?.length}</p>
-                    </button> */}
+                        {/* <p>{followers?.length}</p> */}
+                    </button>
                 </div>
                 <hr className='border-gray-200' />
             </div>

@@ -113,8 +113,6 @@ const EditProfile = () => {
 
     const [profilePic, setProfilePic] = useState('');
     const [coverPic, setCoverPic] = useState('');
-    const [isPending, startTransition] = React.useTransition();
-
 
     const socialsRef = React.useRef<React.RefObject<HTMLInputElement>[]>([]);
     const [socialLinks, setSocialLinks] = useState<Record<string, string>>({
@@ -127,7 +125,7 @@ const EditProfile = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
 
         const [twitter, linkedin, instagram, website] = socialsRef.current.map(ref => ref.current?.value);
 
@@ -138,18 +136,16 @@ const EditProfile = () => {
             website
         }
 
-        startTransition(async () => {
-            setIsLoading(true);
+        setIsLoading(true);
 
-            await updateProfile({ ...values, socials }, user_id)
+        await updateProfile({ ...values, socials }, user_id)
+        setIsLoading(false);
 
-            toast.success(`Profile updated successfully`, {
-                style: {
-                    color: 'green'
-                }
-            });
-            setIsLoading(false);
-        })
+        toast.success(`Profile updated successfully`, {
+            style: {
+                color: 'green'
+            }
+        });
     }
 
     const [Experience, setExperience] = useState([]);
