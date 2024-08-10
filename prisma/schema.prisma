@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  email           String?
+  name            String?
+  username        String   @unique
+  password        String
+  introduction    String?
+  about           String?
+  country         String?
+  city            String?
+  softwareSkills  String[] @map("software_skills")
+  specializations String[]
+  college         String?
+  role            String?
+  profilePicture  String?  @map("profile_picture")
+  coverPicture    String?  @map("cover_picture")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  socialLinks SocialLink[]
+  experiences Experience[]
+  educations  Education[]
+  sessions    Session[]
+
+  @@map("users")
+}
+
+model Experience {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  company     String
+  position    String
+  startYear   String @map("start_year")
+  startMonth  String @map("start_month")
+  endYear     String @map("end_year")
+  endMonth    String @map("end_month")
+  description String
+  userId      String @map("user_id") @db.ObjectId
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("experiences")
+}
+
+model Education {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  school      String
+  field       String
+  degree      String
+  startYear   String
+  endYear     String
+  description String
+  userId      String @db.ObjectId
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("educations")
+}
+
+model SocialLink {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  url    String
+  userId String @map("user_id") @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("social_links")
+}
+
+model Session {
+  objectId  String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        String    @unique @map("session_id")
+  userId    String    @db.ObjectId
+  expiresAt DateTime?
+  user      User      @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@map("sessions")
+}

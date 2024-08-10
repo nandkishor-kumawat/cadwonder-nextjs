@@ -1,7 +1,7 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import Link from 'next/link';
-import { FileDetails, Question } from '@/lib/types/types';
+import { FileDetails, Question } from '@/types/types';
 import CommentList from '../comments/comment-list';
 import CommentForm from '../comments/comment-form';
 import FilePreview from '../answers/file-preview';

@@ -97,7 +97,7 @@ export default function ProfileForm() {
       redirect: false,
     })
     await loginUser("/");
-    
+
     toast.success(`Logged in successfully`, {
       style: {
         color: 'green'

@@ -1,6 +1,6 @@
 import React from 'react'
 import ModelItem from './model-item'
-import { Model } from '@/lib/types/types'
+import { Model } from '@/types/types'
 
 export default async function ModelList({ models }: { models: Model[] }) {
 

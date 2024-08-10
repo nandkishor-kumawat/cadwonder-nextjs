@@ -1,7 +1,7 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Link from 'next/link'
-import { Answer, User } from '@/lib/types/types'
+import { Answer, User } from '@/types/types'
 import { getAuth } from '@/app/api/auth/[...nextauth]/options'
 import DeleteAnswerButton from './delete-answer-button'
 import FilePreview from './file-preview'
@@ -22,7 +22,7 @@ export default async function AnswerItem({ answer }: Props) {
       <div className='flex gap-4'>
         <div className='inline-flex self-start'>
           <Avatar className='w-12 h-12'>
-            <AvatarImage src={user?.profilePicture}  width={48} height={48} />
+            <AvatarImage src={user?.profilePicture} width={48} height={48} />
             <AvatarFallback>{user?.name?.[0].toUpperCase()}</AvatarFallback>
           </Avatar>
         </div>

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { getData, getUserBy } from '@/lib/functions';
-import { Question } from '@/lib/types/types';
+import { Question } from '@/types/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import Await from '@/components/await';
 import QuestionList from '@/components/questions/question-list';

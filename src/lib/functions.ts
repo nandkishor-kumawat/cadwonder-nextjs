@@ -1,6 +1,6 @@
 import { db } from "@/firebase";
 import { OrderByDirection, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
-import { User } from "./types/types";
+import { User } from "../types/types";
 
 
 export const getData = async ({ coll, key, value, order }: { coll: string, key: string, value: string, order?: OrderByDirection }) => {

@@ -1,4 +1,4 @@
-import { bg1 } from '@/lib/data/colors';
+import { bg1 } from '@/data/colors';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'

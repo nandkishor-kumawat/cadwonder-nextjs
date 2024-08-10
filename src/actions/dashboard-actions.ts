@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/firebase"
-import { Education, Experience } from "@/lib/types/types"
+import { Education, Experience } from "@/types/types"
 import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"

@@ -1,7 +1,7 @@
 "use client"
 import { db } from '@/firebase'
-import { color1 } from '@/lib/data/colors'
-import { Question } from '@/lib/types/types'
+import { color1 } from '@/data/colors'
+import { Question } from '@/types/types'
 import { collection, doc, onSnapshot, query, where } from 'firebase/firestore'
 import React, { useEffect } from 'react'
 import { BiCommentDetail } from 'react-icons/bi'

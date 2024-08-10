@@ -14,15 +14,15 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { SelectWithSearch } from "@/components/form/SelectWithSearch";
-import { bg1 } from "@/lib/data/colors";
+import { bg1 } from "@/data/colors";
 import { Textarea } from "@/components/ui/textarea";
-import categories, { category1 } from "@/lib/data/category";
-import SoftwareSkills from "@/lib/data/SoftwareSkills";
+import categories, { category1 } from "@/data/category";
+import SoftwareSkills from "@/data/SoftwareSkills";
 import TagsInput from "@/components/ui/tags-input";
 import React, { useState } from "react";
 import Link from "next/link";
 import { uploadFileWithProgress } from "@/firebase/functions";
-import { FileDetails } from "@/lib/types/types";
+import { FileDetails } from "@/types/types";
 import { useSession } from "next-auth/react";
 import { createSlug } from "@/lib/functions";
 import { redirect, useRouter } from "next/navigation";

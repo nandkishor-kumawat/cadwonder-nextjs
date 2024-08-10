@@ -2,7 +2,7 @@
 
 import { db } from "@/firebase";
 import { getData, getRegex, getUser } from "@/lib/functions";
-import { Question } from "@/lib/types/types";
+import { Question } from "@/types/types";
 import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query } from "firebase/firestore";
 import { revalidatePath } from "next/cache";
 

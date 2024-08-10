@@ -3,7 +3,7 @@ import {
     Card,
     CardContent,
 } from "@/components/ui/card"
-import { color2 } from '@/lib/data/colors';
+import { color2 } from '@/data/colors';
 import Link from 'next/link';
 import { getData, getUser } from '@/lib/functions';
 import QuestionStates from './question-states';
@@ -41,7 +41,7 @@ const QuestionCard = async ({ question: data }: any) => {
                         <Link href={`/questions/${slug}`}>
                             <h2 className='sm:text-xl font-semibold text-lg text-justify break-all' title={question}>
                                 {question.length > 150 ? question.slice(0, 150) + '...' : question}
-                                </h2>
+                            </h2>
                         </Link>
                         <div className='pt-1 flex gap-1 items-center'>
                             <p>By</p>
@@ -52,7 +52,7 @@ const QuestionCard = async ({ question: data }: any) => {
                                 </Avatar>
                                 <p className='text-orange-500'>{user?.name}</p>
                             </Link>
-                            
+
                         </div>
                         <p className='sm:text-base text-sm'>Category: <span className='text-gray-400'>{category}</span></p>
                         {!!tags.length && <p className='sm:text-base text-sm'>Tags: {tags.join(', ')}</p>}

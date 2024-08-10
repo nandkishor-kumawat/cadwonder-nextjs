@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
-import { color2 } from '@/lib/data/colors'
-import { Education } from '@/lib/types/types'
+import { color2 } from '@/data/colors'
+import { Education } from '@/types/types'
 import EducationFormModal from './EducationFormModal'
 
 interface EducationDetailCardProps {
@@ -9,7 +9,7 @@ interface EducationDetailCardProps {
     edit?: boolean
 }
 
-export default function EducationDetailCard({ data,edit }: EducationDetailCardProps) {
+export default function EducationDetailCard({ data, edit }: EducationDetailCardProps) {
 
     return (
         <Card className='my-2 p-4' style={{ backgroundColor: color2 }}>

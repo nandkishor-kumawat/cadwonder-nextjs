@@ -5,8 +5,8 @@ import React from 'react'
 import { HiOutlineSearch } from 'react-icons/hi'
 import { Input } from '../ui/input'
 import { SelectWithSearch } from './SelectWithSearch';
-import SoftwareSkills from '@/lib/data/SoftwareSkills';
-import categories from '@/lib/data/category';
+import SoftwareSkills from '@/data/SoftwareSkills';
+import categories from '@/data/category';
 
 const SearchBar = () => {
   const searchParams = useSearchParams();

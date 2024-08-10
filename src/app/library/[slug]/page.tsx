@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { Metadata } from 'next';
 import DataInfo from '@/components/questions/data-info';
 import { siteMetadata } from '@/lib/siteMetaData';
-import { Model } from '@/lib/types/types';
+import { Model } from '@/types/types';
 import { getModelBySlug } from '@/actions';
 
 type Props = {

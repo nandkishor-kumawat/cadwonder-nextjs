@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache"
 
 import { db } from "@/firebase";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc } from "firebase/firestore";
-import { Model } from "@/lib/types/types";
+import { Model } from "@/types/types";
 import { getData, getRegex, getUser } from "@/lib/functions";
 
 export const postModel = async (body: Omit<Model, "id">) => {
