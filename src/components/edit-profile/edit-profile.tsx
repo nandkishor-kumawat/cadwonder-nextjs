@@ -17,10 +17,6 @@ import {
 } from "@/components/ui/form"
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import SoftwareSkills from '@/data/SoftwareSkills'
-import SpecializedIn from '@/data/SpecializedIn'
-import { bg1 } from '@/data/colors'
-import countries from '@/data/countries'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -35,6 +31,7 @@ import ProfilePicUploader from '@/components/edit-profile/profile-pic-uploader'
 import Overlay from '@/components/loaders/overlay'
 import { updateProfile } from '@/actions'
 import { toast } from 'sonner'
+import { bg1, countries, SoftwareSkills, SpecializedIn } from '@/data'
 
 interface linkType {
     name: string

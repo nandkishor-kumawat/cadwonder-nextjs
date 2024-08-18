@@ -8,7 +8,7 @@ export const category1 = [
     "Translations"
 ]
 
-const categories = [
+export const categories = [
     "Design & CAD",
     "Modeling",
     "Drafting",
@@ -69,7 +69,3 @@ export const ModelCategories = [
     'Tools',
     'Toys',
 ]
-
-export default categories;
-
-

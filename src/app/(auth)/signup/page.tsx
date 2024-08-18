@@ -16,8 +16,6 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import PasswordInput from "@/components/form/password-input";
 import { SelectWithSearch } from "@/components/form/SelectWithSearch";
-import countries from "@/lib/data/countries";
-import roles from "@/lib/data/roles";
 import { useState } from "react";
 import Overlay from "@/components/loaders/overlay";
 import { useRouter } from "next/navigation";
@@ -25,7 +23,8 @@ import { signIn } from "next-auth/react";
 import { loginUser } from "@/actions";
 import { createSlug } from "@/lib/functions"
 import Spinner from "@/components/loaders/spinner"
-import { toast } from "sonner"
+import { toast } from "sonner";
+import { countries, roles } from "@/data"
 
 const formSchema = z.object({
   name: z.string().min(3, {

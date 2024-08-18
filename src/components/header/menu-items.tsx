@@ -126,7 +126,7 @@ const MenuItems = () => {
 
       <div className='hidden sm:flex items-center gap-4'>
         {navLinks.map((link, index) => (
-          <Link key={index} href={link.href} className={`hover:text-orange-400 text-white ${link.current ? 'text-orange-400' : ''}`}>{link.name}</Link>
+          <Link key={index} href={link.href} className={`hover:text-orange-400 text-lg text-white ${link.current ? 'text-orange-400' : ''}`}>{link.name}</Link>
         ))}
 
         {!(session) && (

@@ -1,4 +1,4 @@
-const roles = [
+export const roles = [
     "Administrator/Principal/Superintendent",
     "Biomedical Engineer",
     "C-level Executive",
@@ -26,5 +26,3 @@ const roles = [
     "Training",
     "Other"
 ]
-
-export default roles;

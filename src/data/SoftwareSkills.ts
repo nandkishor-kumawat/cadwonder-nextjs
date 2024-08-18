@@ -1,4 +1,4 @@
-const SoftwareSkills = [
+export const SoftwareSkills = [
     "Snagit",
     "Alibre Design",
     "ArchiCAD",
@@ -69,5 +69,3 @@ const SoftwareSkills = [
     "Cinema 4D",
     "Other"
 ]
-
-export default SoftwareSkills

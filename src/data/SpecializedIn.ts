@@ -1,4 +1,4 @@
-const SpecializedIn = [
+export const SpecializedIn = [
     "3D printing",
     "Aerospace",
     "Agriculture",
@@ -33,5 +33,3 @@ const SpecializedIn = [
     "Tools",
     "Toys"
 ]
-
-export default SpecializedIn

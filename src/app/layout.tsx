@@ -75,7 +75,7 @@ export default function RootLayout({
                 {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
             ) : null}
             <Navbar />
-            <div style={{ height: 'calc(100% - 3.5rem)' }}>
+            <div className='h-body'>
               <div className="h-full overflow-hidden">
                 <div className="h-full overflow-y-auto scrollbar">
                   {children}

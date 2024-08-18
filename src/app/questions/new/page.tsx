@@ -16,8 +16,7 @@ import { Input } from "@/components/ui/input"
 import { SelectWithSearch } from "@/components/form/SelectWithSearch";
 import { bg1 } from "@/data/colors";
 import { Textarea } from "@/components/ui/textarea";
-import categories, { category1 } from "@/data/category";
-import SoftwareSkills from "@/data/SoftwareSkills";
+import { SoftwareSkills, categories, category1 } from "@/data";
 import TagsInput from "@/components/ui/tags-input";
 import React, { useState } from "react";
 import Link from "next/link";

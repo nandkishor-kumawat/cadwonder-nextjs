@@ -51,6 +51,10 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+      height: {
+        header: "var(--header-height)",
+        body: "calc(100vh - var(--header-height))",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -72,5 +76,18 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    //@ts-ignore
+    function ({ addUtilities }) {
+      const newUtilities = {
+        ".flex-center": {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        },
+      };
+      addUtilities(newUtilities);
+    }
+  ],
 }
