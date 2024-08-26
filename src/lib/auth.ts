@@ -2,10 +2,9 @@ import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import prisma from "./prisma";
 import { cookies } from "next/headers";
 import { cache } from "react";
-import { Lucia } from "lucia";
-import { User } from "lucia";
-import { Session } from "lucia";
+import { Lucia, User, Session } from "lucia";
 import { Google } from "arctic";
+import { User as PrismaUser } from "@prisma/client";
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
@@ -21,7 +20,13 @@ export const lucia = new Lucia(adapter, {
         attributes: {
             secure: process.env.NODE_ENV === "production"
         }
-    }
+    },
+    getUserAttributes: (databaseUserAttributes) => ({
+        email: databaseUserAttributes.email,
+        name: databaseUserAttributes.name,
+        profilePicture: databaseUserAttributes.profilePicture,
+        username: databaseUserAttributes.username
+    })
 });
 
 export const validateRequest = cache(
@@ -67,5 +72,6 @@ export const deleteSession = async (sessionId: string) => {
 declare module "lucia" {
     interface Register {
         Lucia: typeof lucia;
+        DatabaseUserAttributes: PrismaUser;
     }
 }

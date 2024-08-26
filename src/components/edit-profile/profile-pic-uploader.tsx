@@ -6,7 +6,7 @@ import { Slider } from '../ui/slider';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { uploadFile } from '@/firebase/functions';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/hooks';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { toast } from 'sonner';
@@ -26,7 +26,7 @@ const ProfilePicUploader = ({
   handleSave,
   pic
 }: Props) => {
-  const { data: session } = useSession();
+  const session = useSession();
 
   const editorRef = useRef<AvatarEditor>(null);
   const bxref = useRef<HTMLDivElement>(null);
@@ -114,8 +114,8 @@ const ProfilePicUploader = ({
               height: 'auto'
             }}
             priority={true}
-            width={ratio === 1? 200 : 1200}
-            height={ratio === 1? 200 : 600}
+            width={ratio === 1 ? 200 : 1200}
+            height={ratio === 1 ? 200 : 600}
             alt='profile'
             src={pic} />
         </div>

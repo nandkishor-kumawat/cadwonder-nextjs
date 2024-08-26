@@ -23,7 +23,7 @@ import { ScrollArea } from '../ui/scroll-area'
 import { Education } from '@/types/types'
 import { YEARS } from '@/data/time-period'
 import { addEducation, deleteEducation } from '@/actions'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/hooks'
 import { useFormStatus } from 'react-dom'
 import Overlay from '../loaders/overlay'
 
@@ -68,7 +68,7 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
         }
     }, [data, form])
 
-    const { data: session } = useSession();
+    const session = useSession();
     const [isLoading, setIsLoading] = React.useState(false);
     const closeBtnRef = React.useRef<HTMLButtonElement>(null);
     const [isPending, startTransition] = React.useTransition();

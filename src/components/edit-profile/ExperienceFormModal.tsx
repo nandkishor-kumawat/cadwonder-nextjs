@@ -23,7 +23,7 @@ import { ScrollArea } from '../ui/scroll-area'
 import { Experience } from '@/types/types'
 import { MONTHS, YEARS } from '@/data/time-period'
 import { addExperience, deleteExperience } from '@/actions'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/hooks'
 import { useFormStatus } from 'react-dom'
 import Overlay from '../loaders/overlay'
 
@@ -43,7 +43,7 @@ interface ExperienceFormProps {
 }
 
 const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
-    const { data: session } = useSession();
+    const session = useSession();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

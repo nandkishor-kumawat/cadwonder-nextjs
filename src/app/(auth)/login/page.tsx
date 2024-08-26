@@ -17,12 +17,13 @@ import Link from "next/link"
 import { useState } from "react";
 import PasswordInput from "@/components/form/password-input";
 import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Overlay from "@/components/loaders/overlay"
 import { loginUser } from "@/actions"
 import Spinner from "@/components/loaders/spinner"
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner"
+import { useSession } from "@/hooks"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -42,12 +43,15 @@ export default function Page() {
       password: "",
     },
   })
-
+  const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams?.get("callbackUrl") ?? '/';
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const session = useSession();
+  console.log(session)
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { email, password } = values
@@ -78,10 +82,7 @@ export default function Page() {
   }
 
   const handleGoogleSignIn = async () => {
-    const res = await signIn("google", {
-      redirect: false,
-      // callbackUrl
-    })
+    router.push('/api/auth/signin/google?callbackUrl=' + callbackUrl);
   }
 
   return (
@@ -139,12 +140,12 @@ export default function Page() {
           <Link href="/signup">Don&apos;t have an account? </Link>
         </div>
       </div>
-      {/* <div className="my-4">
+      <div className="my-4">
         <Button type="button" className="w-full text-lg mt-3 bg-slate-50 hover:bg-slate-100 text-black py-3 h-auto" onClick={handleGoogleSignIn}>
           <FcGoogle className="mx-2" size={24} />
           <p className="font-medium">Sign In with Google</p>
         </Button>
-      </div> */}
+      </div>
     </div>
   )
 }

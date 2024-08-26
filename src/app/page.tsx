@@ -1,9 +1,8 @@
-import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import Image from 'next/image'
 import React from 'react'
 
-const page = () => {
+const page = async () => {
   return (
     <div className='relative h-full'>
       <div className="absolute inset-0 -z-10">

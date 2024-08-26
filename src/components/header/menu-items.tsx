@@ -9,13 +9,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { MenuIcon } from 'lucide-react';
-import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
-import { Session } from 'next-auth';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { AiFillLike } from 'react-icons/ai';
 import { BiCube } from 'react-icons/bi';
 import { MdLogout } from 'react-icons/md';
+import { useSession } from '@/hooks';
+import { signOut } from '@/actions/auth-actions';
 
 const MenuItems = () => {
   const { theme } = useTheme()
@@ -46,10 +46,12 @@ const MenuItems = () => {
   ]
 
   const handleLogout = async () => {
-    await signOut({ callbackUrl: '/login', redirect: true });
+    await signOut();
+    router.refresh();
   }
 
-  const { data: session } = useSession();
+  const { session } = useSession();
+  console.log(JSON.stringify(session, null, 2));
 
   const UserLinks = () => {
     return (
@@ -59,7 +61,7 @@ const MenuItems = () => {
             <Link href={`/${session?.user?.username}`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
               <Avatar className='h-5 w-5'>
                 <AvatarImage src={session?.user?.profilePicture as string} />
-                <AvatarFallback className='text-xs'>{session?.user?.name[0].toUpperCase()}</AvatarFallback>
+                <AvatarFallback className='text-xs'>{session?.user?.name?.[0].toUpperCase()}</AvatarFallback>
               </Avatar>
               <p>My Profile</p>
             </Link>
@@ -138,7 +140,7 @@ const MenuItems = () => {
             <DropdownMenuTrigger className='outline-none active:outline-none'>
               <Avatar className='h-8 w-8 cursor-pointer static'>
                 <AvatarImage src={session?.user?.profilePicture as string} />
-                <AvatarFallback className=''>{session?.user?.name[0].toUpperCase()}</AvatarFallback>
+                <AvatarFallback className=''>{session?.user?.name?.[0].toUpperCase()}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className='bg-slate-600 rounded-none border-none mt-2'>

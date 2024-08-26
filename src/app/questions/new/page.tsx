@@ -22,7 +22,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { uploadFileWithProgress } from "@/firebase/functions";
 import { FileDetails } from "@/types/types";
-import { useSession } from "next-auth/react";
+import { useSession } from "@/hooks";
 import { createSlug } from "@/lib/functions";
 import { redirect, useRouter } from "next/navigation";
 import UploadFileCard from "@/components/upload-file-card";
@@ -65,7 +65,7 @@ export default function NewQuestion() {
     }
   })
 
-  const { data: session } = useSession();
+  const { session } = useSession();
   const [isLoading, setIsLoading] = useState(false);
 
 
@@ -114,7 +114,7 @@ export default function NewQuestion() {
       ...other,
       file_details,
       slug,
-      user_id: session?.user?.uid as string,
+      user_id: session?.user?.id as string,
     }
 
     const response = await postQuestion(body);

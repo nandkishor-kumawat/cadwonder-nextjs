@@ -11,7 +11,7 @@ import { categories, bg1 } from '@/data'
 import { createSlug } from '@/lib/functions'
 import { FileDetails } from '@/types/types'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/hooks'
 import Link from 'next/link'
 import { redirect, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -47,7 +47,7 @@ function NewModal() {
   })
 
   const router = useRouter();
-  const { data: session } = useSession();
+  const session = useSession()
   const [uploadProgress, setUploadProgress] = useState<Record<number, number>>({})
   const [isLoading, setIsLoading] = useState(false);
 

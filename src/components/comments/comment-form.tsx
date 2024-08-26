@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/hooks'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useFormStatus } from 'react-dom'
@@ -27,7 +27,7 @@ interface Props {
 
 
 export default function CommentForm({ association_id }: Props) {
-    const { data: session } = useSession();
+    const session = useSession();
     const user = session?.user as {
         id: string;
         name: string;

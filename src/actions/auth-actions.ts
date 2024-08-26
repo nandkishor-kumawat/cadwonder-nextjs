@@ -16,3 +16,9 @@ export const loginUser = async (callbackUrl: string) => {
     revalidatePath('/', 'layout')
     redirect(callbackUrl, RedirectType.replace);
 }
+
+export const signOut = async () => {
+    await fetch('http://localhost:3001/api/auth/signout')
+    revalidatePath('/', 'layout')
+    redirect('http://localhost:3001/login', RedirectType.replace);
+}

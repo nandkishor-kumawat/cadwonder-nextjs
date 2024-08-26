@@ -26,7 +26,7 @@ import { InputElement, InputGroup, InputItem } from '@/components/ui/input-group
 import Link from 'next/link'
 import { collection, doc, onSnapshot, query } from 'firebase/firestore'
 import { db } from '@/firebase'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/hooks'
 import ProfilePicUploader from '@/components/edit-profile/profile-pic-uploader'
 import Overlay from '@/components/loaders/overlay'
 import { updateProfile } from '@/actions'
@@ -91,7 +91,7 @@ const formSchema = z.object({
 })
 
 const EditProfile = () => {
-    const { data: session } = useSession();
+    const session = useSession();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

@@ -11,7 +11,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, any>((props, ref) => {
     return (
         <div className="relative">
             <FormControl>
-                <Input type={isPasswordVisible ? "text" : "password"} placeholder="Enter your password" {...props} ref={ref} />
+                <Input type={isPasswordVisible ? "text" : "password"} placeholder="Enter your password" {...props} autoComplete='true' ref={ref} />
             </FormControl>
             <button type="button" className="h-full aspect-square grid place-content-center absolute top-0 right-0" onClick={() => setIsPasswordVisible(!isPasswordVisible)}>
                 {isPasswordVisible ? <FaEye /> : <FaEyeSlash />}

@@ -1,13 +1,12 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/components/providers/theme-provider'
-import { Providers } from '@/components/providers/session-provider'
 import Navbar from '@/components/header/navbar'
 import GoogleAnalytics from '@/components/google-analytics'
 import { Toaster } from '@/components/ui/sonner'
 import { siteMetadata } from '@/lib/siteMetaData'
 import NextTopLoader from 'nextjs-toploader';
+import { SessionProvider, ThemeProvider } from '@/components/providers'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -62,7 +61,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <NextTopLoader color='rgb(251 146 60)' showSpinner={false} />
-        <Providers>
+        <SessionProvider>
           <Toaster position="top-right" duration={2000} />
           <ThemeProvider
             attribute="class"
@@ -83,7 +82,7 @@ export default function RootLayout({
               </div>
             </div>
           </ThemeProvider>
-        </Providers>
+        </SessionProvider>
       </body>
     </html>
   )

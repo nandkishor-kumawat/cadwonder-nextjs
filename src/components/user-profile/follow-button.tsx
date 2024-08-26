@@ -1,7 +1,7 @@
 "use client"
 import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from '../ui/button'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/hooks'
 import { addDoc, collection, deleteDoc, doc, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '@/firebase'
 import Link from 'next/link'
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const FollowButton = ({ following_id, username, className }: Props) => {
-    const { data, status } = useSession();
+    const { session: data, status } = useSession();
 
     const user_id = data?.user?.id as string;
     const [followers, setFollowers] = useState<any[]>([]);

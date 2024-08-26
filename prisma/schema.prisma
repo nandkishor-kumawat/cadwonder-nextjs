@@ -9,10 +9,10 @@ datasource db {
 
 model User {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  email           String?
+  email           String   @unique
   name            String?
   username        String   @unique
-  password        String
+  password        String?
   introduction    String?
   about           String?
   country         String?
@@ -30,6 +30,8 @@ model User {
   experiences Experience[]
   educations  Education[]
   sessions    Session[]
+  Question    Question[]
+  Answer      Answer[]
 
   @@map("users")
 }
@@ -76,9 +78,48 @@ model SocialLink {
 model Session {
   objectId  String    @id @default(auto()) @map("_id") @db.ObjectId
   id        String    @unique @map("session_id")
-  userId    String    @db.ObjectId
+  userId    String    @map("user_id") @db.ObjectId
   expiresAt DateTime?
   user      User      @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+model Question {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String        @map("user_id") @db.ObjectId
+  question    String
+  slug        String
+  description String?
+  category    String
+  software    String?
+  fileDetails FileDetails[]
+  views       Int?          @default(0)
+  answerCount Int?          @default(0) @map("answer_count")
+  tags        String[]
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Answer Answer[]
+
+  @@map("questions")
+}
+
+model Answer {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String        @map("user_id") @db.ObjectId
+  questionId  String        @map("question_id") @db.ObjectId
+  answer      String
+  fileDetails FileDetails[]
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("answers")
+}
+
+type FileDetails {
+  name String
+  url  String
 }

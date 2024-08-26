@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { useSession } from 'next-auth/react'
+import { useSession } from '@/hooks'
 import { Button } from '../ui/button'
 import { useFormStatus } from 'react-dom'
 import { postAnswer } from '@/actions'
@@ -34,7 +34,7 @@ const SubmitButton = () => {
 
 
 export default function AnswerForm({ question_id }: Props) {
-  const { data: session } = useSession();
+  const session = useSession();
 
   const user = session?.user as {
     uid: string;

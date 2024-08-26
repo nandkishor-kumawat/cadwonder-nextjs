@@ -1,4 +1,5 @@
 import { createSession, google } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 import { GoogleRefreshedTokens, OAuth2RequestError } from "arctic";
 import { cookies } from "next/headers";
 
@@ -34,10 +35,27 @@ export async function GET(request: Request) {
         );
 
         const googleUser = await googleUserResponse.json();
-
-        console.log(googleUser);
-
+        let userId = "";
         //TODO: check if user exists in database
+        const existingUser = await prisma.user.findFirst({
+            where: {
+                email: googleUser.email,
+            },
+        });
+
+        if (!existingUser) {
+            const newUser = await prisma.user.create({
+                data: {
+                    email: googleUser.email,
+                    name: googleUser.name,
+                    profilePicture: googleUser.picture,
+                    username: googleUser.email.split("@")[0],
+                },
+            });
+            userId = newUser.id;
+        }
+
+        const session = await createSession(existingUser?.id ?? userId);
 
         return new Response(null, {
             status: 302,

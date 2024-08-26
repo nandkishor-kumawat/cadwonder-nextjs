@@ -1,11 +1,11 @@
 "use client"
 import { loginUser } from '@/actions';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/hooks';
 import React, { Suspense, useLayoutEffect, useTransition } from 'react'
 
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const { data: session } = useSession()
+  const session = useSession()
   const [isPending, startTransition] = useTransition();
 
   // useLayoutEffect(() => {
