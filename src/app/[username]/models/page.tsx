@@ -2,7 +2,7 @@ import Await from '@/components/await';
 import ModelList from '@/components/model/model-list';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getData, getUserBy } from '@/lib/functions';
-import { Model } from '@/types/types';
+import { Model } from '@prisma/client';
 import React, { Suspense } from 'react'
 
 const Page = async ({ params: { username } }: { params: { username: string } }) => {

@@ -1,26 +1,28 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import Link from 'next/link';
-import { FileDetails, Question } from '@/types/types';
+import { FileDetails, Model, Question } from '@prisma/client';
 import CommentList from '../comments/comment-list';
 import CommentForm from '../comments/comment-form';
 import FilePreview from '../answers/file-preview';
+import { validateRequest } from '@/lib/auth';
+
 
 interface Props {
-    data: Question & {
-        createdAt: Date;
+    data: (Question | Model) & {
         user: {
             id: string;
             name: string;
-            profilePicture: string;
+            profilePicture: string | null | undefined;
             username: string;
-        };
+        }
     }
     title: string;
 }
 
 export default async function DataInfo({ data, title }: Props) {
     const user = data.user;
+    const { session } = await validateRequest();
     return (
         <div className="info">
             <div className='my-2 mb-4'>
@@ -43,7 +45,7 @@ export default async function DataInfo({ data, title }: Props) {
 
                     <div className="deails my-1 min-h-[3rem]">
                         <p>{data?.description}</p>
-                        {data.file_details?.map((file: FileDetails) => (
+                        {data.fileDetails?.map((file: FileDetails) => (
                             <FilePreview key={file.name} file={file} />
                         ))}
                     </div>

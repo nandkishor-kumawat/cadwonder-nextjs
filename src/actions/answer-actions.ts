@@ -1,31 +1,70 @@
 "use server"
 
-import { db } from "@/firebase";
-import { getData, getUser } from "@/lib/functions";
-import { addDoc, collection, deleteDoc, doc } from "firebase/firestore";
-import { revalidateTag } from "next/cache";
+import { validateRequest } from "@/lib/auth";
+import prisma from "@/lib/prisma";
+import { Answer } from "@prisma/client";
+import { revalidatePath, revalidateTag } from "next/cache";
 
-export const postAnswer = async (formData: FormData) => {
+export const postAnswer = async (data: Answer) => {
 
-  const rowData = {
-    answer: formData.get('answer'),
-    question_id: formData.get('question_id'),
-    user_id: formData.get('user_id'),
-    file_details: JSON.parse(formData.get('file_details') as string),
-  };
+  const { user } = await validateRequest();
+  if (!user) return { error: "You need to be logged in to post an answer" }
 
-  const docRef = await addDoc(collection(db, 'answers'), {
-    ...rowData,
-    createdAt: Date.now(),
-  });
+  try {
+    const [answer] = await prisma.$transaction([
+      prisma.answer.create({
+        data: {
+          ...data,
+          userId: user.id,
+        }
+      }),
+      prisma.question.update({
+        where: {
+          id: data.questionId
+        },
+        data: {
+          answerCount: {
+            increment: 1
+          }
+        }
+      })
+    ]);
+    revalidatePath(`/questions/[slug]`, "page");
+    return { answer };
 
-  revalidateTag('answers');
+  } catch (error) {
+    console.error('Error creating Answer:', error);
+    return { error: "Error creating Answer" };
+  }
 }
 
 export const deleteAnswer = async (id: string) => {
   try {
-    await deleteDoc(doc(db, 'answers', id));
-    // TODO: also remove Question related data
+    const { user } = await validateRequest();
+    if (!user) return { message: "You need to be logged in to delete an answer", error: true };
+    const answer = await prisma.answer.findUnique({
+      where: {
+        id
+      }
+    });
+    if (!answer) return { message: "Answer not found", error: true }
+    if (answer.userId !== user.id) return { error: "You are not authorized to delete this answer" }
+
+    await prisma.$transaction([
+      prisma.answer.delete({
+        where: { id }
+      }),
+      prisma.question.update({
+        where: {
+          id: answer.questionId
+        },
+        data: {
+          answerCount: {
+            decrement: 1
+          }
+        }
+      })
+    ]);
     revalidateTag('answers');
     return { message: "Answer deleted Successfully", error: false };
   } catch (error) {
@@ -37,28 +76,23 @@ export const deleteAnswer = async (id: string) => {
 
 export const getAnswersByQuestionId = async (questionId: string) => {
   try {
-    const ans = await getData({
-      coll: "answers",
-      key: "question_id",
-      value: questionId,
-      order: "asc"
+    const answers = await prisma.answer.findMany({
+      where: {
+        questionId
+      },
+      include: {
+        user: true,
+      },
+      orderBy: {
+        createdAt: 'asc'
+      },
+      take: 10,
+      skip: 0
     });
-
-    const answers = await Promise.all(ans.map(async answer => {
-      const user = await getUser(answer.user_id as string);
-      return {
-        ...answer,
-        user: {
-          username: user?.username,
-          profilePicture: user?.profilePicture,
-          name: user?.name,
-          id: user?.id
-        }
-      };
-    }));
-
-    return [answers, null]
+    if (!answers) return { error: "No answers found" };
+    return { answers };
   } catch (error) {
-    return [null, error]
+    console.error('Error getting Answers:', error);
+    return { error: "Error getting Answers" };
   }
 }

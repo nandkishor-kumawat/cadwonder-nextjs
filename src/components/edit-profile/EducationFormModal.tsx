@@ -20,7 +20,7 @@ import { FaEdit } from 'react-icons/fa'
 import { AiOutlineAppstoreAdd } from 'react-icons/ai'
 import { Button } from '../ui/button'
 import { ScrollArea } from '../ui/scroll-area'
-import { Education } from '@/types/types'
+import { Education } from '@prisma/client'
 import { YEARS } from '@/data/time-period'
 import { addEducation, deleteEducation } from '@/actions'
 import { useSession } from '@/hooks'
@@ -68,7 +68,7 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
         }
     }, [data, form])
 
-    const session = useSession();
+    const { session } = useSession();
     const [isLoading, setIsLoading] = React.useState(false);
     const closeBtnRef = React.useRef<HTMLButtonElement>(null);
     const [isPending, startTransition] = React.useTransition();
@@ -77,7 +77,7 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
 
         startTransition(async () => {
             setIsLoading(true);
-            const res = await addEducation({ id: data?.id, ...values }, session?.user)
+            const res = await addEducation({ id: data?.id!, userId: session?.user?.id!, ...values }, session?.user)
             form.reset()
             console.table(res);
             setIsLoading(false);
@@ -95,6 +95,7 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
             </>
         )
     }
+    if (!data) return null;
 
     return (
         <Dialog>

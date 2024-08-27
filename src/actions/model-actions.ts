@@ -1,91 +1,165 @@
 "use server"
 import { revalidatePath } from "next/cache"
 
-import { db } from "@/firebase";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc } from "firebase/firestore";
-import { Model } from "@/types/types";
-import { getData, getRegex, getUser } from "@/lib/functions";
+import { Model } from "@prisma/client";
+import prisma from "@/lib/prisma";
+import { validateRequest } from "@/lib/auth";
+import { cache } from "react";
 
 export const postModel = async (body: Omit<Model, "id">) => {
-    try {
-        const docRef = await addDoc(collection(db, 'models'), {
-            ...body,
-            createdAt: Date.now(),
-        });
-        revalidatePath('/library')
-        return { id: docRef.id, ...body, error: null };
-    } catch (error) {
-        console.error('Error creating Model:', error);
-        return { error: "Error creating Model" }
-    }
+	const { user } = await validateRequest();
+	if (!user) return { error: "You need to be logged in to post a model" }
+	if (body.userId !== user.id) return { error: "You are not authorized to post this model" }
+	try {
+		const model = await prisma.model.create({
+			data: {
+				...body,
+				userId: user.id,
+
+			}
+		})
+		revalidatePath('/library')
+		return { model };
+	} catch (error) {
+		console.error('Error creating Model:', error);
+		return { error: "Error creating Model" }
+	}
 }
 
 export const likeModel = async (formData: FormData) => {
-    const id = formData.get("id") as string;
-    const user_id = formData.get("user_id") as string;
-    const docRef = doc(db, `models/${id}/likes`, user_id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-        await deleteDoc(docRef);
-    } else {
-        await setDoc(docRef, {
-            user_id: user_id,
-            createdAt: Date.now(),
-        })
-    }
+	const { user } = await validateRequest();
+	if (!user) return { error: "You need to be logged in to like a model" }
+	const modelId = formData.get('id') as string;
+	const userId = formData.get('user_id') as string;
+	if (!modelId || !userId) return { error: "Invalid Request" }
+	try {
+		const isLiked = await isModelLiked(modelId, user.id);
+		if (isLiked) {
+			await prisma.$transaction([
+				prisma.likes.delete({
+					where: {
+						userId_referenceId: {
+							userId: user.id,
+							referenceId: modelId
+						}
+					}
+				}),
+				prisma.model.update({
+					where: {
+						id: modelId
+					},
+					data: {
+						likesCount: {
+							decrement: 1
+						}
+					}
+				})
+			])
+		} else {
+			await prisma.$transaction([
+				prisma.likes.create({
+					data: {
+						referenceId: modelId,
+						userId: user.id
+					}
+				}),
+				prisma.model.update({
+					where: {
+						id: modelId
+					},
+					data: {
+						likesCount: {
+							increment: 1
+						}
+					}
+				})
+			])
+		}
+		revalidatePath(`/library`, 'page')
+	} catch (error) {
+		console.error('Error liking Model:', error);
+		return { error: "Error liking Model" }
+	}
 }
 
-
-export const getModelBySlug = async (slug: string) => {
-    try {
-        const [model] = await getData({
-            coll: "models",
-            key: "slug",
-            value: slug
-        })
-        if (!model) throw new Error("Model not found")
-
-        const user = await getUser(model.user_id as string) as {
-            username: string;
-            profilePicture: string;
-            name: string;
-            id: string
-        };
-
-        const data = {
-            ...model,
-            user: {
-                username: user?.username,
-                profilePicture: user?.profilePicture,
-                name: user?.name,
-                id: user?.id
-            }
-        }
-        return [data, null]
-    } catch (error) {
-        console.error('Error getting Model:', error);
-        return [null, error]
-    }
+export const isModelLiked = async (modelId: string, userId?: string) => {
+	if (!userId) return false;
+	const like = await prisma.likes.findFirst({
+		where: {
+			referenceId: modelId,
+			userId
+		}
+	})
+	return !!like;
 }
+
+export const getModelBySlug = cache(async (slug: string) => {
+	try {
+		const model = await prisma.model.findFirst({
+			where: {
+				slug
+			},
+			include: {
+				user: {
+					select: {
+						username: true,
+						profilePicture: true,
+						name: true,
+						id: true
+					}
+				}
+			}
+		})
+		if (!model) throw new Error('Model not found')
+		return { model }
+	} catch (error) {
+		console.error('Error getting Model:', error);
+		return { error }
+	}
+})
 
 export const getModels = async (queryString: string) => {
-    try {
-        let q = query(collection(db, 'models'), orderBy('createdAt', 'desc'));
-        const searchParams = new URLSearchParams(queryString);
-        const que = searchParams.get('query');
-        const category = searchParams.get('category');
-        const software = searchParams.get('software');
+	try {
+		const searchParams = new URLSearchParams(queryString);
+		const que = searchParams.get('query');
+		const category = searchParams.get('category');
 
-        const querySnapshot = await getDocs(q);
-        const models = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Model[];
-        if (!que) return models;
+		const models = await prisma.model.findMany({
+			where: {
+				AND: [
+					que ? {
+						OR: [
+							{ modelName: { contains: que, mode: 'insensitive' } },
+							{ description: { contains: que, mode: 'insensitive' } }
+						]
+					} : {},
+					category ? {
+						category: {
+							hasSome: category.split(',')
+						}
+					} : {}
+				]
+			},
+			orderBy: {
+				createdAt: 'desc'
+			},
+			include: {
+				user: {
+					select: {
+						username: true,
+						profilePicture: true,
+						name: true,
+						id: true
+					}
+				}
+			},
+			take: 10,
+			skip: 0,
+		})
 
-        const regex = getRegex(que);
-        const filteredModels = models?.filter(model => regex.test(model.modelName));
-
-        return filteredModels
-    } catch (error) {
-        console.error('Error getting Questions:', error);
-        return []
-    }
+		return models
+	} catch (error) {
+		console.error('Error getting Questions:', error);
+		return [];
+	}
 }

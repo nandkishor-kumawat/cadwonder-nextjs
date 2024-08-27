@@ -91,7 +91,7 @@ const formSchema = z.object({
 })
 
 const EditProfile = () => {
-    const session = useSession();
+    const { session } = useSession();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -106,7 +106,7 @@ const EditProfile = () => {
         }
     });
 
-    const user_id = session?.user?.uid as string;
+    const user_id = session?.user?.id as string;
 
     const [profilePic, setProfilePic] = useState('');
     const [coverPic, setCoverPic] = useState('');
@@ -209,8 +209,8 @@ const EditProfile = () => {
     return (
         <div className="absolute top-0 left-0 right-0 bottom-0 z-50">
             {isLoading && <Overlay />}
-            <div className="sticky top-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
-                <div className="flex items-center justify-between py-1">
+            <div className="sticky top-0 px-4 py-1 bg-white border-b-slate-200 border-b z-10 h-header flex items-center" style={{ background: bg1 }}>
+                <div className="flex items-center justify-between py-1 flex-1">
                     <p className="text-white text-lg">Edit Profile</p>
 
                     <div className="flex items-center gap-2">
@@ -226,14 +226,9 @@ const EditProfile = () => {
 
 
             <div className="container max-w-3xl py-4">
-
                 <div className='flex items-center justify-center flex-col mt-2'>
-
-
                     <p>Profile Picture</p>
-
                     <ProfilePicUploader pic={profilePic} ratio={1} canvasWidth={150} type='profile' handleSave={setProfilePic} />
-
                 </div>
 
                 <Form {...form}>

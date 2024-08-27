@@ -1,6 +1,6 @@
 import { db } from "@/firebase";
 import { getRegex } from "@/lib/functions";
-import { Model } from "@/types/types";
+import { Model } from "@prisma/client";
 import { collection, getDocs, orderBy, query as que } from "firebase/firestore";
 
 export const GET = async (request: Request) => {

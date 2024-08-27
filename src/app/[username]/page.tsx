@@ -13,7 +13,7 @@ export default async function Page({ params: { username } }: { params: { usernam
 
 
     const softwareSkills: string[] = user?.softwareSkills ?? [];
-    const specializedIn: string[] = user?.specializedIn ?? [];
+    const specializedIn: string[] = user?.specializations ?? [];
     const Education = await getDataFromCollection(`users/${user.id}/Education`);
     const workExperience = await getDataFromCollection(`users/${user.id}/workExperience`);
 

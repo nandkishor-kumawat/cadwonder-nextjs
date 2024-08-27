@@ -8,9 +8,9 @@ import { postAnswer } from '@/actions'
 import { Textarea } from '../ui/textarea'
 import { Skeleton } from '../ui/skeleton'
 import { uploadFileWithProgress } from '@/firebase/functions'
-import { FileDetails } from '@/types/types'
 import UploadFileCard from '../upload-file-card'
 import Overlay from '../loaders/overlay'
+import { Answer, FileDetails } from '@prisma/client'
 
 
 interface Props {
@@ -34,13 +34,9 @@ const SubmitButton = () => {
 
 
 export default function AnswerForm({ question_id }: Props) {
-  const session = useSession();
+  const { session } = useSession();
 
-  const user = session?.user as {
-    uid: string;
-    name: string;
-    profilePicture: string;
-  };
+  const user = session?.user;
 
   const [uploadProgress, setUploadProgress] = useState<Record<number, number>>({});
   const [files, setFiles] = useState<File[]>([]);
@@ -73,15 +69,20 @@ export default function AnswerForm({ question_id }: Props) {
   };
 
   const handleSubmit = async (formData: FormData) => {
-    let file_details = [] as FileDetails[];
+    if (!user) return;
+    let fileDetails = [] as FileDetails[];
 
     if (files.length) {
-      file_details = await handleUploadFiles(files) as FileDetails[];
+      fileDetails = await handleUploadFiles(files) as FileDetails[];
     }
-    formData.append('question_id', question_id);
-    formData.append('user_id', session?.user?.uid as string);
-    formData.append('file_details', JSON.stringify(file_details));
-    await postAnswer(formData);
+    const body = {
+      questionId: question_id,
+      answer: formData.get('answer') as string,
+      fileDetails: fileDetails,
+      userId: user?.id,
+    } as Answer;
+
+    await postAnswer(body);
     formRef.current?.reset();
     setFiles([]);
     setUploadProgress({});

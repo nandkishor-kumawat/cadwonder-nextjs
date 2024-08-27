@@ -1,22 +1,18 @@
 import React, { Suspense } from 'react'
 import { getData, getUserBy } from '@/lib/functions';
-import { Question } from '@/types/types';
 import { Skeleton } from '@/components/ui/skeleton';
 import Await from '@/components/await';
 import QuestionList from '@/components/questions/question-list';
+import { Question } from '@prisma/client';
+import { getQuestions } from '@/actions';
 
 const Page = async ({ params: { username } }: { params: { username: string } }) => {
-
+  //TODO: Implement this function
   const user = await getUserBy("username", username);
 
   if (!user) return null;
-
-  const promise = getData({
-    coll: "questions",
-    key: "user_id",
-    value: user.id,
-    order: "desc"
-  }) as Promise<Question[]>;
+  const queryString = `userId=${user.id}`;
+  const promise = getQuestions(queryString);
 
   return (
     <Suspense fallback={

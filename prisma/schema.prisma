@@ -10,7 +10,7 @@ datasource db {
 model User {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   email           String   @unique
-  name            String?
+  name            String
   username        String   @unique
   password        String?
   introduction    String?
@@ -20,7 +20,7 @@ model User {
   softwareSkills  String[] @map("software_skills")
   specializations String[]
   college         String?
-  role            String?
+  role            Role     @default(USER)
   profilePicture  String?  @map("profile_picture")
   coverPicture    String?  @map("cover_picture")
   createdAt       DateTime @default(now()) @map("created_at")
@@ -30,10 +30,18 @@ model User {
   experiences Experience[]
   educations  Education[]
   sessions    Session[]
-  Question    Question[]
-  Answer      Answer[]
+  questions   Question[]
+  answers     Answer[]
+  models      Model[]
+  comments    Comment[]
+  likes       Likes[]
 
   @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 model Experience {
@@ -93,14 +101,14 @@ model Question {
   description String?
   category    String
   software    String?
-  fileDetails FileDetails[]
+  fileDetails FileDetails[] @map("file_details")
   views       Int?          @default(0)
   answerCount Int?          @default(0) @map("answer_count")
   tags        String[]
   createdAt   DateTime      @default(now()) @map("created_at")
 
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Answer Answer[]
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answers Answer[]
 
   @@map("questions")
 }
@@ -122,4 +130,44 @@ model Answer {
 type FileDetails {
   name String
   url  String
+}
+
+model Model {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String        @map("user_id") @db.ObjectId
+  modelName   String        @map("model_name")
+  description String
+  slug        String
+  category    String[]
+  fileDetails FileDetails[] @map("file_details")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  likesCount  Int?          @default(0) @map("likes_count")
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  likes       Likes[]
+
+  @@map("models")
+}
+
+model Likes {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  referenceId String   @map("reference_id") @db.ObjectId
+  userId      String   @map("user_id") @db.ObjectId
+  createdAt   DateTime @default(now()) @map("created_at")
+  model       Model    @relation(fields: [referenceId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, referenceId])
+  @@map("likes")
+}
+
+model Comment {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  associationId String   @map("association_id")
+  comment       String
+  userId        String   @map("user_id") @db.ObjectId
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("comments")
 }

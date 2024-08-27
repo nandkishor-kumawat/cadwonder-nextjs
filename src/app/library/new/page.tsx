@@ -9,7 +9,7 @@ import UploadFileCard from '@/components/upload-file-card'
 import { uploadFileWithProgress } from '@/firebase/functions'
 import { categories, bg1 } from '@/data'
 import { createSlug } from '@/lib/functions'
-import { FileDetails } from '@/types/types'
+import { FileDetails, Model } from '@prisma/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from '@/hooks'
 import Link from 'next/link'
@@ -47,7 +47,7 @@ function NewModal() {
   })
 
   const router = useRouter();
-  const session = useSession()
+  const { session } = useSession()
   const [uploadProgress, setUploadProgress] = useState<Record<number, number>>({})
   const [isLoading, setIsLoading] = useState(false);
 
@@ -83,24 +83,31 @@ function NewModal() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { files, ...other } = values;
     setIsLoading(true)
-    let file_details = [] as FileDetails[];
+    let fileDetails = [] as FileDetails[];
 
     if (files.length) {
-      file_details = await handleUploadFiles(files) as FileDetails[];
+      fileDetails = await handleUploadFiles(files) as FileDetails[];
     }
 
     const slug = await createSlug('models', 'slug', other.modelName);
 
     const body = {
       ...other,
-      file_details,
+      fileDetails,
       slug,
-      user_id: session?.user.uid as string,
-    }
+      userId: session?.user.id as string,
+    } as Model;
 
-    const response = await postModel(body);
+    const { error } = await postModel(body);
     setIsLoading(false);
-    if (response?.error) return alert(response.error);
+    if (error) {
+      toast.error(error, {
+        style: {
+          color: 'red'
+        }
+      });
+      return;
+    }
 
     toast.success(`Model uploaded successfully`, {
       style: {
@@ -115,8 +122,8 @@ function NewModal() {
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-50">
       {isLoading && <Overlay />}
-      <div className="sticky top-0 left-0 right-0 px-4 py-2 bg-white border-b-slate-200 border-b z-10" style={{ background: bg1 }}>
-        <div className="flex items-center justify-between">
+      <div className="sticky top-0 left-0 right-0 px-4 py-2 bg-white border-b-slate-200 border-b z-10 h-header flex items-center" style={{ background: bg1 }}>
+        <div className="flex items-center justify-between flex-1">
           <p className="text-white text-lg">New Model</p>
 
           <div className="flex items-center gap-2">

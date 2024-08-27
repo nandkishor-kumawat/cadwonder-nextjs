@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { color2 } from '@/data/colors'
-import { Experience } from '@/types/types'
+import { Experience } from '@prisma/client'
 import ExperienceFormModal from './ExperienceFormModal'
 
 interface ExperienceDetailCardProps {

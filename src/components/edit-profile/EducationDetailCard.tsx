@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { color2 } from '@/data/colors'
-import { Education } from '@/types/types'
+import { Education } from '@prisma/client'
 import EducationFormModal from './EducationFormModal'
 
 interface EducationDetailCardProps {

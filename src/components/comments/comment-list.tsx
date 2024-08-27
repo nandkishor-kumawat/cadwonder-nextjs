@@ -1,20 +1,17 @@
 import React from 'react'
 import CommentItem from './comment-item'
-import { Comment } from '@/types/types';
+import { Comment } from '@prisma/client';
 import { getData } from '@/lib/functions';
+import { getCommentsByAssociationId } from '@/actions';
 
 export default async function CommentList({ id }: { id: string }) {
 
-    const comments: Comment[] = await getData({
-        coll: "comments",
-        key: "association_id",
-        value: id
-    });
+    const { comments } = await getCommentsByAssociationId(id);
 
     return (
         <div className='w-full'>
             <div className='flex flex-col'>
-                {comments.map((comment) => (
+                {comments?.map((comment) => (
                     <CommentItem key={comment.id} comment={comment} />
                 ))}
             </div>

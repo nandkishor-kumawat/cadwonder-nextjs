@@ -26,7 +26,7 @@ const ProfilePicUploader = ({
   handleSave,
   pic
 }: Props) => {
-  const session = useSession();
+  const { session } = useSession();
 
   const editorRef = useRef<AvatarEditor>(null);
   const bxref = useRef<HTMLDivElement>(null);

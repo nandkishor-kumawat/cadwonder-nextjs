@@ -14,16 +14,15 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PasswordInput from "@/components/form/password-input";
-import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Overlay from "@/components/loaders/overlay"
-import { loginUser } from "@/actions"
 import Spinner from "@/components/loaders/spinner"
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner"
 import { useSession } from "@/hooks"
+import { signIn } from "@/actions"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -50,25 +49,26 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const session = useSession();
-  console.log(session)
+  const { session } = useSession();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { email, password } = values
     setIsLoading(true);
 
-    const res = await signIn("credentials", {
+    const { user, error } = await signIn({
       email,
-      password,
-      redirect: false,
-      callbackUrl
+      password
     })
 
     setIsLoading(false);
 
-    if (res?.error) {
-      setErrorMessage("Invalid credentials");
-      setTimeout(() => setErrorMessage(""), 2000);
+    if (error) {
+      // setErrorMessage(error);
+      toast.error(error, {
+        style: {
+          color: 'red'
+        },
+      });
       return;
     }
 
@@ -77,13 +77,20 @@ export default function Page() {
         color: 'green'
       },
     });
-
-    await loginUser(callbackUrl);
+    router.replace(callbackUrl);
   }
 
   const handleGoogleSignIn = async () => {
     router.push('/api/auth/signin/google?callbackUrl=' + callbackUrl);
   }
+
+  useEffect(() => {
+    if (!errorMessage) return;
+    let timer = setTimeout(() => setErrorMessage(""), 5000);
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [errorMessage])
 
   return (
     <div className="container max-w-md m-auto sm:my-32 my-28">

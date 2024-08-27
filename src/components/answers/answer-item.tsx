@@ -1,10 +1,12 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Link from 'next/link'
-import { Answer, User } from '@/types/types'
-import { getAuth } from '@/app/api/auth/[...nextauth]/options'
+import { Answer, User } from '@prisma/client'
 import DeleteAnswerButton from './delete-answer-button'
 import FilePreview from './file-preview'
+import { validateRequest } from '@/lib/auth'
+import CommentList from '../comments/comment-list'
+import CommentForm from '../comments/comment-form'
 
 interface Props {
   answer: Answer & { user: User }
@@ -12,7 +14,7 @@ interface Props {
 
 export default async function AnswerItem({ answer }: Props) {
 
-  const session = await getAuth();
+  const session = await validateRequest();
 
   const user = answer?.user;
 
@@ -34,12 +36,12 @@ export default async function AnswerItem({ answer }: Props) {
               <p className='text-gray-500 text-sm'>{new Date(answer.createdAt).toLocaleString()}</p>
             </div>
 
-            {session?.user?.id === answer.user_id && (<DeleteAnswerButton id={answer.id} />)}
+            {session?.user?.id === answer.userId && (<DeleteAnswerButton id={answer.id} />)}
           </div>
 
           <div className="deails my-1">
             <p>{answer.answer}</p>
-            {answer.file_details?.map((file) => (
+            {answer.fileDetails?.map((file) => (
               <FilePreview key={file.name} file={file} />
             ))}
           </div>
@@ -47,7 +49,7 @@ export default async function AnswerItem({ answer }: Props) {
           {/* <div className='comments'>
             <CommentList id={answer.id} />
 
-            {session &&
+            {session.user &&
               <CommentForm association_id={answer.id} />
             }
           </div> */}

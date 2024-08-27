@@ -51,7 +51,6 @@ const MenuItems = () => {
   }
 
   const { session } = useSession();
-  console.log(JSON.stringify(session, null, 2));
 
   const UserLinks = () => {
     return (

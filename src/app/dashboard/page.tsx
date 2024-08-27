@@ -1,13 +1,12 @@
 import React, { Suspense } from 'react'
 import { Metadata } from 'next'
 import { getData } from '@/lib/functions'
-import { checkProtected } from '@/actions'
-import { getAuth } from '../api/auth/[...nextauth]/options'
 import Link from 'next/link'
 import { FaEdit } from 'react-icons/fa'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import Await from '@/components/await'
+import { validateRequest } from '@/lib/auth'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -15,10 +14,10 @@ export const metadata: Metadata = {
 
 async function Dashboard() {
   // await checkProtected("/dashboard");
-  const session = await getAuth();
-  if (!session) return null;
+  const session = await validateRequest();
+  if (!session.user) return null;
 
-  const user = session?.user;
+  const user = session.user;
 
   const userQuestions = getData({
     coll: "questions",
@@ -48,7 +47,7 @@ async function Dashboard() {
     )} */}
 
         <div className="h-3/5 w-full flex justify-center" style={{
-          backgroundImage: user.coverPicture ? `url(${user.coverPicture})` : "radial-gradient(circle, rgba(255,148,57,1) 0%, rgba(71,194,200,1) 7%, rgba(255,148,57,1) 13%, rgba(71,194,200,1) 31%, rgba(255,148,57,1) 100%)",
+          // backgroundImage: user.coverPicture ? `url(${user.coverPicture})` : "radial-gradient(circle, rgba(255,148,57,1) 0%, rgba(71,194,200,1) 7%, rgba(255,148,57,1) 13%, rgba(71,194,200,1) 31%, rgba(255,148,57,1) 100%)",
           backgroundSize: 'cover',
           backfaceVisibility: 'hidden'
         }}>

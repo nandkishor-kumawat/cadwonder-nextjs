@@ -5,12 +5,14 @@ export {
 } from './answer-actions';
 
 export {
-    checkProtected,
-    loginUser
+    signIn,
+    signOut,
+    signUp
 } from './auth-actions';
 
 export {
-    postComment
+    postComment,
+    getCommentsByAssociationId
 } from './comment-actions';
 
 export {
@@ -25,7 +27,8 @@ export {
     postModel,
     likeModel,
     getModelBySlug,
-    getModels
+    getModels,
+    isModelLiked
 } from './model-actions';
 
 export {

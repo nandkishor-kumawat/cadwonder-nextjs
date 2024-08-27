@@ -1,7 +1,7 @@
 "use server"
 
 import { db } from "@/firebase"
-import { Education, Experience } from "@/types/types"
+import { Education, Experience } from "@prisma/client"
 import { addDoc, collection, deleteDoc, doc, updateDoc } from "firebase/firestore"
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
@@ -18,8 +18,8 @@ export const addExperience = async (experience: Experience, user: any) => {
 
     const docRef = await addDoc(collection(db, `users/${user?.uid}/workExperience`), experience)
     return {
+        ...experience,
         id: docRef.id,
-        ...experience
 
     }
 }
@@ -42,8 +42,8 @@ export const addEducation = async (education: Education, user: any) => {
     }
     const docRef = await addDoc(collection(db, `users/${user?.id}/Education`), education)
     return {
+        ...education,
         id: docRef.id,
-        ...education
     }
 }
 

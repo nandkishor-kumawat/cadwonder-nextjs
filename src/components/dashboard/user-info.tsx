@@ -4,11 +4,11 @@ import React from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { getData } from '@/lib/functions'
-import { getAuth } from '@/app/api/auth/[...nextauth]/options'
+import { validateRequest } from '@/lib/auth'
 
 const UserInfo = async () => {
 
-    const session = await getAuth();
+    const session = await validateRequest();
     const user = session?.user;
     if (!session || !user) return null;
 
@@ -40,7 +40,7 @@ const UserInfo = async () => {
             )} */}
 
             <div className="h-3/5 w-full flex justify-center" style={{
-                backgroundImage: user.coverPicture ? `url(${user.coverPicture})` : "radial-gradient(circle, rgba(255,148,57,1) 0%, rgba(71,194,200,1) 7%, rgba(255,148,57,1) 13%, rgba(71,194,200,1) 31%, rgba(255,148,57,1) 100%)",
+                // backgroundImage: user.coverPicture ? `url(${user.coverPicture})` : "radial-gradient(circle, rgba(255,148,57,1) 0%, rgba(71,194,200,1) 7%, rgba(255,148,57,1) 13%, rgba(71,194,200,1) 31%, rgba(255,148,57,1) 100%)",
                 backgroundSize: 'cover',
                 backfaceVisibility: 'hidden'
             }}>

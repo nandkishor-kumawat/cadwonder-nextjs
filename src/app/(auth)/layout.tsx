@@ -1,20 +1,5 @@
-"use client"
-import { loginUser } from '@/actions';
-import { useSession } from '@/hooks';
-import React, { Suspense, useLayoutEffect, useTransition } from 'react'
-
+import React, { Suspense } from 'react'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const session = useSession()
-  const [isPending, startTransition] = useTransition();
-
-  // useLayoutEffect(() => {
-  //   if (session?.user) {
-  //     startTransition(() => {
-  //       loginUser('/');
-  //     })
-  //   }
-  // }, [session])
-
   return <Suspense>{children}</Suspense>
 }

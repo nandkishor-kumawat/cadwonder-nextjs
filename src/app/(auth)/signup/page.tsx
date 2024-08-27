@@ -19,12 +19,11 @@ import { SelectWithSearch } from "@/components/form/SelectWithSearch";
 import { useState } from "react";
 import Overlay from "@/components/loaders/overlay";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { loginUser } from "@/actions";
 import { createSlug } from "@/lib/functions"
 import Spinner from "@/components/loaders/spinner"
 import { toast } from "sonner";
 import { countries, roles } from "@/data"
+import { signIn, signUp } from "@/actions"
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -69,39 +68,32 @@ export default function ProfileForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    const username = await createSlug("users", "username", values.name);
-
     setIsLoading(true);
+    const formData = new FormData();
 
-    const data = await fetch(`/api/auth/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ ...values, username })
-    }).then(res => res.json())
+    Object.entries(values).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
 
-    console.table(data.user);
+    const { error, user } = await signUp(formData);
 
-
-    if (data.error) {
-      alert(data.error);
+    if (error) {
+      toast.error(error, {
+        style: {
+          color: 'red'
+        },
+      });
       setIsLoading(false)
       return
     }
-
-    const res = await signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    })
-    await loginUser("/");
 
     toast.success(`Logged in successfully`, {
       style: {
         color: 'green'
       },
     });
+
+    router.replace('/');
     setIsLoading(false)
 
   }

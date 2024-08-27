@@ -27,12 +27,8 @@ interface Props {
 
 
 export default function CommentForm({ association_id }: Props) {
-    const session = useSession();
-    const user = session?.user as {
-        id: string;
-        name: string;
-        profilePicture: string;
-    };
+    const { session } = useSession();
+    const user = session?.user;
 
     // if (!user) return (
     //     <div className="flex gap-2 items-center">

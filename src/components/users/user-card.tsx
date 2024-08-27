@@ -2,7 +2,7 @@ import { color2 } from '@/data/colors'
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import Link from 'next/link'
-import { User } from '@/types/types'
+import { User } from '@prisma/client'
 
 export default function UserCard({ user }: { user: User }) {
 

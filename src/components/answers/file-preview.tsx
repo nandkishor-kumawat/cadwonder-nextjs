@@ -1,5 +1,5 @@
 "use client"
-import { FileDetails } from '@/types/types'
+import { FileDetails } from '@prisma/client'
 import Image from 'next/image'
 import React from 'react'
 

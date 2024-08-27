@@ -2,8 +2,9 @@ import React, { Suspense } from 'react'
 import { Metadata } from 'next';
 import DataInfo from '@/components/questions/data-info';
 import { siteMetadata } from '@/lib/siteMetaData';
-import { Model } from '@/types/types';
+import { Model } from '@prisma/client';
 import { getModelBySlug } from '@/actions';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: { slug: string };
@@ -15,7 +16,8 @@ export async function generateMetadata({
   const { slug } = params;
 
   const url = `${siteMetadata.siteUrl}/models/${slug}`;
-  const [model, err] = await getModelBySlug(slug);
+  const { model, error } = await getModelBySlug(slug);
+  if (!model) return {};
 
   const publishedAt = new Date(model.createdAt).toISOString();
 
@@ -47,13 +49,14 @@ export async function generateMetadata({
 }
 
 
-async function Question({ params: { slug } }: Props) {
+export default async function page({ params: { slug } }: Props) {
 
-  const [model, err] = await getModelBySlug(slug);
+  const { model, error } = await getModelBySlug(slug);
+  if (!model) notFound();
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "question",
+    "@type": "model",
     "headline": model.modelName,
     "description": model.description || siteMetadata.description,
     // "image": imageList,
@@ -101,5 +104,3 @@ async function Question({ params: { slug } }: Props) {
     </>
   )
 }
-
-export default Question

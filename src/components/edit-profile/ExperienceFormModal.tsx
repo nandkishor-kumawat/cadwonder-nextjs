@@ -20,7 +20,7 @@ import { FaEdit } from 'react-icons/fa'
 import { AiOutlineAppstoreAdd } from 'react-icons/ai'
 import { Button } from '../ui/button'
 import { ScrollArea } from '../ui/scroll-area'
-import { Experience } from '@/types/types'
+import { Experience } from '@prisma/client'
 import { MONTHS, YEARS } from '@/data/time-period'
 import { addExperience, deleteExperience } from '@/actions'
 import { useSession } from '@/hooks'
@@ -43,7 +43,7 @@ interface ExperienceFormProps {
 }
 
 const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
-    const session = useSession();
+    const { session } = useSession();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -79,7 +79,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         startTransition(async () => {
             setIsLoading(true);
-            const res = await addExperience({ id: data?.id, ...values }, session?.user)
+            const res = await addExperience({ id: data?.id!, userId: session?.user.id!, ...values }, session?.user)
             form.reset()
             console.table(res);
             setIsLoading(false);
@@ -99,6 +99,7 @@ const ExperienceFormModal = ({ data }: ExperienceFormProps) => {
     }
 
 
+    if (!data) return null;
 
     return (
         <Dialog>

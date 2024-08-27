@@ -1,87 +1,123 @@
 "use server"
 
-import { db } from "@/firebase";
-import { getData, getRegex, getUser } from "@/lib/functions";
-import { Question } from "@/types/types";
-import { addDoc, collection, deleteDoc, doc, getDocs, orderBy, query } from "firebase/firestore";
+import { validateRequest } from "@/lib/auth";
+import prisma from "@/lib/prisma";
+import { Question } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import { cache } from "react";
 
 
 export const postQuestion = async (body: Omit<Question, "id">) => {
+  const { user } = await validateRequest();
+  if (!user) return { error: "You need to be logged in to post a question" }
   try {
-    const docRef = await addDoc(collection(db, 'questions'), {
-      ...body,
-      createdAt: Date.now(),
-    });
+    const question = await prisma.question.create({
+      data: {
+        ...body,
+        userId: user.id,
+      }
+    })
     revalidatePath('/questions')
-    return { id: docRef.id, ...body, error: null };
+    return { question };
   } catch (error) {
     console.error('Error creating Question:', error);
     return { error: "Error creating Question" }
   }
 }
 
-export const deleteQuestion = async (id: string) => {
+export const deleteQuestion = async (questionId: string) => {
   try {
-    await deleteDoc(doc(db, 'questions', id));
-    // TODO: also remove Question related data
+    const { user } = await validateRequest();
+    if (!user) return { error: "You need to be logged in to delete a question" }
+    const question = await prisma.question.findUnique({
+      where: {
+        id: questionId
+      }
+    })
+    if (!question) return { error: "Question not found" }
+    if (question.userId !== user.id) return { error: "You are not authorized to delete this question" }
+    await prisma.question.delete({
+      where: {
+        id: questionId
+      }
+    })
+
     revalidatePath('/questions');
     revalidatePath('/');
-    return { error: false, message: "Question deleted Successfully" };
+    return { message: "Question deleted Successfully" };
   } catch (error) {
     console.error('Error deleting Question:', error);
-    return { message: "Error deleting Question", error: true };
+    return { error: "Error deleting Question" };
   }
 }
 
-
-export const getQuestionBySlug = async (slug: string) => {
+export const getQuestionBySlug = cache(async (slug: string) => {
   try {
-    const [question] = await getData({
-      coll: "questions",
-      key: "slug",
-      value: slug
-    })
-    if (!question) throw new Error("Question not found")
-
-    const user = await getUser(question.user_id as string) as {
-      username: string;
-      profilePicture: string;
-      name: string;
-      id: string
-    };
-
-    const data = {
-      ...question, user: {
-        username: user?.username,
-        profilePicture: user?.profilePicture,
-        name: user?.name,
-        id: user?.id
+    const question = await prisma.question.findFirst({
+      where: {
+        slug
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+            profilePicture: true,
+            name: true,
+            id: true
+          }
+        }
       }
-    }
-    return [data, null]
+    })
+    if (!question) throw new Error('Question not found')
+    return { question }
   } catch (error) {
     console.error('Error getting Question:', error);
-    return [null, error]
+    return { error }
   }
-}
+})
 
 export const getQuestions = async (queryString: string) => {
   try {
-    let q = query(collection(db, 'questions'), orderBy('createdAt', 'desc'));
     const searchParams = new URLSearchParams(queryString);
     const que = searchParams.get('query');
     const category = searchParams.get('category');
     const software = searchParams.get('software');
+    const userId = searchParams.get('userId');
 
-    const querySnapshot = await getDocs(q);
-    const questions = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Question[];
-    if (!que) return questions;
+    const questions = await prisma.question.findMany({
+      where: {
+        AND: [
+          que ? {
+            OR: [
+              { question: { contains: que, mode: 'insensitive' } },
+              { description: { contains: que, mode: 'insensitive' } }
+            ]
+          } : {},
+          category ? { category } : {},
+          software ? { software } : {},
+          userId ? { userId } : {}
+        ]
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+            profilePicture: true,
+            name: true,
+            id: true
+          }
+        }
+      },
+      take: 10,
+      skip: 0,
+    })
 
-    const regex = getRegex(que);
-    const filteredQuestions = questions?.filter(question => regex.test(question.question));
 
-    return filteredQuestions
+
+    return questions
   } catch (error) {
     console.error('Error getting Questions:', error);
     return [];

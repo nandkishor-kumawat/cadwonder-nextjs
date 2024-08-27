@@ -8,30 +8,23 @@ import Link from 'next/link';
 import { getData, getUser } from '@/lib/functions';
 import QuestionStates from './question-states';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { getQuestions } from '@/actions';
 
 
-const QuestionCard = async ({ question: data }: any) => {
+const QuestionCard = async ({ question: data }: { question: Awaited<ReturnType<typeof getQuestions>>[0] }) => {
 
     const {
         id,
         question,
         views,
-        user_id,
+        userId,
         tags,
         category,
-        slug
+        slug,
+        user,
+        answerCount
     } = data;
 
-
-    const user = await getUser(user_id);
-
-    const answers = await getData({
-        coll: "answers",
-        key: "question_id",
-        value: id
-    });
-
-    const answer_count = answers.length;
 
     return (
         <Card className='my-2 py-2' style={{ backgroundColor: color2 }}>
@@ -39,8 +32,8 @@ const QuestionCard = async ({ question: data }: any) => {
                 <div className="flex flex-1">
                     <div className='flex flex-col flex-1 gap-1'>
                         <Link href={`/questions/${slug}`}>
-                            <h2 className='sm:text-xl font-semibold text-lg text-justify break-all' title={question}>
-                                {question.length > 150 ? question.slice(0, 150) + '...' : question}
+                            <h2 className='sm:text-xl font-semibold text-lg text-justify break-all line-clamp-1' title={question}>
+                                {question}
                             </h2>
                         </Link>
                         <div className='pt-1 flex gap-1 items-center'>

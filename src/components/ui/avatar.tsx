@@ -33,14 +33,18 @@ Avatar.displayName = AvatarPrimitive.Root.displayName
 //   />
 // ))
 
+interface AvatarImageProps extends Omit<React.ComponentPropsWithoutRef<typeof Image>, 'alt' | 'src'> {
+  src: string | null | undefined;
+}
+
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof Image>,
-  Omit<React.ComponentPropsWithoutRef<typeof Image>, 'alt'>
+  AvatarImageProps
 >(({ className, src, width = 32, height = 32, ...props }, ref) => {
 
   const [isError, setIsError] = React.useState(false);
 
-  if (isError) return null;
+  if (isError || !src) return null;
 
   return (
     <Image

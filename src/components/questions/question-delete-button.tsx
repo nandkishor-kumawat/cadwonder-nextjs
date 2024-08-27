@@ -12,8 +12,8 @@ export default function QuestionDeleteButton({ id }: { id: string }) {
 
     const deleteQue = () => {
         startTransition(async () => {
-            const { error,message } = await deleteQuestion(id);
-            toast(message, {
+            const { error, message } = await deleteQuestion(id);
+            toast(error ?? message, {
                 style: {
                     color: error ? "red" : "green"
                 },

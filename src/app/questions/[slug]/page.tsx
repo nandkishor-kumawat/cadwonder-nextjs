@@ -1,7 +1,6 @@
 import React, { Suspense } from 'react'
 import { Metadata } from 'next';
 import AnswerForm from '@/components/answers/answer-form';
-import AnswerItem from '@/components/answers/answer-item';
 import { Button } from '@/components/ui/button';
 import DataInfo from '@/components/questions/data-info';
 import { getData, updateViewCount } from '@/lib/functions';
@@ -11,11 +10,11 @@ import FollowButton from '@/components/user-profile/follow-button';
 import { siteMetadata } from '@/lib/siteMetaData';
 import { MdDeleteForever } from 'react-icons/md';
 import QuestionDeleteButton from '@/components/questions/question-delete-button';
-import { getAuth } from '@/app/api/auth/[...nextauth]/options';
 import AnswerList from '@/components/answers/answer-list';
 import { AnswerFallback } from '@/components/fallbacks';
 import { getQuestionBySlug } from '@/actions';
 import Link from 'next/link';
+import { validateRequest } from '@/lib/auth';
 
 type Props = {
   params: { slug: string };
@@ -28,7 +27,7 @@ export async function generateMetadata({
 
   const url = `${siteMetadata.siteUrl}/questions/${slug}`;
 
-  const [question, error] = await getQuestionBySlug(slug);
+  const { question, error } = await getQuestionBySlug(slug);
   if (!question) return {};
   const publishedAt = new Date(question.createdAt).toISOString();
 
@@ -52,7 +51,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: question.title,
+      title: question.question,
       description: question.description || siteMetadata.description,
       // images: ogImages,
     },
@@ -61,9 +60,9 @@ export async function generateMetadata({
 
 
 async function Page({ params: { slug } }: Props) {
-  const [question, error] = await getQuestionBySlug(slug);
-  const session = await getAuth();
-
+  const { question, error } = await getQuestionBySlug(slug);
+  const { session, user } = await validateRequest();
+  console.log(question)
   if (error) return <div>Error</div>
   if (!question) return <div>Question not found</div>
 
@@ -130,7 +129,7 @@ async function Page({ params: { slug } }: Props) {
 
           <div className='w-full md:w-max md:mt-5 space-y-6'>
             <div className='flex gap-2'>
-              {question.user_id === session?.user.id && (<QuestionDeleteButton id={question.id} />)}
+              {question.userId === user?.id && (<QuestionDeleteButton id={question.id} />)}
               <FollowButton following_id={question.user.id} className='rounded-none border border-slate-400 w-full font-normal text-sm' />
               <Button variant={'ghost'} className='rounded-none border border-slate-400 w-full font-normal text-sm space-x-2'>
                 <FaShareSquare />
