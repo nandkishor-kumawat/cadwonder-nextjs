@@ -1,22 +1,26 @@
+import { getModels, getUsersBy } from '@/actions';
 import Await from '@/components/await';
 import ModelList from '@/components/model/model-list';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getData, getUserBy } from '@/lib/functions';
-import { Model } from '@prisma/client';
 import React, { Suspense } from 'react'
 
-const Page = async ({ params: { username } }: { params: { username: string } }) => {
+interface Props {
+  searchParams?: Record<string, string>;
+  params: { username: string };
+}
 
-  const user = await getUserBy("username", username);
+const Page = async ({ searchParams, params: { username } }: Props) => {
+  const user = await getUsersBy("username", username);
 
   if (!user) return null;
 
-  const promise = getData({
-    coll: "models",
-    key: "user_id",
-    value: user.id,
-    order: "desc"
-  });
+  const filteredSearchParams = Object.fromEntries(
+    Object.entries(searchParams ?? {}).filter(([key, value]) => value !== undefined)
+  );
+
+  const params = new URLSearchParams({ ...filteredSearchParams, userId: user.id });
+  const queryString = params.toString();
+  const promise = getModels(queryString);
 
   return (
     <div className="grid gap-2 pb-2" style={{

@@ -1,15 +1,18 @@
 import React, { Suspense } from 'react'
 import UserCard from '@/components/users/user-card';
-import { getUsers } from '@/lib/functions';
 import { Metadata } from 'next';
 import { Skeleton } from '@/components/ui/skeleton';
+import prisma from '@/lib/prisma';
 
 export const metadata: Metadata = {
   title: 'Users',
 }
 
 const UserList = async () => {
-  const users = await getUsers();
+  const users = await prisma.user.findMany({
+    take: 10,
+    skip: 0,
+  });
   return users?.map(user => <UserCard key={user.id} user={user} />)
 }
 

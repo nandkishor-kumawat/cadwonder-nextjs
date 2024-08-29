@@ -1,17 +1,26 @@
 import React, { Suspense } from 'react'
-import { getData, getUserBy } from '@/lib/functions';
 import { Skeleton } from '@/components/ui/skeleton';
 import Await from '@/components/await';
 import QuestionList from '@/components/questions/question-list';
-import { Question } from '@prisma/client';
-import { getQuestions } from '@/actions';
+import { getQuestions, getUsersBy } from '@/actions';
 
-const Page = async ({ params: { username } }: { params: { username: string } }) => {
-  //TODO: Implement this function
-  const user = await getUserBy("username", username);
+interface Props {
+  searchParams?: Record<string, string>;
+  params: { username: string };
+}
+
+const Page = async ({ searchParams, params: { username } }: Props) => {
+  const user = await getUsersBy("username", username);
+
 
   if (!user) return null;
-  const queryString = `userId=${user.id}`;
+
+  const filteredSearchParams = Object.fromEntries(
+    Object.entries(searchParams ?? {}).filter(([key, value]) => value !== undefined)
+  );
+
+  const params = new URLSearchParams({ ...filteredSearchParams, userId: user.id });
+  const queryString = params.toString();
   const promise = getQuestions(queryString);
 
   return (

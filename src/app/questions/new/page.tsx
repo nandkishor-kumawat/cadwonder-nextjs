@@ -20,7 +20,6 @@ import { SoftwareSkills, categories, category1 } from "@/data";
 import TagsInput from "@/components/ui/tags-input";
 import React, { useState } from "react";
 import Link from "next/link";
-import { uploadFileWithProgress } from "@/firebase/functions";
 import { FileDetails } from "@prisma/client";
 import { useSession } from "@/hooks";
 import { createSlug } from "@/lib/functions";
@@ -78,24 +77,26 @@ export default function NewQuestion() {
   };
 
   const handleUploadFiles = async (files: File[]) => {
-    if (!files) return;
+    if (!files) return [];
 
-    const uploadPromises = files.map((file, index) => {
-      return uploadFileWithProgress(file, index, (progressIndex, progress) => {
-        setUploadProgress((prevProgress) => ({
-          ...prevProgress,
-          [progressIndex]: progress,
-        }));
-      });
-    });
+    //TODO
 
-    try {
-      const results = await Promise.all(uploadPromises);
+    // const uploadPromises = files.map((file, index) => {
+    //   return uploadFileWithProgress(file, index, (progressIndex, progress) => {
+    //     setUploadProgress((prevProgress) => ({
+    //       ...prevProgress,
+    //       [progressIndex]: progress,
+    //     }));
+    //   });
+    // });
 
-      return results;
-    } catch (error) {
-      console.error('Error uploading files:', error);
-    }
+    // try {
+    //   const results = await Promise.all(uploadPromises);
+
+    //   return results;
+    // } catch (error) {
+    //   console.error('Error uploading files:', error);
+    // }
   };
 
   const router = useRouter();

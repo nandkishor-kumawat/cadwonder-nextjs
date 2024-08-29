@@ -5,7 +5,6 @@ import {
 } from "@/components/ui/card"
 import { color2 } from '@/data/colors';
 import Link from 'next/link';
-import { getData, getUser } from '@/lib/functions';
 import QuestionStates from './question-states';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { getQuestions } from '@/actions';

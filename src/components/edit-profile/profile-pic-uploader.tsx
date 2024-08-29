@@ -5,10 +5,7 @@ import { AiOutlineZoomIn, AiOutlineZoomOut } from 'react-icons/ai'
 import { Slider } from '../ui/slider';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { uploadFile } from '@/firebase/functions';
 import { useSession } from '@/hooks';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '@/firebase';
 import { toast } from 'sonner';
 
 interface Props {
@@ -76,11 +73,13 @@ const ProfilePicUploader = ({
       const canvas = editorRef.current.getImage();
       const dataURI = canvas.toDataURL('image/jpeg')
       const blob = await fetch(dataURI).then((res) => res.blob());
-      const { url } = await uploadFile(blob, `${session?.user?.id}-${type}.jpg`);
-      handleSave(url);
-      await updateDoc(doc(db, 'users', session?.user?.id as string), {
-        [`${type}Picture`]: url
-      });
+      //TODO
+      // const { url } = await uploadFile(blob, `${session?.user?.id}-${type}.jpg`);
+      // handleSave(url);
+      //TODO: Update the user's profile picture
+      // await updateDoc(doc(db, 'users', session?.user?.id as string), {
+      //   [`${type}Picture`]: url
+      // });
 
       toast.success(`${type[0].toUpperCase()}${type.slice(1)} Picture updated successfully`, {
         style: {

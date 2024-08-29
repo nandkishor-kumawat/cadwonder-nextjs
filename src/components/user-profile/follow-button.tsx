@@ -2,8 +2,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from '../ui/button'
 import { useSession } from '@/hooks'
-import { addDoc, collection, deleteDoc, doc, onSnapshot, query, where } from 'firebase/firestore'
-import { db } from '@/firebase'
 import Link from 'next/link'
 import { FaRegEdit } from 'react-icons/fa'
 
@@ -22,27 +20,27 @@ const FollowButton = ({ following_id, username, className }: Props) => {
     const isSameUser = user_id === following_id;
     const isFollowing = followers.find((follower: any) => follower.follower_id === user_id);
 
-    useEffect(() => {
-        const q = query(collection(db, "followers"), where("following_id", "==", following_id));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const followers: any[] = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-            setFollowers(followers);
-        });
+    // useEffect(() => {
+    //     const q = query(collection(db, "followers"), where("following_id", "==", following_id));
+    //     const unsubscribe = onSnapshot(q, (snapshot) => {
+    //         const followers: any[] = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    //         setFollowers(followers);
+    //     });
 
-        return () => unsubscribe()
-    }, [following_id]);
+    //     return () => unsubscribe()
+    // }, [following_id]);
 
 
     const doFollowUnfollow = useCallback(async () => {
-        if (!isFollowing) {
-            await addDoc(collection(db, "followers"), {
-                follower_id: user_id,
-                following_id
-            });
-        } else {
-            const docRef = doc(db, "followers", isFollowing.id);
-            await deleteDoc(docRef);
-        }
+        // if (!isFollowing) {
+        //     await addDoc(collection(db, "followers"), {
+        //         follower_id: user_id,
+        //         following_id
+        //     });
+        // } else {
+        //     const docRef = doc(db, "followers", isFollowing.id);
+        //     await deleteDoc(docRef);
+        // }
     }, [isFollowing, user_id, following_id]);
 
 

@@ -1,6 +1,4 @@
 "use client"
-import { db } from '@/firebase';
-import { collection, onSnapshot } from 'firebase/firestore';
 import React, { useEffect } from 'react'
 import { AiFillLike } from 'react-icons/ai'
 
@@ -11,13 +9,13 @@ const LikeButton = ({ id, user_id }: { id: string, user_id: string | undefined }
 
     useEffect(() => {
         if (!id || !user_id) return;
-        const q = collection(db, `models/${id}/likes`);
+        // const q = collection(db, `models/${id}/likes`);
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            setLikes(snapshot.docs.length);
-            setIsLiked(!!snapshot.docs.map((doc) => doc.data()).find((doc: any) => doc.user_id === user_id));
-        });
-        return () => unsubscribe()
+        // const unsubscribe = onSnapshot(q, (snapshot) => {
+        //     setLikes(snapshot.docs.length);
+        //     setIsLiked(!!snapshot.docs.map((doc) => doc.data()).find((doc: any) => doc.user_id === user_id));
+        // });
+        // return () => unsubscribe()
     }, [id, user_id]);
 
 

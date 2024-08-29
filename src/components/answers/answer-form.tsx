@@ -7,7 +7,6 @@ import { useFormStatus } from 'react-dom'
 import { postAnswer } from '@/actions'
 import { Textarea } from '../ui/textarea'
 import { Skeleton } from '../ui/skeleton'
-import { uploadFileWithProgress } from '@/firebase/functions'
 import UploadFileCard from '../upload-file-card'
 import Overlay from '../loaders/overlay'
 import { Answer, FileDetails } from '@prisma/client'
@@ -49,23 +48,24 @@ export default function AnswerForm({ question_id }: Props) {
   };
 
   const handleUploadFiles = async (files: File[]) => {
-    if (!files) return;
+    if (!files) return [];
+    //TODO
 
-    const uploadPromises = files.map((file, index) => {
-      return uploadFileWithProgress(file, index, (progressIndex, progress) => {
-        setUploadProgress((prevProgress) => ({
-          ...prevProgress,
-          [progressIndex]: progress,
-        }));
-      });
-    });
+    // const uploadPromises = files.map((file, index) => {
+    //   return uploadFileWithProgress(file, index, (progressIndex, progress) => {
+    //     setUploadProgress((prevProgress) => ({
+    //       ...prevProgress,
+    //       [progressIndex]: progress,
+    //     }));
+    //   });
+    // });
 
-    try {
-      const results = await Promise.all(uploadPromises);
-      return results;
-    } catch (error) {
-      console.error('Error uploading files:', error);
-    }
+    // try {
+    //   const results = await Promise.all(uploadPromises);
+    //   return results;
+    // } catch (error) {
+    //   console.error('Error uploading files:', error);
+    // }
   };
 
   const handleSubmit = async (formData: FormData) => {

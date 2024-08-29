@@ -1,35 +1,25 @@
 import React, { Suspense } from 'react'
 import { Metadata } from 'next'
-import { getData } from '@/lib/functions'
 import Link from 'next/link'
 import { FaEdit } from 'react-icons/fa'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Skeleton } from '@/components/ui/skeleton'
 import Await from '@/components/await'
 import { validateRequest } from '@/lib/auth'
+import prisma from '@/lib/prisma'
+import { getUserStats } from '@/actions'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
 }
 
 async function Dashboard() {
-  // await checkProtected("/dashboard");
-  const session = await validateRequest();
-  if (!session.user) return null;
 
-  const user = session.user;
+  const { user } = await validateRequest();
+  if (!user) return null;
 
-  const userQuestions = getData({
-    coll: "questions",
-    key: "user_id",
-    value: user.id
-  });
+  const promise = getUserStats(user.id);
 
-  const userModels = getData({
-    coll: "models",
-    key: "user_id",
-    value: user.id
-  })
+
   return (
     <div>
       <div className={`h-3/5 relative`}>
@@ -81,12 +71,12 @@ async function Dashboard() {
               <div className='flex items-center justify-center gap-2 flex-wrap'>
                 <p>0 Follower(s), </p>
 
-                <Await promise={userQuestions}>
-                  {questions => <p>{questions.length} Question(s),</p>}
-                </Await>
-
-                <Await promise={userModels}>
-                  {models => <p>{models.length} Model(s),</p>}
+                <Await promise={promise}>
+                  {(data) => <>
+                    <p>{data.questions} Question(s),</p>
+                    <p>{data.models} Model(s),</p>
+                  </>
+                  }
                 </Await>
 
                 {/* <p>1 Badge received</p> */}

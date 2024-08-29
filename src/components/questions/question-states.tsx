@@ -1,8 +1,5 @@
 "use client"
-import { db } from '@/firebase'
-import { color1 } from '@/data/colors'
 import { Question } from '@prisma/client'
-import { collection, doc, onSnapshot, query, where } from 'firebase/firestore'
 import React, { useEffect } from 'react'
 import { BiCommentDetail } from 'react-icons/bi'
 import { FaEye, FaUser } from 'react-icons/fa'

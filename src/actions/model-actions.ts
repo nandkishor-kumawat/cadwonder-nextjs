@@ -123,6 +123,7 @@ export const getModels = async (queryString: string) => {
 		const searchParams = new URLSearchParams(queryString);
 		const que = searchParams.get('query');
 		const category = searchParams.get('category');
+		const userId = searchParams.get('userId');
 
 		const models = await prisma.model.findMany({
 			where: {
@@ -137,7 +138,8 @@ export const getModels = async (queryString: string) => {
 						category: {
 							hasSome: category.split(',')
 						}
-					} : {}
+					} : {},
+					userId ? { userId } : {},
 				]
 			},
 			orderBy: {

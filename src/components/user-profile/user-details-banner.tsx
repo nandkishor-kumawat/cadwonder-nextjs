@@ -3,27 +3,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import FollowButton from './follow-button'
 import Link from 'next/link'
 import { MdOutlineLocationOn } from 'react-icons/md'
-import { getData, getUserBy } from '@/lib/functions'
 import LinkNav from './link-nav'
 import Await from '../await'
+import { getUsersBy, getUserStats } from '@/actions'
 
 const UserDetailsBanner = async ({ username }: { username: string }) => {
 
-    const user = await getUserBy("username", username);
+    const user = await getUsersBy("username", username);
 
     if (!user) return null;
 
-    const userQuestions = getData({
-        coll: "questions",
-        key: "user_id",
-        value: user.id
-    });
-
-    // const userModels = await getData({
-    //     coll: "models",
-    //     key: "user_id",
-    //     value: user.id
-    // });
+    const promise = getUserStats(user.id);
 
     return (
         <>
@@ -54,8 +44,8 @@ const UserDetailsBanner = async ({ username }: { username: string }) => {
 
                                     <Link href={`/${username}/questions`} className='text-center'>
 
-                                        <Await promise={userQuestions}>
-                                            {questions => <p>{questions.length}</p>}
+                                        <Await promise={promise}>
+                                            {data => <p>{data.questions}</p>}
                                         </Await>
 
                                         <p>Questions</p>

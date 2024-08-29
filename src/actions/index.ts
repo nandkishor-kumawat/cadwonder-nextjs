@@ -37,3 +37,5 @@ export {
     getQuestionBySlug,
     getQuestions
 } from './question-actions';
+
+export * from './users.actions';

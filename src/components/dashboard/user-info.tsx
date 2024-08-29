@@ -3,26 +3,16 @@ import Link from 'next/link'
 import React from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { getData } from '@/lib/functions'
 import { validateRequest } from '@/lib/auth'
+import { getUserStats } from '@/actions'
+import Await from '../await'
 
 const UserInfo = async () => {
 
-    const session = await validateRequest();
-    const user = session?.user;
-    if (!session || !user) return null;
+    const { user } = await validateRequest();
+    if (!user) return null;
 
-    const userQuestions = await getData({
-        coll: "questions",
-        key: "user_id",
-        value: user.id
-    });
-
-    const userModels = await getData({
-        coll: "models",
-        key: "user_id",
-        value: user.id
-    })
+    const promise = getUserStats(user.id);
 
     return (
         <div className={`h-3/5 relative`}>
@@ -73,8 +63,13 @@ const UserInfo = async () => {
 
                         <div className='flex items-center justify-center gap-2 flex-wrap'>
                             <p>0 Follower(s), </p>
-                            <p>{userQuestions.length} Question(s), </p>
-                            <p>{userModels.length} Model(s), </p>
+                            <Await promise={promise}>
+                                {(data) => <>
+                                    <p>{data.questions} Question(s),</p>
+                                    <p>{data.models} Model(s),</p>
+                                </>
+                                }
+                            </Await>
                             {/* <p>1 Badge received</p> */}
                         </div>
 

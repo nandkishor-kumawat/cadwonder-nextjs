@@ -1,7 +1,5 @@
 import React from 'react'
 import CommentItem from './comment-item'
-import { Comment } from '@prisma/client';
-import { getData } from '@/lib/functions';
 import { getCommentsByAssociationId } from '@/actions';
 
 export default async function CommentList({ id }: { id: string }) {

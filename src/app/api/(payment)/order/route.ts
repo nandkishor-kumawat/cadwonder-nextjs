@@ -1,13 +1,13 @@
 import Razorpay from 'razorpay';
 import { NextRequest, NextResponse } from 'next/server';
 
-// const razorpay = new Razorpay({
-//     key_id: process.env.key_id!,
-//     key_secret: process.env.key_secret,
-// });
-
 
 export async function POST(request: NextRequest) {
+    const razorpay = new Razorpay({
+        key_id: process.env.key_id!,
+        key_secret: process.env.key_secret,
+    });
+
     const { amount, currency } = (await request.json()) as {
         amount: string;
         currency: string;
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
         currency: currency,
         receipt: 'rcp1',
     };
-    // const order = await razorpay.orders.create(options);
-    // console.log(order);
+    const order = await razorpay.orders.create(options);
+    console.log(order);
     return NextResponse.json({ orderId: 6 }, { status: 200 });
 }

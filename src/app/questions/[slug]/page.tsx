@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import AnswerForm from '@/components/answers/answer-form';
 import { Button } from '@/components/ui/button';
 import DataInfo from '@/components/questions/data-info';
-import { getData, updateViewCount } from '@/lib/functions';
+import { updateViewCount } from '@/lib/functions';
 import QuestionStates from '@/components/questions/question-states';
 import { FaRegEdit, FaShareSquare } from 'react-icons/fa';
 import FollowButton from '@/components/user-profile/follow-button';
@@ -15,6 +15,7 @@ import { AnswerFallback } from '@/components/fallbacks';
 import { getQuestionBySlug } from '@/actions';
 import Link from 'next/link';
 import { validateRequest } from '@/lib/auth';
+import Image from 'next/image';
 
 type Props = {
   params: { slug: string };
@@ -62,7 +63,7 @@ export async function generateMetadata({
 async function Page({ params: { slug } }: Props) {
   const { question, error } = await getQuestionBySlug(slug);
   const { session, user } = await validateRequest();
-  console.log(question)
+
   if (error) return <div>Error</div>
   if (!question) return <div>Question not found</div>
 
@@ -89,6 +90,8 @@ async function Page({ params: { slug } }: Props) {
     }]
   }
 
+  const isAdmin = user?.role === 'ADMIN';
+
   return (
     <>
       <script
@@ -112,57 +115,80 @@ async function Page({ params: { slug } }: Props) {
                 </Suspense>
               </div>
 
-              <div className='my-2'>
-                {session ? (
-                  <>
-                    <h1 className='text-2xl font-bold'>Drop your answer</h1>
-                    <AnswerForm question_id={question.id} />
-                  </>
-                ) :
-                  <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500" asChild>
-                    <Link href={`/login?callbackUrl=/questions/${slug}`}>Login to answer</Link>
-                  </Button>
-                }
+
+              {isAdmin && (
+                <div className='my-2'>
+                  {session ? (
+                    <>
+                      <h1 className='text-2xl font-bold'>Drop your answer</h1>
+                      <AnswerForm question_id={question.id} />
+                    </>
+                  ) :
+                    <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500" asChild>
+                      <Link href={`/login?callbackUrl=/questions/${slug}`}>Login to answer</Link>
+                    </Button>
+                  }
+                </div>
+              )}
+
+              <div className='w-full relative'>
+                <div className='absolute inset-0'>
+                  <Image
+                    src={'/blur.png'}
+                    alt={'blur'}
+                    width={1000}
+                    height={500}
+                    className='w-full h-auto'
+                  />
+                </div>
+              </div>
+              <div className='rounded-xl mx-auto border sticky bottom-0 border-orange-400/40 bg-orange-100 shadow-2xl flex-center flex-col aspect-square w-1/3'>
+                Pay Rs. 3 to get the answer
+                <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500" asChild>
+                  <Link href={`/login?callbackUrl=/questions/${slug}`}>Get Solution</Link>
+                </Button>
               </div>
             </div>
           </div>
 
-          <div className='w-full md:w-max md:mt-5 space-y-6'>
-            <div className='flex gap-2'>
-              {question.userId === user?.id && (<QuestionDeleteButton id={question.id} />)}
-              <FollowButton following_id={question.user.id} className='rounded-none border border-slate-400 w-full font-normal text-sm' />
-              <Button variant={'ghost'} className='rounded-none border border-slate-400 w-full font-normal text-sm space-x-2'>
-                <FaShareSquare />
-                <span>Share</span>
-              </Button>
-            </div>
-            <div>
-              <QuestionStates question={question} ext />
-            </div>
+          {isAdmin && (
+            <div className='w-full md:w-max md:mt-5 space-y-6'>
+              <div className='flex gap-2'>
+                {question.userId === user?.id && (<QuestionDeleteButton id={question.id} />)}
+                <FollowButton following_id={question.user.id} className='rounded-none border border-slate-400 w-full font-normal text-sm' />
+                <Button variant={'ghost'} className='rounded-none border border-slate-400 w-full font-normal text-sm space-x-2'>
+                  <FaShareSquare />
+                  <span>Share</span>
+                </Button>
+              </div>
+              <div>
+                <QuestionStates question={question} ext />
+              </div>
 
-            <div>
-              <p>Details:</p>
-              <table className='w-full text-left align-baseline'>
-                <tbody>
-                  <tr>
-                    <th>Created:</th>
-                    <td>{date}</td>
-                  </tr>
-                  <tr>
-                    <th>Category:</th>
-                    <td>{question.category}</td>
-                  </tr>
-                  {question.software && (
+              <div>
+                <p>Details:</p>
+                <table className='w-full text-left align-baseline'>
+                  <tbody>
                     <tr>
-                      <th>Software:</th>
-                      <td>{question.software}</td>
+                      <th>Created:</th>
+                      <td>{date}</td>
                     </tr>
-                  )}
+                    <tr>
+                      <th>Category:</th>
+                      <td>{question.category}</td>
+                    </tr>
+                    {question.software && (
+                      <tr>
+                        <th>Software:</th>
+                        <td>{question.software}</td>
+                      </tr>
+                    )}
 
-                </tbody>
-              </table>
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+          )}
 
         </div>
 

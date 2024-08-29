@@ -2,7 +2,6 @@ import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Link from 'next/link'
 import { Prisma } from '@prisma/client'
-import { getUser } from '@/lib/functions'
 
 type CommentWithUser = Prisma.CommentGetPayload<{
   include: {

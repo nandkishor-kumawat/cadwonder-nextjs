@@ -25,7 +25,8 @@ export const lucia = new Lucia(adapter, {
         email: databaseUserAttributes.email,
         name: databaseUserAttributes.name,
         profilePicture: databaseUserAttributes.profilePicture,
-        username: databaseUserAttributes.username
+        username: databaseUserAttributes.username,
+        role: databaseUserAttributes.role
     })
 });
 

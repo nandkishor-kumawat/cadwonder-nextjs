@@ -24,8 +24,6 @@ import { z } from 'zod'
 import { FaLink, FaLinkedin, FaTwitterSquare, FaInstagram, } from 'react-icons/fa';
 import { InputElement, InputGroup, InputItem } from '@/components/ui/input-group'
 import Link from 'next/link'
-import { collection, doc, onSnapshot, query } from 'firebase/firestore'
-import { db } from '@/firebase'
 import { useSession } from '@/hooks'
 import ProfilePicUploader from '@/components/edit-profile/profile-pic-uploader'
 import Overlay from '@/components/loaders/overlay'
@@ -148,62 +146,62 @@ const EditProfile = () => {
     const [Experience, setExperience] = useState([]);
     const [Education, setEducation] = useState([]);
 
-    useEffect(() => {
-        if (!user_id) return;
+    // useEffect(() => {
+    //     if (!user_id) return;
 
-        const q = query(collection(db, `users/${user_id}/workExperience`));
+    //     const q = query(collection(db, `users/${user_id}/workExperience`));
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            let d = [] as any;
-            snapshot.forEach((doc) => {
-                d.push({ id: doc.id, ...doc.data() })
-            })
-            setExperience(d);
-        });
-        return () => unsubscribe()
-    }, [user_id]);
+    //     const unsubscribe = onSnapshot(q, (snapshot) => {
+    //         let d = [] as any;
+    //         snapshot.forEach((doc) => {
+    //             d.push({ id: doc.id, ...doc.data() })
+    //         })
+    //         setExperience(d);
+    //     });
+    //     return () => unsubscribe()
+    // }, [user_id]);
 
-    useEffect(() => {
-        if (!user_id) return;
+    // useEffect(() => {
+    //     if (!user_id) return;
 
-        const q = query(collection(db, `users/${user_id}/Education`));
+    //     const q = query(collection(db, `users/${user_id}/Education`));
 
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            let d = [] as any;
-            snapshot.forEach((doc) => {
-                d.push({ id: doc.id, ...doc.data() })
-            })
-            setEducation(d);
-        });
-        return () => unsubscribe()
-    }, [user_id]);
+    //     const unsubscribe = onSnapshot(q, (snapshot) => {
+    //         let d = [] as any;
+    //         snapshot.forEach((doc) => {
+    //             d.push({ id: doc.id, ...doc.data() })
+    //         })
+    //         setEducation(d);
+    //     });
+    //     return () => unsubscribe()
+    // }, [user_id]);
 
-    useEffect(() => {
-        if (!user_id) return;
+    // useEffect(() => {
+    //     if (!user_id) return;
 
-        const docRef = doc(db, `users/${user_id}`);
-        const unsubscribe = onSnapshot(docRef, (doc) => {
-            const data = doc.data();
-            if (!data) return;
-            form.setValue('name', data.name);
-            form.setValue('introduction', data?.introduction);
-            form.setValue('about', data?.about);
-            form.setValue('country', data?.country);
-            form.setValue('city', data?.city);
-            form.setValue('softwareSkills', data?.softwareSkills ?? []);
-            form.setValue('specializedIn', data?.specializedIn ?? []);
-            setProfilePic(data?.profilePicture);
-            setCoverPic(data?.coverPicture);
-            setSocialLinks({
-                twitter: data?.socials?.twitter ?? '',
-                linkedin: data?.socials?.linkedin ?? '',
-                instagram: data?.socials?.instagram ?? '',
-                website: data?.socials?.website ?? ''
-            })
-        });
-        return () => unsubscribe()
+    //     const docRef = doc(db, `users/${user_id}`);
+    //     const unsubscribe = onSnapshot(docRef, (doc) => {
+    //         const data = doc.data();
+    //         if (!data) return;
+    //         form.setValue('name', data.name);
+    //         form.setValue('introduction', data?.introduction);
+    //         form.setValue('about', data?.about);
+    //         form.setValue('country', data?.country);
+    //         form.setValue('city', data?.city);
+    //         form.setValue('softwareSkills', data?.softwareSkills ?? []);
+    //         form.setValue('specializedIn', data?.specializedIn ?? []);
+    //         setProfilePic(data?.profilePicture);
+    //         setCoverPic(data?.coverPicture);
+    //         setSocialLinks({
+    //             twitter: data?.socials?.twitter ?? '',
+    //             linkedin: data?.socials?.linkedin ?? '',
+    //             instagram: data?.socials?.instagram ?? '',
+    //             website: data?.socials?.website ?? ''
+    //         })
+    //     });
+    //     return () => unsubscribe()
 
-    }, [user_id, form]);
+    // }, [user_id, form]);
 
     if (!session) return null;
     return (

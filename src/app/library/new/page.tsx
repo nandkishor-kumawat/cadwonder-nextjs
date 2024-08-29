@@ -6,7 +6,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import UploadFileCard from '@/components/upload-file-card'
-import { uploadFileWithProgress } from '@/firebase/functions'
 import { categories, bg1 } from '@/data'
 import { createSlug } from '@/lib/functions'
 import { FileDetails, Model } from '@prisma/client'
@@ -58,24 +57,25 @@ function NewModal() {
   };
 
   const handleUploadFiles = async (files: File[]) => {
-    if (!files) return;
+    if (!files) return [];
+    //TODO
 
-    const uploadPromises = files.map((file, index) => {
-      return uploadFileWithProgress(file, index, (progressIndex, progress) => {
-        setUploadProgress((prevProgress) => ({
-          ...prevProgress,
-          [progressIndex]: progress,
-        }));
-      });
-    });
+    // const uploadPromises = files.map((file, index) => {
+    //   return uploadFileWithProgress(file, index, (progressIndex, progress) => {
+    //     setUploadProgress((prevProgress) => ({
+    //       ...prevProgress,
+    //       [progressIndex]: progress,
+    //     }));
+    //   });
+    // });
 
-    try {
-      const results = await Promise.all(uploadPromises);
+    // try {
+    //   const results = await Promise.all(uploadPromises);
 
-      return results;
-    } catch (error) {
-      console.error('Error uploading files:', error);
-    }
+    //   return results;
+    // } catch (error) {
+    //   console.error('Error uploading files:', error);
+    // }
   };
 
 
