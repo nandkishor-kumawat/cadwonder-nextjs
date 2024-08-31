@@ -35,8 +35,8 @@ export async function GET(request: Request) {
         );
 
         const googleUser = await googleUserResponse.json();
+
         let userId = "";
-        //TODO: check if user exists in database
         const existingUser = await prisma.user.findFirst({
             where: {
                 email: googleUser.email,
@@ -55,7 +55,7 @@ export async function GET(request: Request) {
             userId = newUser.id;
         }
 
-        const session = await createSession(existingUser?.id ?? userId);
+        const session = await createSession(existingUser?.id ?? userId, 'google');
 
         return new Response(null, {
             status: 302,

@@ -29,13 +29,13 @@ export default async function Page({
   const promise = getQuestions(queryString);
 
   return (
-    <div className="container max-w-3xl mx-auto px-2 mb-2 h-full">
+    <div className="container max-w-4xl mx-auto px-2 py-4 h-full space-y-6">
 
       <div className="flex items-center justify-between">
         <h1 className='text-3xl font-semibold'>Questions</h1>
-        <Link href={'/questions/new'}>
-          <Button size={'sm'} className="text-base text-white my-4 bg-orange-400 hover:bg-orange-500 rounded-sm">Ask Question</Button>
-        </Link>
+        {/* <Link href={'/questions/new'}>
+          <Button size={'sm'}>Ask Question</Button>
+        </Link> */}
       </div>
 
       <SearchBar />

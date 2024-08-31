@@ -54,6 +54,7 @@ export const signIn = async ({
     }
 
     await createSession(user.id);
+    revalidatePath('/', 'layout')
     return {
         user
     }
@@ -98,6 +99,7 @@ export const signUp = async (formData: FormData) => {
             }
         })
         await createSession(user.id);
+        revalidatePath('/', 'layout')
         return {
             user
         }
@@ -110,11 +112,11 @@ export const signUp = async (formData: FormData) => {
 }
 
 export const signOut = async () => {
-    await fetch('http://localhost:3001/api/auth/signout', {
+    await fetch(process.env.NEXTAUTH_URL + '/api/auth/signout', {
         headers: {
             cookie: cookies().toString()
         }
     })
     revalidatePath('/', 'layout')
-    redirect('http://localhost:3001/login', RedirectType.replace);
+    // redirect(process.env.NEXTAUTH_URL + '/login', RedirectType.replace);
 }

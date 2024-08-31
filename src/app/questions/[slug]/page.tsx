@@ -16,6 +16,7 @@ import { getQuestionBySlug } from '@/actions';
 import Link from 'next/link';
 import { validateRequest } from '@/lib/auth';
 import Image from 'next/image';
+import { Role } from '@prisma/client';
 
 type Props = {
   params: { slug: string };
@@ -90,7 +91,7 @@ async function Page({ params: { slug } }: Props) {
     }]
   }
 
-  const isAdmin = user?.role === 'ADMIN';
+  const isAdmin = user?.role === Role.ADMIN;
 
   return (
     <>

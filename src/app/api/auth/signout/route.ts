@@ -1,6 +1,5 @@
 import { lucia, validateRequest } from "@/lib/auth"
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export const GET = async () => {
     const { session } = await validateRequest();
@@ -9,5 +8,5 @@ export const GET = async () => {
     }
     const sessionCookie = lucia.createBlankSessionCookie();
     cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-    return redirect('/login');
+    return Response.json({ message: "Signed out" });
 }

@@ -32,13 +32,13 @@ export default async function Page({
   const promise = getModels(queryString);
 
   return (
-    <div className="container max-w-4xl mx-auto px-2 mb-2">
+    <div className="container max-w-4xl mx-auto px-2 py-4 space-y-6">
 
       <div className="flex items-center justify-between">
         <h1 className='text-3xl font-semibold'>Models</h1>
-        <Link href={'/library/new'}>
-          <Button size={'sm'} className="text-base text-white my-4 bg-orange-400 hover:bg-orange-500 rounded-sm">Upload New Model</Button>
-        </Link>
+        {/* <Link href={'/library/new'}>
+          <Button size={'sm'}>Upload New Model</Button>
+        </Link> */}
       </div>
       <SearchBar />
 

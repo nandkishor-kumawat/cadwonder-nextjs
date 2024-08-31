@@ -25,8 +25,9 @@ export const lucia = new Lucia(adapter, {
         email: databaseUserAttributes.email,
         name: databaseUserAttributes.name,
         profilePicture: databaseUserAttributes.profilePicture,
+        coverPicture: databaseUserAttributes.coverPicture,
         username: databaseUserAttributes.username,
-        role: databaseUserAttributes.role
+        role: databaseUserAttributes.role,
     })
 });
 
@@ -56,8 +57,8 @@ export const validateRequest = cache(
     }
 );
 
-export const createSession = async (userId: string) => {
-    const session = await lucia.createSession(userId, {});
+export const createSession = async (userId: string, provider: 'google' | 'credentials' = 'credentials') => {
+    const session = await lucia.createSession(userId, { provider });
     const sessionCookie = lucia.createSessionCookie(session.id);
     cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
     return session;

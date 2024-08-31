@@ -7,6 +7,7 @@ import Await from '@/components/await'
 import { validateRequest } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { getUserStats } from '@/actions'
+import { Role } from '@prisma/client'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -15,7 +16,11 @@ export const metadata: Metadata = {
 async function Dashboard() {
 
   const { user } = await validateRequest();
-  if (!user) return null;
+  if (!user || user.role !== Role.ADMIN) return (
+    <div className="h-full w-full flex-center">
+      <h1 className='text-3xl font-semibold text-center'>You are not authorized to view this page</h1>
+    </div>
+  );
 
   const promise = getUserStats(user.id);
 

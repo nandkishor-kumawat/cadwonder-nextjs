@@ -7,6 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Providers {
+  google
+  credentials
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+type FileDetails {
+  name String
+  url  String
+}
+
 model User {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   email           String   @unique
@@ -39,9 +54,16 @@ model User {
   @@map("users")
 }
 
-enum Role {
-  USER
-  ADMIN
+model Session {
+  objectId  String     @id @default(auto()) @map("_id") @db.ObjectId
+  id        String     @unique @map("session_id")
+  userId    String     @map("user_id") @db.ObjectId
+  expiresAt DateTime?
+  provider  Providers? @default(credentials)
+  user      User       @relation(references: [id], fields: [userId], onDelete: Cascade)
+  createdAt DateTime   @default(now()) @map("created_at")
+
+  @@map("sessions")
 }
 
 model Experience {
@@ -83,16 +105,6 @@ model SocialLink {
   @@map("social_links")
 }
 
-model Session {
-  objectId  String    @id @default(auto()) @map("_id") @db.ObjectId
-  id        String    @unique @map("session_id")
-  userId    String    @map("user_id") @db.ObjectId
-  expiresAt DateTime?
-  user      User      @relation(references: [id], fields: [userId], onDelete: Cascade)
-
-  @@map("sessions")
-}
-
 model Question {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   userId      String        @map("user_id") @db.ObjectId
@@ -125,11 +137,6 @@ model Answer {
   question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@map("answers")
-}
-
-type FileDetails {
-  name String
-  url  String
 }
 
 model Model {

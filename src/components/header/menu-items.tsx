@@ -1,7 +1,7 @@
 "use client"
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation'
-import React from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useMemo } from 'react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,77 +9,66 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { MenuIcon } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { AiFillLike } from 'react-icons/ai';
 import { BiCube } from 'react-icons/bi';
 import { MdLogout } from 'react-icons/md';
 import { useSession } from '@/hooks';
 import { signOut } from '@/actions/auth-actions';
+import { NavItem } from '../ui/nav-item';
+import { Role } from '@prisma/client';
+
 
 const MenuItems = () => {
-  const { theme } = useTheme()
-  const pathname = usePathname();
-  const router = useRouter()
 
-  const navLinks = [
-    {
-      name: 'Questions',
-      href: '/questions',
-      current: pathname === '/questions',
-    },
-    {
-      name: 'Users',
-      href: '/users',
-      current: pathname === '/users',
-    },
-    {
-      name: 'Library',
-      href: '/library',
-      current: pathname === '/library',
-    },
-    {
-      name: 'Dashboard',
-      href: '/dashboard',
-      current: pathname === '/dashboard',
-    },
-  ]
+  const router = useRouter()
 
   const handleLogout = async () => {
     await signOut();
-    router.refresh();
+    router.push('/login');
   }
 
   const { session } = useSession();
+  const navLinks = useMemo(() => {
+    const links = [
+      { name: 'Home', href: '/', },
+      { name: 'Questions', href: '/questions', },
+      { name: 'Users', href: '/users', },
+      { name: 'Library', href: '/library', },
+      { name: 'Dashboard', href: '/dashboard', },
+    ]
+    if (session?.user?.role !== Role.ADMIN) links.pop();
+    return links;
+  }, [session])
 
   const UserLinks = () => {
     return (
       <ul className='flex flex-col px-3 py-2 bg-slate-600'>
         <li>
           <DropdownMenuItem className='bg-transparent hover:bg-transparent focus:bg-transparent text-base'>
-            <Link href={`/${session?.user?.username}`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
+            <NavItem href={`/${session?.user?.username}`} className={`flex items-center gap-2`}>
               <Avatar className='h-5 w-5'>
                 <AvatarImage src={session?.user?.profilePicture as string} />
                 <AvatarFallback className='text-xs'>{session?.user?.name?.[0].toUpperCase()}</AvatarFallback>
               </Avatar>
               <p>My Profile</p>
-            </Link>
+            </NavItem>
           </DropdownMenuItem>
         </li>
         <li>
           <DropdownMenuItem className='bg-transparent hover:bg-transparent focus:bg-transparent text-base'>
-            <Link href={`/${session?.user?.username}/models`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
+            <NavItem href={`/${session?.user?.username}/models`} className={`flex items-center gap-2`}>
               <BiCube />
               My Models
-            </Link>
+            </NavItem>
           </DropdownMenuItem>
         </li>
         <li>
           <DropdownMenuItem className='bg-transparent hover:bg-transparent focus:bg-transparent text-base'>
-            <Link href={`/${session?.user?.username}/likes`} className={`hover:text-orange-400 text-white flex items-center gap-2`}>
+            <NavItem href={`/${session?.user?.username}/likes`} className={`flex items-center gap-2`}>
               <AiFillLike />
               <p>My Likes</p>
-            </Link>
+            </NavItem>
           </DropdownMenuItem>
         </li>
         <li>
@@ -106,11 +95,13 @@ const MenuItems = () => {
               <ul className='flex flex-col gap-2'>
                 {navLinks.map((link, index) => (
                   <li key={index}>
-                    <Link className={`hover:text-orange-400 text-${link.current ? 'white' : ''} dark:text-black`} href={link.href}>
-                      <DropdownMenuItem className={`cursor-pointer  ${link.current ? 'bg-[#3b3b3b]' : ''}`}>
-                        {link.name}
-                      </DropdownMenuItem>
-                    </Link>
+                    <NavItem href={link.href} className='text-black'>
+                      {(isActive) => (
+                        <DropdownMenuItem className={`cursor-pointer  ${isActive && 'bg-[#3b3b3b] text-orange-400'}`}>
+                          {link.name}
+                        </DropdownMenuItem>
+                      )}
+                    </NavItem>
                   </li>
                 ))}
                 {!(session) && (
@@ -127,7 +118,9 @@ const MenuItems = () => {
 
       <div className='hidden sm:flex items-center gap-4'>
         {navLinks.map((link, index) => (
-          <Link key={index} href={link.href} className={`hover:text-orange-400 text-lg text-white ${link.current ? 'text-orange-400' : ''}`}>{link.name}</Link>
+          <NavItem key={index} href={link.href} className='text-lg'>
+            {link.name}
+          </NavItem>
         ))}
 
         {!(session) && (

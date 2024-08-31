@@ -25,11 +25,7 @@ export default async function DataInfo({ data, title }: Props) {
     const { session } = await validateRequest();
     return (
         <div className="info">
-            <div className='my-2 mb-4'>
-                <h1 className='text-2xl font-bold text-justify'>{title}</h1>
-            </div>
-
-            <div className='flex gap-4 my-2'>
+            <div className='flex gap-4 my-2 mt-4'>
                 <div className='inline-flex self-start'>
                     <Avatar className='w-12 h-12'>
                         <AvatarImage src={user?.profilePicture} width={96} height={96} />
@@ -41,6 +37,10 @@ export default async function DataInfo({ data, title }: Props) {
                     <div className="info">
                         <Link href={`/${user?.username}`} className='text-orange-400 font-semibold'>{user?.name}</Link>
                         <p className='text-gray-400 text-sm'>{new Date(data.createdAt).toLocaleString()}</p>
+                    </div>
+
+                    <div className='my-2'>
+                        <h1 className='text-2xl font-bold text-justify'>{title}</h1>
                     </div>
 
                     <div className="deails my-1 min-h-[3rem]">
