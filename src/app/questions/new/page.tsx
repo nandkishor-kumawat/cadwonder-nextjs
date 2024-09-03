@@ -81,22 +81,22 @@ export default function NewQuestion() {
 
     //TODO
 
-    // const uploadPromises = files.map((file, index) => {
-    //   return uploadFileWithProgress(file, index, (progressIndex, progress) => {
-    //     setUploadProgress((prevProgress) => ({
-    //       ...prevProgress,
-    //       [progressIndex]: progress,
-    //     }));
-    //   });
-    // });
+    const uploadPromises = files.map(async (file, index) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      return fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      }).then((response) => response.json());
+    });
 
-    // try {
-    //   const results = await Promise.all(uploadPromises);
+    try {
+      const results = await Promise.all(uploadPromises);
 
-    //   return results;
-    // } catch (error) {
-    //   console.error('Error uploading files:', error);
-    // }
+      return results;
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
   };
 
   const router = useRouter();
@@ -108,6 +108,9 @@ export default function NewQuestion() {
 
     if (files.length) {
       fileDetails = await handleUploadFiles(files) as FileDetails[];
+      console.log(fileDetails);
+      setIsLoading(false);
+      return;
     }
 
     const slug = await createSlug('questions', 'slug', other.question);

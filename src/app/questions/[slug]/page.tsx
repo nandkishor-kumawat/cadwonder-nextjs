@@ -109,15 +109,15 @@ async function Page({ params: { slug } }: Props) {
               <div className="answers my-2 flex flex-col gap-2">
                 <Suspense fallback={
                   <>
-                    <AnswerFallback />
-                    <AnswerFallback />
+                    {/* <AnswerFallback /> */}
+                    {/* <AnswerFallback /> */}
                   </>}>
                   <AnswerList question_id={question.id} />
                 </Suspense>
               </div>
 
 
-              {isAdmin && (
+              {/* {isAdmin && (
                 <div className='my-2'>
                   {session ? (
                     <>
@@ -130,7 +130,7 @@ async function Page({ params: { slug } }: Props) {
                     </Button>
                   }
                 </div>
-              )}
+              )} */}
 
               <div className='w-full relative'>
                 <div className='absolute inset-0'>
@@ -152,7 +152,7 @@ async function Page({ params: { slug } }: Props) {
             </div>
           </div>
 
-          {isAdmin && (
+          {/* {isAdmin && (
             <div className='w-full md:w-max md:mt-5 space-y-6'>
               <div className='flex gap-2'>
                 {question.userId === user?.id && (<QuestionDeleteButton id={question.id} />)}
@@ -189,7 +189,7 @@ async function Page({ params: { slug } }: Props) {
                 </table>
               </div>
             </div>
-          )}
+          )} */}
 
         </div>
 

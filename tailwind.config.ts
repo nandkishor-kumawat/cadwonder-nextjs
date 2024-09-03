@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -88,6 +90,27 @@ module.exports = {
         },
       };
       addUtilities(newUtilities);
-    }
+    },
+    //@ts-ignore
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          //@ts-ignore
+          'max-h-body': (value) => ({
+            maxHeight: `calc(100vh - var(--header-height) * ${value})`,
+          }),
+        },
+        {
+          values: {
+            DEFAULT: 5,
+            1: 1,
+            2: 2,
+            3: 3,
+            4: 4,
+          },
+          supportsNegativeValues: false,
+        }
+      );
+    }),
   ],
 }
