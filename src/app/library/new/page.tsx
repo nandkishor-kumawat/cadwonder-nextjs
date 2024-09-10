@@ -8,11 +8,11 @@ import { Textarea } from '@/components/ui/textarea'
 import UploadFileCard from '@/components/upload-file-card'
 import { categories, bg1 } from '@/data'
 import { createSlug } from '@/lib/functions'
-import { FileDetails, Model } from '@prisma/client'
+import { Files, Model } from '@prisma/client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSession } from '@/hooks'
 import Link from 'next/link'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -83,20 +83,20 @@ function NewModal() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { files, ...other } = values;
     setIsLoading(true)
-    let fileDetails = [] as FileDetails[];
+    let fileDetails: Files[] = [];
 
     if (files.length) {
-      fileDetails = await handleUploadFiles(files) as FileDetails[];
+      fileDetails = await handleUploadFiles(files) as Files[];
     }
 
     const slug = await createSlug('models', 'slug', other.modelName);
 
     const body = {
       ...other,
-      fileDetails,
       slug,
       userId: session?.user.id as string,
-    } as Model;
+      fileDetails
+    } as Model & { fileDetails: Files[] };
 
     const { error } = await postModel(body);
     setIsLoading(false);
@@ -127,7 +127,7 @@ function NewModal() {
           <p className="text-white text-lg">New Model</p>
 
           <div className="flex items-center gap-2">
-            <Link href="./" className='text-white py-2 px-3' >Cancel</Link>
+            <Link href="/dashboard/models" className='text-white py-2 px-3' >Cancel</Link>
             <Button
               disabled={isLoading}
               className="bg-orange-500 text-lg hover:bg-orange-600"

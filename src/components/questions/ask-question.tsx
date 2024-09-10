@@ -7,6 +7,7 @@ import { IoMdClose } from 'react-icons/io'
 import { FaArrowRight, FaRegImage } from 'react-icons/fa'
 import { Input } from '../ui/input'
 import { getBlurLevel } from '@/lib/functions'
+import Link from 'next/link'
 
 const AskQuestion = () => {
 
@@ -71,17 +72,19 @@ const AskQuestion = () => {
             </div>
             <div className='mt-3 flex justify-end items-center gap-4'>
                 <div className='file-btn'>
-                    <label htmlFor='photo' className='cursor-pointer'>
-                        <FaRegImage size={24} className='text-gray-500 hover:text-gray-700 active:scale-90 hover:scale-105' />
+                    <label htmlFor='photo' className={`cursor-${file ? 'not-allowed' : 'pointer'}`}>
+                        <FaRegImage size={24} className={`text-gray-500 hover:text-gray-700 active:scale-90 hover:scale-105 pointer-events-${file ? 'none' : 'auto'}`} />
                         <span className='sr-only'>Upload Image</span>
                     </label>
                     <Input disabled={!!file} id='photo' type='file' accept='image/*' onChange={onSelectFile} className='hidden' />
                 </div>
 
                 <div className='search-btn'>
-                    <Button disabled={!search} className='my-0 rounded-full flex-center gap-3' >
-                        <span>Search</span>
-                        <FaArrowRight />
+                    <Button disabled={!search.trim()} className='my-0 rounded-full px-0'>
+                        <Link href={`/search?query=${search.split('\n').join(' ')}`} className={`flex-center gap-3 py-2 rounded-full px-4`}>
+                            <span>Search</span>
+                            <FaArrowRight />
+                        </Link>
                     </Button>
                 </div>
                 <ImageSearchUpload file={file} onUpload={handleUpload} handleClose={() => setFile(undefined)} />

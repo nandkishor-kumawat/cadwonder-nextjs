@@ -32,15 +32,17 @@ const FollowButton = ({ following_id, username, className }: Props) => {
 
 
     const doFollowUnfollow = useCallback(async () => {
-        // if (!isFollowing) {
-        //     await addDoc(collection(db, "followers"), {
-        //         follower_id: user_id,
-        //         following_id
-        //     });
-        // } else {
-        //     const docRef = doc(db, "followers", isFollowing.id);
-        //     await deleteDoc(docRef);
-        // }
+        if (!isFollowing) {
+            // TODO: Add follower
+            // await addDoc(collection(db, "followers"), {
+            //     follower_id: user_id,
+            //     following_id
+            // });
+        } else {
+            // TODO: Remove follower
+            // const docRef = doc(db, "followers", isFollowing.id);
+            // await deleteDoc(docRef);
+        }
     }, [isFollowing, user_id, following_id]);
 
 

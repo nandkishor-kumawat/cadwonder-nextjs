@@ -1,0 +1,26 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-sans font-bold py-1;
+}
+.privacy-policy h1 {
+  @apply text-4xl my-4 border-b py-2;
+}
+.privacy-policy h2 {
+  @apply text-3xl my-3.5 border-b py-2;
+}
+.privacy-policy h3 {
+  @apply text-2xl my-2.5;
+}
+.privacy-policy h4 {
+  @apply text-xl my-2;
+}
+.privacy-policy h5 {
+  @apply text-lg my-1.5;
+}
+.privacy-policy h6 {
+  @apply text-base my-1;
+}

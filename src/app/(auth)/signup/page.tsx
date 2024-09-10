@@ -19,11 +19,10 @@ import { SelectWithSearch } from "@/components/form/SelectWithSearch";
 import { useState } from "react";
 import Overlay from "@/components/loaders/overlay";
 import { useRouter } from "next/navigation";
-import { createSlug } from "@/lib/functions"
 import Spinner from "@/components/loaders/spinner"
 import { toast } from "sonner";
 import { countries, roles } from "@/data"
-import { signIn, signUp } from "@/actions"
+import { signUp } from "@/actions"
 
 const formSchema = z.object({
   name: z.string().min(3, {

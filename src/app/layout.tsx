@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/header/navbar'
+import { Header } from '@/components/header'
 import GoogleAnalytics from '@/components/google-analytics'
 import { Toaster } from '@/components/ui/sonner'
 import { siteMetadata } from '@/lib/siteMetaData'
 import NextTopLoader from 'nextjs-toploader';
 import { SessionProvider, ThemeProvider } from '@/components/providers'
+import { Footer } from '@/components/footer'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -73,7 +74,8 @@ export default function RootLayout({
               <GoogleAnalytics ga_id=
                 {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
             ) : null}
-            <Navbar />
+
+            <Header />
             <div className='h-body'>
               <div className="h-full overflow-hidden">
                 <div className="h-full overflow-y-auto scrollbar">
@@ -81,6 +83,7 @@ export default function RootLayout({
                 </div>
               </div>
             </div>
+            <Footer />
           </ThemeProvider>
         </SessionProvider>
       </body>

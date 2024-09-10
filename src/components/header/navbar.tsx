@@ -5,7 +5,7 @@ import React from 'react'
 import logo from '../../../public/logo.png'
 import MenuItems from './menu-items';
 
-async function Navbar() {
+export const Header = () => {
 
     return (
         <header className="text-gray-600 body-font sticky top-0 flex h-header z-10" style={{ backgroundColor: bg1 }}>
@@ -30,5 +30,3 @@ async function Navbar() {
         </header>
     )
 }
-
-export default Navbar

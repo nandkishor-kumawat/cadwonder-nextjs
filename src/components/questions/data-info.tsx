@@ -1,9 +1,7 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import Link from 'next/link';
-import { FileDetails, Model, Question } from '@prisma/client';
-import CommentList from '../comments/comment-list';
-import CommentForm from '../comments/comment-form';
+import { Files, Model, Question } from '@prisma/client';
 import FilePreview from '../answers/file-preview';
 import { validateRequest } from '@/lib/auth';
 
@@ -15,7 +13,8 @@ interface Props {
             name: string;
             profilePicture: string | null | undefined;
             username: string;
-        }
+        },
+        fileDetails: Files[];
     }
     title: string;
 }
@@ -45,7 +44,7 @@ export default async function DataInfo({ data, title }: Props) {
 
                     <div className="deails my-1 min-h-[3rem]">
                         <p>{data?.description}</p>
-                        {data.fileDetails?.map((file: FileDetails) => (
+                        {data.fileDetails?.map((file: Files) => (
                             <FilePreview key={file.name} file={file} />
                         ))}
                     </div>

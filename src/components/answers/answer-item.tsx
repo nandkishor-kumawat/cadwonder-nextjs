@@ -1,15 +1,22 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Link from 'next/link'
-import { Answer, User } from '@prisma/client'
+import { Answer, Prisma, User } from '@prisma/client'
 import DeleteAnswerButton from './delete-answer-button'
 import FilePreview from './file-preview'
 import { validateRequest } from '@/lib/auth'
 import CommentList from '../comments/comment-list'
 import CommentForm from '../comments/comment-form'
 
+
+
 interface Props {
-  answer: Answer & { user: User }
+  answer: Prisma.AnswerGetPayload<{
+    include: {
+      user: true;
+      fileDetails: true;
+    }
+  }>
 }
 
 export default async function AnswerItem({ answer }: Props) {

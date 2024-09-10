@@ -2,21 +2,27 @@
 
 import { validateRequest } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { Question } from "@prisma/client";
+import { Files, Question } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
+type QuestionBody = Question & {
+  fileDetails: Files[]
+}
 
-export const postQuestion = async (body: Omit<Question, "id">) => {
+export const postQuestion = async (body: QuestionBody) => {
   const { user } = await validateRequest();
   if (!user) return { error: "You need to be logged in to post a question" }
   try {
+    const { fileDetails, ...questionBody } = body;
     const question = await prisma.question.create({
       data: {
-        ...body,
+        ...questionBody,
         userId: user.id,
       }
-    })
+    });
+
+    // TODO: update question id in fileDetails
     revalidatePath('/questions')
     return { question };
   } catch (error) {
@@ -65,7 +71,8 @@ export const getQuestionBySlug = cache(async (slug: string) => {
             name: true,
             id: true
           }
-        }
+        },
+        fileDetails: true
       }
     })
     if (!question) throw new Error('Question not found')
@@ -109,7 +116,8 @@ export const getQuestions = async (queryString: string) => {
             name: true,
             id: true
           }
-        }
+        },
+        fileDetails: true
       },
       take: 10,
       skip: 0,

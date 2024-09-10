@@ -20,13 +20,13 @@ import { SoftwareSkills, categories, category1 } from "@/data";
 import TagsInput from "@/components/ui/tags-input";
 import React, { useState } from "react";
 import Link from "next/link";
-import { FileDetails } from "@prisma/client";
+import { Files } from "@prisma/client";
 import { useSession } from "@/hooks";
 import { createSlug } from "@/lib/functions";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import UploadFileCard from "@/components/upload-file-card";
 import Overlay from "@/components/loaders/overlay";
-import { postModel, postQuestion } from "@/actions";
+import { postQuestion } from "@/actions";
 import { toast } from "sonner"
 import { Question } from "@prisma/client"
 
@@ -104,10 +104,10 @@ export default function NewQuestion() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { files, ...other } = values;
     setIsLoading(true);
-    let fileDetails = [] as FileDetails[];
+    let fileDetails: Files[] = [];
 
     if (files.length) {
-      fileDetails = await handleUploadFiles(files) as FileDetails[];
+      fileDetails = await handleUploadFiles(files) as Files[];
       console.log(fileDetails);
       setIsLoading(false);
       return;
@@ -120,7 +120,7 @@ export default function NewQuestion() {
       fileDetails,
       slug,
       userId: session?.user.id!
-    } as Question
+    } as Question & { fileDetails: Files[] };
 
     const { error, question } = await postQuestion(body);
 
@@ -148,12 +148,12 @@ export default function NewQuestion() {
   return (
     <div className="absolute top-0 left-0 right-0 bottom-0 z-50">
       {isLoading && <Overlay />}
-      <div className="top-0 left-0 right-0 px-4 py-1 h-header bg-white border-b-slate-200 border-b z-10 flex items-center" style={{ background: bg1 }}>
+      <div className="top-0 sticky left-0 right-0 px-4 py-1 h-header bg-white border-b-slate-200 border-b z-10 flex items-center" style={{ background: bg1 }}>
         <div className="flex items-center justify-between py-1 flex-1">
           <p className="text-white text-lg">New Question</p>
 
           <div className="flex items-center gap-2">
-            <Link href="./" className='text-white py-2 px-3' >Cancel</Link>
+            <Link href="/dashboard/questions" className='text-white py-2 px-3' >Cancel</Link>
 
             <Button
               className="bg-orange-500 text-lg hover:bg-orange-600"

@@ -1,31 +1,28 @@
+import { getModels, getUsersBy } from '@/actions';
+import Await from '@/components/await';
+import SearchBar from '@/components/form/SearchBar';
+import ModelList from '@/components/model/model-list';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { validateRequest } from '@/lib/auth';
+import Link from 'next/link';
 import React, { Suspense } from 'react'
-import SearchBar from '@/components/form/SearchBar'
-import ModelList from '@/components/model/model-list'
-import { Skeleton } from '@/components/ui/skeleton'
-import { Metadata } from 'next'
-import { getModels } from '@/actions'
-import Await from '@/components/await'
 
-export const metadata: Metadata = {
-  title: 'Models',
+interface Props {
+  searchParams?: Record<string, string>;
+  params: { username: string };
 }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
-}) {
+const Page = async ({ searchParams }: Props) => {
+  const { user } = await validateRequest();
+  if (!user) return null;
 
   const filteredSearchParams = Object.fromEntries(
     Object.entries(searchParams ?? {}).filter(([key, value]) => value !== undefined)
   );
 
-  const params = new URLSearchParams(filteredSearchParams);
+  const params = new URLSearchParams({ ...filteredSearchParams, userId: user.id });
   const queryString = params.toString();
-
   const promise = getModels(queryString);
 
   return (
@@ -33,9 +30,11 @@ export default async function Page({
 
       <div className="flex items-center justify-between">
         <h1 className='text-3xl font-semibold'>Models</h1>
-        {/* <Link href={'/library/new'}>
-          <Button size={'sm'}>Upload New Model</Button>
-        </Link> */}
+        <Button size={'sm'} className='rounded-none' asChild>
+          <Link href={'/library/new'}>
+            Post Model
+          </Link>
+        </Button>
       </div>
       <SearchBar />
 
@@ -56,3 +55,5 @@ export default async function Page({
     </div>
   )
 }
+
+export default Page

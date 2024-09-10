@@ -6,6 +6,7 @@ export const getUsersBy = cache(async<K extends keyof User>(
     key: K,
     value: User[K],
 ): Promise<User | null> => {
+    if (!value) return null;
     try {
         const user = await prisma.user.findFirst({
             where: {

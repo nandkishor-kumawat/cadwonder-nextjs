@@ -1,9 +1,9 @@
 "use client"
-import { FileDetails } from '@prisma/client'
+import { Files } from '@prisma/client'
 import Image from 'next/image'
 import React from 'react'
 
-export default function FilePreview({ file }: { file: FileDetails }) {
+export default function FilePreview({ file }: { file: Files }) {
     const isImage = ['jpg', 'jpeg', 'png'].includes(file.name.split('.').at(-1) as string)
     return (
         <a

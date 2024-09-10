@@ -143,11 +143,13 @@ async function Page({ params: { slug } }: Props) {
                   />
                 </div>
               </div>
-              <div className='rounded-xl mx-auto border sticky bottom-0 border-orange-400/40 bg-orange-100 shadow-2xl flex-center flex-col aspect-square w-1/3'>
-                Pay Rs. 3 to get the answer
-                <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500" asChild>
-                  <Link href={`/login?callbackUrl=/questions/${slug}`}>Get Solution</Link>
-                </Button>
+              <div className="w-full">
+                <div className='rounded-xl mx-auto border sticky bottom-0 border-orange-400/40 bg-orange-100 shadow-2xl flex-center flex-col aspect-square w-full max-w-80'>
+                  Pay Rs. 3 to get the answer
+                  <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500" asChild>
+                    <Link href={`/login?callbackUrl=/questions/${slug}`}>Get Solution</Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

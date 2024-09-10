@@ -17,11 +17,6 @@ enum Role {
   ADMIN
 }
 
-type FileDetails {
-  name String
-  url  String
-}
-
 model User {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   email           String   @unique
@@ -106,32 +101,64 @@ model SocialLink {
 }
 
 model Question {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String        @map("user_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @map("user_id") @db.ObjectId
   question    String
   slug        String
   description String?
   category    String
   software    String?
-  fileDetails FileDetails[] @map("file_details")
-  views       Int?          @default(0)
-  answerCount Int?          @default(0) @map("answer_count")
+  fileDetails Files[]
+  views       Int?     @default(0)
+  answerCount Int?     @default(0) @map("answer_count")
   tags        String[]
-  createdAt   DateTime      @default(now()) @map("created_at")
+  createdAt   DateTime @default(now()) @map("created_at")
 
   user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   answers Answer[]
 
+  @@index([question, description])
   @@map("questions")
 }
 
+model Files {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  type        String
+  size        Int
+  url         String
+  textContent String?  @map("text_content")
+  questionId  String?  @map("question_id") @db.ObjectId
+  answerId    String?  @map("answer_id") @db.ObjectId
+  modelId     String?  @map("model_id") @db.ObjectId
+  searchId    String?  @map("search_id") @db.ObjectId
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  question Question? @relation(fields: [questionId], references: [id])
+  answer   Answer?   @relation(fields: [answerId], references: [id])
+  model    Model?    @relation(fields: [modelId], references: [id])
+  search   Search?   @relation(fields: [searchId], references: [id])
+
+  @@index([textContent])
+  @@map("files")
+}
+
+model Search {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  query     String
+  createdAt DateTime @default(now()) @map("created_at")
+  files     Files[]
+
+  @@map("searches")
+}
+
 model Answer {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String        @map("user_id") @db.ObjectId
-  questionId  String        @map("question_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @map("user_id") @db.ObjectId
+  questionId  String   @map("question_id") @db.ObjectId
   answer      String
-  fileDetails FileDetails[]
-  createdAt   DateTime      @default(now()) @map("created_at")
+  fileDetails Files[]
+  createdAt   DateTime @default(now()) @map("created_at")
 
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
@@ -140,16 +167,16 @@ model Answer {
 }
 
 model Model {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String        @map("user_id") @db.ObjectId
-  modelName   String        @map("model_name")
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @map("user_id") @db.ObjectId
+  modelName   String   @map("model_name")
   description String
   slug        String
   category    String[]
-  fileDetails FileDetails[] @map("file_details")
-  createdAt   DateTime      @default(now()) @map("created_at")
-  likesCount  Int?          @default(0) @map("likes_count")
-  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileDetails Files[]
+  createdAt   DateTime @default(now()) @map("created_at")
+  likesCount  Int?     @default(0) @map("likes_count")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   likes       Likes[]
 
   @@map("models")

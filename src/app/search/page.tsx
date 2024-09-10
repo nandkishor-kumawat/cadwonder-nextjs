@@ -31,9 +31,6 @@ export default async function Page({
 
       <div className="flex items-center justify-between">
         <h1 className='text-3xl font-semibold'>Questions</h1>
-        {/* <Link href={'/questions/new'}>
-          <Button size={'sm'}>Ask Question</Button>
-        </Link> */}
       </div>
 
       <SearchBar />

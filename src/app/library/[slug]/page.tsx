@@ -1,8 +1,7 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Metadata } from 'next';
 import DataInfo from '@/components/questions/data-info';
 import { siteMetadata } from '@/lib/siteMetaData';
-import { Model } from '@prisma/client';
 import { getModelBySlug } from '@/actions';
 import { notFound } from 'next/navigation';
 

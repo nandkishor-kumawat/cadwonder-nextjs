@@ -9,7 +9,7 @@ import { Textarea } from '../ui/textarea'
 import { Skeleton } from '../ui/skeleton'
 import UploadFileCard from '../upload-file-card'
 import Overlay from '../loaders/overlay'
-import { Answer, FileDetails } from '@prisma/client'
+import { Answer, Files } from '@prisma/client'
 
 
 interface Props {
@@ -70,17 +70,17 @@ export default function AnswerForm({ question_id }: Props) {
 
   const handleSubmit = async (formData: FormData) => {
     if (!user) return;
-    let fileDetails = [] as FileDetails[];
+    let fileDetails: Files[] = [];
 
     if (files.length) {
-      fileDetails = await handleUploadFiles(files) as FileDetails[];
+      fileDetails = await handleUploadFiles(files) as Files[];
     }
     const body = {
       questionId: question_id,
       answer: formData.get('answer') as string,
       fileDetails: fileDetails,
       userId: user?.id,
-    } as Answer;
+    } as Answer & { fileDetails: Files[] };
 
     await postAnswer(body);
     formRef.current?.reset();

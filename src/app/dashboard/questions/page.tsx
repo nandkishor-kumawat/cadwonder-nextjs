@@ -1,29 +1,27 @@
 import React, { Suspense } from 'react'
-import SearchBar from '@/components/form/SearchBar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Metadata } from 'next';
-import QuestionList from '@/components/questions/question-list';
 import Await from '@/components/await';
-import { getQuestions } from '@/actions';
+import QuestionList from '@/components/questions/question-list';
+import { getQuestions, getUsersBy } from '@/actions';
+import { validateRequest } from '@/lib/auth';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import SearchBar from '@/components/form/SearchBar';
 
-
-export const metadata: Metadata = {
-  title: 'Questions',
+interface Props {
+  searchParams?: Record<string, string>;
 }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: Record<string, string>;
-}) {
+const Page = async ({ searchParams }: Props) => {
+  const { user } = await validateRequest();
+  if (!user) return null;
 
   const filteredSearchParams = Object.fromEntries(
     Object.entries(searchParams ?? {}).filter(([key, value]) => value !== undefined)
   );
 
-  const params = new URLSearchParams(filteredSearchParams);
+  const params = new URLSearchParams({ ...filteredSearchParams, userId: user.id });
   const queryString = params.toString();
-
   const promise = getQuestions(queryString);
 
   return (
@@ -31,9 +29,11 @@ export default async function Page({
 
       <div className="flex items-center justify-between">
         <h1 className='text-3xl font-semibold'>Questions</h1>
-        {/* <Link href={'/questions/new'}>
-          <Button size={'sm'}>Ask Question</Button>
-        </Link> */}
+        <Button size={'sm'} className='rounded-none' asChild>
+          <Link href={'/questions/new'}>
+            Post Question
+          </Link>
+        </Button>
       </div>
 
       <SearchBar />
@@ -52,3 +52,5 @@ export default async function Page({
     </div>
   )
 }
+
+export default Page

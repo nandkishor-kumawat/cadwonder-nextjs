@@ -2,19 +2,20 @@
 
 import { validateRequest } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { Answer } from "@prisma/client";
+import { Answer, Files } from "@prisma/client";
 import { revalidatePath, revalidateTag } from "next/cache";
 
-export const postAnswer = async (data: Answer) => {
+export const postAnswer = async (data: Answer & { fileDetails: Files[] }) => {
 
   const { user } = await validateRequest();
   if (!user) return { error: "You need to be logged in to post an answer" }
 
   try {
+    const { fileDetails, ...answerBody } = data;
     const [answer] = await prisma.$transaction([
       prisma.answer.create({
         data: {
-          ...data,
+          ...answerBody,
           userId: user.id,
         }
       }),

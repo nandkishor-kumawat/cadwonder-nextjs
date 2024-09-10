@@ -1,23 +1,25 @@
 "use server"
 import { revalidatePath } from "next/cache"
 
-import { Model } from "@prisma/client";
+import { Files, Model } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { validateRequest } from "@/lib/auth";
 import { cache } from "react";
 
-export const postModel = async (body: Omit<Model, "id">) => {
+export const postModel = async (body: Model & { fileDetails: Files[] }) => {
 	const { user } = await validateRequest();
 	if (!user) return { error: "You need to be logged in to post a model" }
 	if (body.userId !== user.id) return { error: "You are not authorized to post this model" }
 	try {
+		const { fileDetails, ...modelBody } = body;
 		const model = await prisma.model.create({
 			data: {
-				...body,
+				...modelBody,
 				userId: user.id,
 
 			}
-		})
+		});
+		// TODO: update model id in fileDetails
 		revalidatePath('/library')
 		return { model };
 	} catch (error) {
@@ -107,7 +109,8 @@ export const getModelBySlug = cache(async (slug: string) => {
 						name: true,
 						id: true
 					}
-				}
+				},
+				fileDetails: true
 			}
 		})
 		if (!model) throw new Error('Model not found')
@@ -153,7 +156,8 @@ export const getModels = async (queryString: string) => {
 						name: true,
 						id: true
 					}
-				}
+				},
+				fileDetails: true
 			},
 			take: 10,
 			skip: 0,
