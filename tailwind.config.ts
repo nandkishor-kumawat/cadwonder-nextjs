@@ -57,6 +57,9 @@ module.exports = {
         header: "var(--header-height)",
         body: "calc(100vh - var(--header-height))",
       },
+      minHeight: {
+        body: "calc(100vh - var(--header-height))",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

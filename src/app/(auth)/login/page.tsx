@@ -49,7 +49,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const { session } = useSession();
+  const { session, update } = useSession();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { email, password } = values
@@ -77,6 +77,7 @@ export default function Page() {
         color: 'green'
       },
     });
+    update()
     router.replace(callbackUrl);
   }
 

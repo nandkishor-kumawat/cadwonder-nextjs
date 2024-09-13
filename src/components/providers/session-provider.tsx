@@ -1,15 +1,15 @@
 "use client";
 
 import { Session, User } from "lucia";
-import { createContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 
 type ISession = Session & {
     user: User;
 }
 
 export type SessionContextValue =
-    | { session: ISession; status: "authenticated" }
-    | { session: null; status: "loading" | "unauthenticated" };
+    | { session: ISession; status: "authenticated", update: () => void }
+    | { session: null; status: "loading" | "unauthenticated", update: () => void };
 
 
 
@@ -19,29 +19,29 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     const [session, setSession] = useState<ISession | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    useEffect(() => {
-        const fetchSession = async () => {
-            setIsLoading(true);
-            const res = await fetch(`/api/auth/session`).then(res => res.json());
-            if (res?.user && res?.session) {
-                setSession({ ...res.session, user: res.user });
-            } else {
-                setSession(null);
-            }
-        };
-
-        fetchSession();
+    const fetchSession = useCallback(async () => {
+        setIsLoading(true);
+        const res = await fetch(`/api/auth/session`).then(res => res.json());
+        if (res?.user && res?.session) {
+            setSession({ ...res.session, user: res.user });
+        } else {
+            setSession(null);
+        }
     }, []);
+
+    useEffect(() => {
+        fetchSession();
+    }, [fetchSession]);
 
     const sessionValue: SessionContextValue = useMemo(() => {
         if (session) {
-            return { session: session, status: "authenticated" };
+            return { session: session, status: "authenticated", update: fetchSession };
         } else if (isLoading) {
-            return { session: null, status: "loading" };
+            return { session: null, status: "loading", update: fetchSession };
         } else {
-            return { session: null, status: "unauthenticated" };
+            return { session: null, status: "unauthenticated", update: fetchSession };
         }
-    }, [session, isLoading]);
+    }, [session, isLoading, fetchSession]);
 
     return (
         <SessionContext.Provider value={sessionValue}>

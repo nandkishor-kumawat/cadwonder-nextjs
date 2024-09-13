@@ -23,10 +23,10 @@ import { toast } from 'sonner'
 const formSchema = z.object({
   modelName: z.string().min(5, {
     message: "Must be at least 5 characters"
-  }),
+  }).trim(),
   description: z.string().min(10, {
     message: "Must be at least 10 characters"
-  }),
+  }).trim(),
   category: z.array(z.string()),
   files: z.array(z.instanceof(File)).refine((files) => files.length > 0, {
     message: "Please select at least one file"
@@ -58,24 +58,22 @@ function NewModal() {
 
   const handleUploadFiles = async (files: File[]) => {
     if (!files) return [];
-    //TODO
 
-    // const uploadPromises = files.map((file, index) => {
-    //   return uploadFileWithProgress(file, index, (progressIndex, progress) => {
-    //     setUploadProgress((prevProgress) => ({
-    //       ...prevProgress,
-    //       [progressIndex]: progress,
-    //     }));
-    //   });
-    // });
+    const uploadPromises = files.map(async (file, index) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      return fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      }).then((response) => response.json());
+    });
 
-    // try {
-    //   const results = await Promise.all(uploadPromises);
-
-    //   return results;
-    // } catch (error) {
-    //   console.error('Error uploading files:', error);
-    // }
+    try {
+      const results = await Promise.all(uploadPromises);
+      return results;
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
   };
 
 
@@ -98,7 +96,7 @@ function NewModal() {
       fileDetails
     } as Model & { fileDetails: Files[] };
 
-    const { error } = await postModel(body);
+    const { error, model } = await postModel(body);
     setIsLoading(false);
     if (error) {
       toast.error(error, {
@@ -108,7 +106,7 @@ function NewModal() {
       });
       return;
     }
-
+    console.table(model)
     toast.success(`Model uploaded successfully`, {
       style: {
         color: 'green'

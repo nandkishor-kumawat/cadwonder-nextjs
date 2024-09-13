@@ -54,7 +54,7 @@ export const signIn = async ({
     }
 
     await createSession(user.id);
-    revalidatePath('/', 'layout')
+    revalidatePath('/', 'layout');
     return {
         user
     }

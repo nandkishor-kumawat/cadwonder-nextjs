@@ -12,7 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { Input, NumberInput } from "@/components/ui/input"
 import { SelectWithSearch } from "@/components/form/SelectWithSearch";
 import { bg1 } from "@/data/colors";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,8 +34,9 @@ import { Question } from "@prisma/client"
 const formSchema = z.object({
   question: z.string().min(10, {
     message: "Question must be at least 10 characters",
-  }),
-  description: z.string().optional(),
+  }).trim(),
+  price: z.string().refine(n => +n <= 15, { message: "Price must be less than or equal to 15" }),
+  description: z.string().trim().optional(),
   category: z.string().refine(data => categories.includes(data), { message: "Please select a valid category" }),
   software: z.string(),
   tags: z.array(z.string()).max(6, { message: "You can only add up to 6 tags" }),
@@ -58,6 +59,7 @@ export default function NewQuestion() {
     defaultValues: {
       question: "",
       description: "",
+      price: "0",
       category: "",
       software: "",
       tags: [],
@@ -78,8 +80,6 @@ export default function NewQuestion() {
 
   const handleUploadFiles = async (files: File[]) => {
     if (!files) return [];
-
-    //TODO
 
     const uploadPromises = files.map(async (file, index) => {
       const formData = new FormData();
@@ -102,37 +102,32 @@ export default function NewQuestion() {
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { files, ...other } = values;
+    const { files, price, ...other } = values;
     setIsLoading(true);
     let fileDetails: Files[] = [];
 
     if (files.length) {
       fileDetails = await handleUploadFiles(files) as Files[];
-      console.log(fileDetails);
-      setIsLoading(false);
-      return;
     }
 
     const slug = await createSlug('questions', 'slug', other.question);
 
     const body = {
       ...other,
+      price: +price,
       fileDetails,
       slug,
       userId: session?.user.id!
     } as Question & { fileDetails: Files[] };
 
     const { error, question } = await postQuestion(body);
-
     setIsLoading(false);
+
     if (error) {
-      toast.error(error, {
-        style: {
-          color: 'red'
-        }
-      });
+      toast.error(error, { style: { color: 'red' } });
       return;
     }
+
     console.table(question);
     toast.success(`Question created successfully`, {
       style: {
@@ -157,6 +152,7 @@ export default function NewQuestion() {
 
             <Button
               className="bg-orange-500 text-lg hover:bg-orange-600"
+              disabled={isLoading}
               onClick={form.handleSubmit(onSubmit)}
             >{isLoading ? 'Publishing...' : 'Publish'}</Button>
           </div>
@@ -179,6 +175,7 @@ export default function NewQuestion() {
               )}
             />
 
+
             <FormField
               control={form.control}
               name="description"
@@ -187,6 +184,20 @@ export default function NewQuestion() {
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Describe your question" rows={5} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <NumberInput placeholder="Enter price" {...field} min={0} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -12,6 +12,7 @@ type QuestionBody = Question & {
 
 export const postQuestion = async (body: QuestionBody) => {
   const { user } = await validateRequest();
+
   if (!user) return { error: "You need to be logged in to post a question" }
   try {
     const { fileDetails, ...questionBody } = body;
@@ -22,7 +23,15 @@ export const postQuestion = async (body: QuestionBody) => {
       }
     });
 
-    // TODO: update question id in fileDetails
+    if (fileDetails.length) {
+      await prisma.files.createMany({
+        data: fileDetails.map((file) => ({
+          ...file,
+          questionId: question.id
+        }))
+      })
+    }
+
     revalidatePath('/questions')
     return { question };
   } catch (error) {

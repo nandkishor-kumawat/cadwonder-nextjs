@@ -3,7 +3,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+  extends React.InputHTMLAttributes<HTMLInputElement> { }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
@@ -22,4 +22,22 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 )
 Input.displayName = "Input"
 
-export { Input }
+const NumberInput = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, type, ...props }, ref) => {
+    return (
+      <Input className={className}
+        ref={ref}
+        {...props}
+        onChange={(e) => {
+          const value = e.target.value;
+          if (new RegExp(/^\d*$/).test(value)) {
+            props?.onChange?.(e);
+          }
+        }}
+      />
+    )
+  }
+)
+NumberInput.displayName = "NumberInput"
+
+export { Input, NumberInput }

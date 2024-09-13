@@ -37,7 +37,15 @@ export async function POST(request: Request) {
         });
 
         const fileUrl = await getDownloadURL(fileRef)
-        return NextResponse.json({ url: fileUrl, fileName: fileRef.name });
+
+        const fileInfo = {
+            name: fileRef.name,
+            size: file.size,
+            url: fileUrl,
+            type: file.type,
+        }
+
+        return NextResponse.json(fileInfo, { status: 201 });
     } catch (error) {
         return NextResponse.json({ error: (error as Error).message }, { status: 500 });
     }

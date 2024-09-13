@@ -21,19 +21,21 @@ import { Role } from '@prisma/client';
 
 const MenuItems = () => {
 
-  const router = useRouter()
+  const router = useRouter();
+
+  const { session, update } = useSession();
 
   const handleLogout = async () => {
     await signOut();
+    update();
     router.push('/login');
   }
 
-  const { session } = useSession();
   const navLinks = useMemo(() => {
     const links = [
       { name: 'Home', href: '/', },
       { name: 'Questions', href: '/questions', },
-      { name: 'Users', href: '/users', },
+      // { name: 'Users', href: '/users', },
       { name: 'Library', href: '/library', },
       { name: 'Dashboard', href: '/dashboard', },
     ]

@@ -6,7 +6,7 @@ import React from 'react'
 
 const page = async () => {
   return (
-    <div className='relative h-full container p-2'>
+    <div className='relative h-body container p-2'>
       <div className="absolute inset-0 -z-10">
         <Image src="/banner.webp" alt="hero" fill />
       </div>

@@ -8,6 +8,7 @@ import { siteMetadata } from '@/lib/siteMetaData'
 import NextTopLoader from 'nextjs-toploader';
 import { SessionProvider, ThemeProvider } from '@/components/providers'
 import { Footer } from '@/components/footer'
+import { cn } from '@/lib/utils'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -60,7 +61,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={cn(inter.className)}>
         <NextTopLoader color='rgb(251 146 60)' showSpinner={false} />
         <SessionProvider>
           <Toaster position="top-right" duration={2000} />
@@ -76,14 +77,17 @@ export default function RootLayout({
             ) : null}
 
             <Header />
+
             <div className='h-body'>
               <div className="h-full overflow-hidden">
                 <div className="h-full overflow-y-auto scrollbar">
-                  {children}
+                  <div className="min-h-body">
+                    {children}
+                  </div>
+                  <Footer />
                 </div>
               </div>
             </div>
-            <Footer />
           </ThemeProvider>
         </SessionProvider>
       </body>

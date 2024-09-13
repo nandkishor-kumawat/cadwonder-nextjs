@@ -19,7 +19,16 @@ export const postModel = async (body: Model & { fileDetails: Files[] }) => {
 
 			}
 		});
-		// TODO: update model id in fileDetails
+
+		if (fileDetails.length) {
+			await prisma.files.createMany({
+				data: fileDetails.map((file) => ({
+					...file,
+					modelId: model.id
+				}))
+			})
+		}
+
 		revalidatePath('/library')
 		return { model };
 	} catch (error) {
