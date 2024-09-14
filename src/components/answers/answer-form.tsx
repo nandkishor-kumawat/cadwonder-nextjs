@@ -10,7 +10,7 @@ import { Skeleton } from '../ui/skeleton'
 import UploadFileCard from '../upload-file-card'
 import Overlay from '../loaders/overlay'
 import { Answer, Files } from '@prisma/client'
-
+import { toast } from "sonner"
 
 interface Props {
   question_id: string
@@ -47,25 +47,26 @@ export default function AnswerForm({ question_id }: Props) {
     setFiles(updatedFiles);
   };
 
+
   const handleUploadFiles = async (files: File[]) => {
     if (!files) return [];
-    //TODO
 
-    // const uploadPromises = files.map((file, index) => {
-    //   return uploadFileWithProgress(file, index, (progressIndex, progress) => {
-    //     setUploadProgress((prevProgress) => ({
-    //       ...prevProgress,
-    //       [progressIndex]: progress,
-    //     }));
-    //   });
-    // });
+    const uploadPromises = files.map(async (file, index) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      return fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      }).then((response) => response.json());
+    });
 
-    // try {
-    //   const results = await Promise.all(uploadPromises);
-    //   return results;
-    // } catch (error) {
-    //   console.error('Error uploading files:', error);
-    // }
+    try {
+      const results = await Promise.all(uploadPromises);
+
+      return results;
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
   };
 
   const handleSubmit = async (formData: FormData) => {
@@ -82,7 +83,15 @@ export default function AnswerForm({ question_id }: Props) {
       userId: user?.id,
     } as Answer & { fileDetails: Files[] };
 
-    await postAnswer(body);
+    const { answer } = await postAnswer(body);
+    console.table(answer);
+
+    toast.success(`Answer posted successfully`, {
+      style: {
+        color: 'green'
+      }
+    });
+
     formRef.current?.reset();
     setFiles([]);
     setUploadProgress({});

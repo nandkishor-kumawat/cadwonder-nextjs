@@ -8,7 +8,7 @@ import { siteMetadata } from '@/lib/siteMetaData'
 import NextTopLoader from 'nextjs-toploader';
 import { SessionProvider, ThemeProvider } from '@/components/providers'
 import { Footer } from '@/components/footer'
-import { cn } from '@/lib/utils'
+import { validateRequest } from '@/lib/auth'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -54,16 +54,17 @@ export const metadata: Metadata = {
 
 
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const session = await validateRequest();
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(inter.className)}>
+      <body className={inter.className}>
         <NextTopLoader color='rgb(251 146 60)' showSpinner={false} />
-        <SessionProvider>
+        <SessionProvider value={session}>
           <Toaster position="top-right" duration={2000} />
           <ThemeProvider
             attribute="class"

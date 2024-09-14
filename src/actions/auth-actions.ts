@@ -1,6 +1,5 @@
 "use server"
 
-import { RedirectType, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { hash, verify } from "@node-rs/argon2";
 import prisma from "@/lib/prisma";

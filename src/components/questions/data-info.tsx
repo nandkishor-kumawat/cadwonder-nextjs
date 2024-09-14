@@ -1,19 +1,23 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import Link from 'next/link';
-import { Files, Model, Question } from '@prisma/client';
+import { Files, Model, Prisma, Question } from '@prisma/client';
 import FilePreview from '../answers/file-preview';
 import { validateRequest } from '@/lib/auth';
+
+type User = Prisma.UserGetPayload<{
+    select: {
+        id: true;
+        name: true;
+        profilePicture: true;
+        username: true;
+    }
+}>
 
 
 interface Props {
     data: (Question | Model) & {
-        user: {
-            id: string;
-            name: string;
-            profilePicture: string | null | undefined;
-            username: string;
-        },
+        user: User,
         fileDetails: Files[];
     }
     title: string;
@@ -39,7 +43,11 @@ export default async function DataInfo({ data, title }: Props) {
                     </div>
 
                     <div className='my-2'>
-                        <h1 className='text-2xl font-bold text-justify'>{title}</h1>
+                        <h1 className='font-bold text-justify'
+                            style={{
+                                fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+                            }}
+                        >{title}</h1>
                     </div>
 
                     <div className="deails my-1 min-h-[3rem]">

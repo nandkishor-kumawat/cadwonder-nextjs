@@ -30,6 +30,16 @@ export const postAnswer = async (data: Answer & { fileDetails: Files[] }) => {
         }
       })
     ]);
+
+    if (fileDetails.length) {
+      await prisma.files.createMany({
+        data: fileDetails.map((file) => ({
+          ...file,
+          answerId: answer.id
+        }))
+      })
+    }
+
     revalidatePath(`/questions/[slug]`, "page");
     return { answer };
 
@@ -82,7 +92,15 @@ export const getAnswersByQuestionId = async (questionId: string) => {
         questionId
       },
       include: {
-        user: true,
+        user: {
+          select: {
+            username: true,
+            profilePicture: true,
+            name: true,
+            id: true,
+          }
+        },
+        fileDetails: true
       },
       orderBy: {
         createdAt: 'asc'

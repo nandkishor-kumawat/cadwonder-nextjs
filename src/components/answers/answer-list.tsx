@@ -6,10 +6,8 @@ import { Answer } from '@prisma/client';
 export default async function AnswerList({ question_id }: { question_id: string }) {
     const { answers, error } = await getAnswersByQuestionId(question_id);
     return (
-        answers ? (
-            answers.map((answer: any) => (
-                <AnswerItem key={answer.id} answer={answer} />
-            ))
-        ) : null
+        answers?.map((answer: any) => (
+            <AnswerItem key={answer.id} answer={answer} />
+        ))
     )
 }

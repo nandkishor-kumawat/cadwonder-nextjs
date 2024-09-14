@@ -23,11 +23,11 @@ const MenuItems = () => {
 
   const router = useRouter();
 
-  const { session, update } = useSession();
+  const { session } = useSession();
 
   const handleLogout = async () => {
     await signOut();
-    update();
+
     router.push('/login');
   }
 
@@ -36,7 +36,7 @@ const MenuItems = () => {
       { name: 'Home', href: '/', },
       { name: 'Questions', href: '/questions', },
       // { name: 'Users', href: '/users', },
-      { name: 'Library', href: '/library', },
+      // { name: 'Library', href: '/library', },
       { name: 'Dashboard', href: '/dashboard', },
     ]
     if (session?.user?.role !== Role.ADMIN) links.pop();

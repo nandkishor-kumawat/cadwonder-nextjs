@@ -1,10 +1,11 @@
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import prisma from "./prisma";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { cache } from "react";
 import { Lucia, User, Session } from "lucia";
 import { Google } from "arctic";
 import { User as PrismaUser } from "@prisma/client";
+import { userAgent } from "next/server";
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
@@ -58,7 +59,16 @@ export const validateRequest = cache(
 );
 
 export const createSession = async (userId: string, provider: 'google' | 'credentials' = 'credentials') => {
-    const session = await lucia.createSession(userId, { provider });
+    const h = headers();
+    const { ua, browser, os } = userAgent({ headers: h });
+    const { ip } = await fetch('https://api.ipify.org?format=json').then(res => res.json());
+    const deviceInfo = {
+        userAgent: ua,
+        browser: `${browser.name} ${browser.version}`,
+        os: `${os.name} ${os.version}`,
+        ip
+    }
+    const session = await lucia.createSession(userId, { provider, ...deviceInfo });
     const sessionCookie = lucia.createSessionCookie(session.id);
     cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
     return session;

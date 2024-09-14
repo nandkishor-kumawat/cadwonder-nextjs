@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import DataInfo from '@/components/questions/data-info';
 import { updateViewCount } from '@/lib/functions';
 import QuestionStates from '@/components/questions/question-states';
-import { FaRegEdit, FaShareSquare } from 'react-icons/fa';
+import { FaRegEdit, FaRupeeSign, FaShareSquare } from 'react-icons/fa';
 import FollowButton from '@/components/user-profile/follow-button';
 import { siteMetadata } from '@/lib/siteMetaData';
 import { MdDeleteForever } from 'react-icons/md';
@@ -68,6 +68,7 @@ async function Page({ params: { slug } }: Props) {
   if (error) return <div>Error</div>
   if (!question) return <div>Question not found</div>
 
+  // TODO: Update view count
   await updateViewCount(question.id);
 
   const date = new Date(question.createdAt).toLocaleDateString('en-US', {
@@ -92,6 +93,8 @@ async function Page({ params: { slug } }: Props) {
   }
 
   const isAdmin = user?.role === Role.ADMIN;
+  const isOwner = isAdmin && (question.userId === user?.id);
+  const isUnlocked = isOwner || 1;
 
   return (
     <>
@@ -106,22 +109,44 @@ async function Page({ params: { slug } }: Props) {
             <DataInfo data={question} title={question.question} />
 
             <div className="flex flex-col gap-3">
-              <div className="answers my-2 flex flex-col gap-2">
-                <Suspense fallback={
-                  <>
-                    {/* <AnswerFallback /> */}
-                    {/* <AnswerFallback /> */}
-                  </>}>
+              {!isUnlocked ? (<div className="answers my-2 flex flex-col gap-2">
+                <Suspense fallback={<AnswerFallback />}>
                   <AnswerList question_id={question.id} />
                 </Suspense>
-              </div>
+              </div>) : (
+                <>
+                  <div className='w-full relative'>
+                    <div className='absolute inset-0'>
+                      <Image
+                        src={'/blur.png'}
+                        quality={50}
+                        alt={'blur'}
+                        width={1000}
+                        height={500}
+                        sizes={'100vw'}
+                        className='w-full md:h-80 h-60'
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full">
+                    <div className='rounded-xl mx-auto border sticky bottom-0 border-orange-400/40 bg-orange-100 shadow-2xl flex-center flex-col aspect-square w-full md:max-w-80 max-w-60'>
+                      <p className="flex items-center gap-1">Pay <span className="flex items-center"><FaRupeeSign size={15} />{question.price}</span> to get the answer</p>
+                      <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500" asChild>
+                        <Link href={`/login?callbackUrl=/questions/${slug}`}>Get Solution</Link>
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              )}
 
 
-              {/* {isAdmin && (
+              {isOwner && (
                 <div className='my-2'>
                   {session ? (
                     <>
-                      <h1 className='text-2xl font-bold'>Drop your answer</h1>
+                      <h1 className='font-bold' style={{
+                        fontSize: 'clamp(1.25rem, 2.5vw, 1.5rem)',
+                      }}>Drop your answer</h1>
                       <AnswerForm question_id={question.id} />
                     </>
                   ) :
@@ -130,27 +155,8 @@ async function Page({ params: { slug } }: Props) {
                     </Button>
                   }
                 </div>
-              )} */}
+              )}
 
-              <div className='w-full relative'>
-                <div className='absolute inset-0'>
-                  <Image
-                    src={'/blur.png'}
-                    alt={'blur'}
-                    width={1000}
-                    height={500}
-                    className='w-full h-auto'
-                  />
-                </div>
-              </div>
-              <div className="w-full">
-                <div className='rounded-xl mx-auto border sticky bottom-0 border-orange-400/40 bg-orange-100 shadow-2xl flex-center flex-col aspect-square w-full max-w-80'>
-                  Pay Rs. 3 to get the answer
-                  <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500" asChild>
-                    <Link href={`/login?callbackUrl=/questions/${slug}`}>Get Solution</Link>
-                  </Button>
-                </div>
-              </div>
             </div>
           </div>
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import QuestionCard from './question-item'
-import { Question } from '@prisma/client'
 import { getQuestions } from '@/actions'
 
 export default function QuestionList({ questions }: { questions: Awaited<ReturnType<typeof getQuestions>> }) {

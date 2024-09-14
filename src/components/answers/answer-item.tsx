@@ -1,7 +1,7 @@
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import Link from 'next/link'
-import { Answer, Prisma, User } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import DeleteAnswerButton from './delete-answer-button'
 import FilePreview from './file-preview'
 import { validateRequest } from '@/lib/auth'

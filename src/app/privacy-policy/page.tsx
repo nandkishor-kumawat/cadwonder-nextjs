@@ -172,10 +172,10 @@ const page = () => {
                 </p>
                 <ul>
                     <li>Google</li>
-                    <li>Facebook</li>
+                    {/* <li>Facebook</li>
                     <li>Instagram</li>
                     <li>Twitter</li>
-                    <li>LinkedIn</li>
+                    <li>LinkedIn</li> */}
                 </ul>
                 <p>
                     If You decide to register through or otherwise grant us access to a
@@ -220,12 +220,7 @@ const page = () => {
                     Cookies can be &quot;Persistent&quot; or &quot;Session&quot; Cookies.
                     Persistent Cookies remain on Your personal computer or mobile device when You
                     go offline, while Session Cookies are deleted as soon as You close Your web
-                    browser. Learn more about cookies on the
-                    <a
-                        href="https://www.freeprivacypolicy.com/blog/sample-privacy-policy-template/#Use_Of_Cookies_And_Tracking"
-                        target="_blank"
-                    >Free Privacy Policy website</a>
-                    article.
+                    browser.
                 </p>
                 <p>
                     We use both Session and Persistent Cookies for the purposes set out below:

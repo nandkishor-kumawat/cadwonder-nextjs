@@ -49,7 +49,7 @@ export const Footer = () => {
             <div className="container mx-auto mt-8 px-6 text-sm text-gray-400">
                 <p>&copy; 2024 CadWonder. All rights reserved.</p>
                 <div className="flex space-x-4 mt-4">
-                    <Link href="#" className="hover:underline">Terms of Service</Link>
+                    {/* <Link href="#" className="hover:underline">Terms of Service</Link> */}
                     <Link href="/privacy-policy" className="hover:underline">Privacy Policy</Link>
                     {/* <Link href="#" className="hover:underline">Cookie Policy</Link> */}
                 </div>
