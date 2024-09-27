@@ -109,7 +109,7 @@ async function Page({ params: { slug } }: Props) {
             <DataInfo data={question} title={question.question} />
 
             <div className="flex flex-col gap-3">
-              {!isUnlocked ? (<div className="answers my-2 flex flex-col gap-2">
+              {isUnlocked ? (<div className="answers my-2 flex flex-col gap-2">
                 <Suspense fallback={<AnswerFallback />}>
                   <AnswerList question_id={question.id} />
                 </Suspense>

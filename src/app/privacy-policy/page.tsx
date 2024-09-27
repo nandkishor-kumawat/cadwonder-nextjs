@@ -1,5 +1,6 @@
 import React from 'react';
 import './privacy.css'
+import { siteMetadata } from '@/lib/siteMetaData';
 
 const page = () => {
     return (
@@ -506,13 +507,17 @@ const page = () => {
                 <h2>Contact Us</h2>
                 <p>If you have any questions about this Privacy Policy, You can contact us:</p>
                 <ul>
-                    <li>
-                        By email:{' '}
+                    <li>Email:&nbsp;
                         <a
                             style={{ all: 'unset', color: 'blue', cursor: 'pointer' }}
-                            href="email:harshkumarmeena31@gmail.com"
-                        >harshkumarmeena31@gmail.com</a>
+                            href={`mailto:${siteMetadata.email}`}>{siteMetadata.email}</a>
                     </li>
+                    <li>Phone:&nbsp;
+                        <a
+                            style={{ all: 'unset', color: 'blue', cursor: 'pointer' }}
+                            href={`tel:${siteMetadata.phone}`}>{siteMetadata.phone}</a>
+                    </li>
+                    <li>Address: {siteMetadata.address}</li>
                 </ul>
 
             </div>

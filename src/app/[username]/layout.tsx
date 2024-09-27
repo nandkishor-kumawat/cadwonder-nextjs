@@ -6,7 +6,7 @@ interface Props extends PropsWithChildren {
 }
 
 export default function Layout({ children, params: { username } }: Props) {
-    return <p>Nothing Here!</p>;
+    // return <p>Nothing Here!</p>;
     return (
         <div className='h-body'>
             <UserDetailsBanner username={username} />

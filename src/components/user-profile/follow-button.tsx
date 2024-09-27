@@ -32,18 +32,18 @@ const FollowButton = ({ following_id, username, className }: Props) => {
 
 
     const doFollowUnfollow = useCallback(async () => {
-        if (!isFollowing) {
-            // TODO: Add follower
-            // await addDoc(collection(db, "followers"), {
-            //     follower_id: user_id,
-            //     following_id
-            // });
-        } else {
-            // TODO: Remove follower
-            // const docRef = doc(db, "followers", isFollowing.id);
-            // await deleteDoc(docRef);
-        }
-    }, [isFollowing, user_id, following_id]);
+        // if (!isFollowing) {
+        // TODO: Add follower
+        // await addDoc(collection(db, "followers"), {
+        //     follower_id: user_id,
+        //     following_id
+        // });
+        // } else {
+        // TODO: Remove follower
+        // const docRef = doc(db, "followers", isFollowing.id);
+        // await deleteDoc(docRef);
+        // }
+    }, []);
 
 
     const unVisible = isSameUser || status === 'loading' || status === 'unauthenticated';

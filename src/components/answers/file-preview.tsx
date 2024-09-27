@@ -5,14 +5,14 @@ import React, { useEffect, useState } from 'react'
 
 export default function FilePreview({ file }: { file: Files }) {
     const isImage = file.type.startsWith('image');
-    const secureUrl = '/api/media/' + file.name;
+    const secureUrl = `/api/media/${file.name}`;
     const [localUrl, setLocalUrl] = useState('');
 
     useEffect(() => {
         (async () => {
             const response = await fetch(secureUrl);
             if (!response.ok) {
-                console.error('Failed to fetch file:', file.name);
+                console.error('Failed to fetch file:', secureUrl);
                 return;
             }
             const blob = await response.blob();
