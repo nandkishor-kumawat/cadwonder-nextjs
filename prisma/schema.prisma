@@ -17,6 +17,12 @@ enum Role {
   ADMIN
 }
 
+enum Status {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
 model User {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   email           String   @unique
@@ -36,15 +42,16 @@ model User {
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
-  socialLinks SocialLink[]
-  experiences Experience[]
-  educations  Education[]
-  sessions    Session[]
-  questions   Question[]
-  answers     Answer[]
-  models      Model[]
-  comments    Comment[]
-  likes       Likes[]
+  socialLinks  SocialLink[]
+  experiences  Experience[]
+  educations   Education[]
+  sessions     Session[]
+  questions    Question[]
+  answers      Answer[]
+  models       Model[]
+  comments     Comment[]
+  likes        Likes[]
+  transactions Transaction[]
 
   @@map("users")
 }
@@ -63,6 +70,28 @@ model Session {
   createdAt DateTime   @default(now()) @map("created_at")
 
   @@map("sessions")
+}
+
+model Transaction {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  @map("user_id") @db.ObjectId
+  questionId  String? @map("question_id") @db.ObjectId
+  amount      Float
+  status      Status  @default(PENDING)
+  orderId     String  @unique @map("order_id")
+  currency    String
+  paymentId   String? @map("payment_id")
+  signature   String?
+  description String?
+  receipt     String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User?     @relation(fields: [userId], references: [id])
+  question Question? @relation(fields: [questionId], references: [id])
+
+  @@map("transactions")
 }
 
 model Experience {
@@ -119,8 +148,9 @@ model Question {
   tags        String[]
   createdAt   DateTime @default(now()) @map("created_at")
 
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  answers Answer[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answers      Answer[]
+  transactions Transaction[]
 
   @@index([question, description])
   @@map("questions")

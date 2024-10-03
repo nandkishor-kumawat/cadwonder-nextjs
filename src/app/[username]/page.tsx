@@ -3,11 +3,11 @@ import EducationDetailCard from '@/components/edit-profile/EducationDetailCard';
 import ExperienceDetailCard from '@/components/edit-profile/ExperienceDetailCard';
 import { Button } from '@/components/ui/button';
 import { notFound } from 'next/navigation';
-import { getUserInfo } from '@/actions';
+import { userActions } from '@/actions';
 
 export default async function Page({ params: { username } }: { params: { username: string } }) {
 
-    const user = await getUserInfo(username);
+    const user = await userActions.getUserInfo(username);
 
     if (!user) notFound();
 

@@ -1,8 +1,12 @@
 import React from 'react'
 import QuestionCard from './question-item'
-import { getQuestions } from '@/actions'
+import { questionActions } from '@/actions';
 
-export default function QuestionList({ questions }: { questions: Awaited<ReturnType<typeof getQuestions>> }) {
+interface Props {
+  questions: Awaited<ReturnType<typeof questionActions.getQuestions>>
+}
+
+export default function QuestionList({ questions }: Props) {
   return (
     <div className='pb-2'>
       {questions.length === 0 && <p className="text-center text-gray-500">No questions found</p>}

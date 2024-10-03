@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { FaEdit } from 'react-icons/fa'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import Await from '@/components/await'
-import { validateRequest } from '@/lib/auth'
-import { getUserStats } from '@/actions'
+import { getAuth } from '@/lib/auth'
+import { userActions } from '@/actions'
 import { Role } from '@prisma/client'
 
 export const metadata: Metadata = {
@@ -14,14 +14,14 @@ export const metadata: Metadata = {
 
 async function Dashboard() {
 
-  const { user } = await validateRequest();
+  const { user } = await getAuth();
   if (!user || user.role !== Role.ADMIN) return (
     <div className="h-full w-full flex-center">
       <h1 className='text-3xl font-semibold text-center'>You are not authorized to view this page</h1>
     </div>
   );
 
-  const promise = getUserStats(user.id);
+  const promise = userActions.getUserStats(user.id);
 
 
   return (

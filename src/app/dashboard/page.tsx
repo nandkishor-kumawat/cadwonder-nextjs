@@ -1,8 +1,8 @@
-import { validateRequest } from '@/lib/auth';
+import { getAuth } from '@/lib/auth';
 import React from 'react'
 
 const page = async () => {
-    const { user } = await validateRequest();
+    const { user } = await getAuth();
     if (!user) return <div>You are not authorized to view this page</div>;
     return (
         <div>

@@ -12,11 +12,12 @@ import { MdDeleteForever } from 'react-icons/md';
 import QuestionDeleteButton from '@/components/questions/question-delete-button';
 import AnswerList from '@/components/answers/answer-list';
 import { AnswerFallback } from '@/components/fallbacks';
-import { getQuestionBySlug } from '@/actions';
+import { questionActions } from '@/actions';
 import Link from 'next/link';
-import { validateRequest } from '@/lib/auth';
+import { getAuth } from '@/lib/auth';
 import Image from 'next/image';
 import { Role } from '@prisma/client';
+import PaymentBtn from './payment-btn';
 
 type Props = {
   params: { slug: string };
@@ -29,7 +30,7 @@ export async function generateMetadata({
 
   const url = `${siteMetadata.siteUrl}/questions/${slug}`;
 
-  const { question, error } = await getQuestionBySlug(slug);
+  const { question, error } = await questionActions.getQuestionBySlug(slug);
   if (!question) return {};
   const publishedAt = new Date(question.createdAt).toISOString();
 
@@ -62,12 +63,10 @@ export async function generateMetadata({
 
 
 async function Page({ params: { slug } }: Props) {
-  const { question, error } = await getQuestionBySlug(slug);
-  const { session, user } = await validateRequest();
-
+  const { question, error } = await questionActions.getQuestionBySlug(slug);
+  const { session, user } = await getAuth();
   if (error) return <div>Error</div>
   if (!question) return <div>Question not found</div>
-
   // TODO: Update view count
   await updateViewCount(question.id);
 
@@ -93,8 +92,8 @@ async function Page({ params: { slug } }: Props) {
   }
 
   const isAdmin = user?.role === Role.ADMIN;
-  const isOwner = isAdmin && (question.userId === user?.id);
-  const isUnlocked = isOwner || 1;
+  const isOwner = user?.id === question.userId;
+  const isUnlocked = isOwner || await questionActions.isQuestionUnlocked(question.id);
 
   return (
     <>
@@ -131,9 +130,7 @@ async function Page({ params: { slug } }: Props) {
                   <div className="w-full">
                     <div className='rounded-xl mx-auto border sticky bottom-0 border-orange-400/40 bg-orange-100 shadow-2xl flex-center flex-col aspect-square w-full md:max-w-80 max-w-60'>
                       <p className="flex items-center gap-1">Pay <span className="flex items-center"><FaRupeeSign size={15} />{question.price}</span> to get the answer</p>
-                      <Button className="rounded-none py-1 my-3 h-8 bg-orange-400 hover:bg-orange-500" asChild>
-                        <Link href={`/login?callbackUrl=/questions/${slug}`}>Get Solution</Link>
-                      </Button>
+                      <PaymentBtn questionId={question.id} amount={question.price} />
                     </div>
                   </div>
                 </>

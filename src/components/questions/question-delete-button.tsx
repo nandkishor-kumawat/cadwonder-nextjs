@@ -2,7 +2,7 @@
 import React, { useTransition } from 'react'
 import { Button } from '../ui/button'
 import { MdDeleteForever } from 'react-icons/md'
-import { deleteQuestion } from '@/actions';
+import { questionActions } from '@/actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
@@ -12,7 +12,7 @@ export default function QuestionDeleteButton({ id }: { id: string }) {
 
     const deleteQue = () => {
         startTransition(async () => {
-            const { error, message } = await deleteQuestion(id);
+            const { error, message } = await questionActions.deleteQuestion(id);
             toast(error ?? message, {
                 style: {
                     color: error ? "red" : "green"

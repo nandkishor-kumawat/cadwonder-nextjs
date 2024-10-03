@@ -3,16 +3,16 @@ import Link from 'next/link'
 import React from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { validateRequest } from '@/lib/auth'
-import { getUserStats } from '@/actions'
+import { getAuth } from '@/lib/auth'
+import { userActions } from '@/actions'
 import Await from '../await'
 
 const UserInfo = async () => {
 
-    const { user } = await validateRequest();
+    const { user } = await getAuth();
     if (!user) return null;
 
-    const promise = getUserStats(user.id);
+    const promise = userActions.getUserStats(user.id);
 
     return (
         <div className={`h-3/5 relative`}>

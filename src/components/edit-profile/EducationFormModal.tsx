@@ -22,7 +22,7 @@ import { Button } from '../ui/button'
 import { ScrollArea } from '../ui/scroll-area'
 import { Education } from '@prisma/client'
 import { YEARS } from '@/data/time-period'
-import { addEducation, deleteEducation } from '@/actions'
+import { dashboardActions } from '@/actions'
 import { useSession } from '@/hooks'
 import { useFormStatus } from 'react-dom'
 import Overlay from '../loaders/overlay'
@@ -77,7 +77,7 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
 
         startTransition(async () => {
             setIsLoading(true);
-            const res = await addEducation({ id: data?.id!, userId: session?.user?.id!, ...values }, session?.user)
+            const res = await dashboardActions.addEducation({ id: data?.id!, userId: session?.user?.id!, ...values }, session?.user)
             form.reset()
             console.table(res);
             setIsLoading(false);
@@ -206,7 +206,7 @@ const EducationFormModal = ({ data }: EducationFormProps) => {
                 <DialogFooter className="sm:justify-end px-3">
                     <div className="flex gap-2">
                         {data &&
-                            <form action={deleteEducation}>
+                            <form action={dashboardActions.deleteEducation}>
                                 <Input type="hidden" name='id' value={data.id} />
                                 <Input type="hidden" name='user_id' value={session?.user?.id} />
                                 <DeleteButton />

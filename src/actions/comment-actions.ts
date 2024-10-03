@@ -1,11 +1,11 @@
 "use server"
 
-import { validateRequest } from "@/lib/auth";
+import { getAuth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { revalidateTag } from "next/cache";
 
 export const postComment = async (formData: FormData) => {
-  const { user } = await validateRequest();
+  const { user } = await getAuth();
   console.log(user)
   if (!user) return { error: "You need to be logged in to post a comment" }
 

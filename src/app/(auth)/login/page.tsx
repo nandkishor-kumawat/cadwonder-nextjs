@@ -22,7 +22,7 @@ import Spinner from "@/components/loaders/spinner"
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner"
 import { useSession } from "@/hooks"
-import { signIn } from "@/actions"
+import { authActions } from "@/actions"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -55,7 +55,7 @@ export default function Page() {
     const { email, password } = values
     setIsLoading(true);
 
-    const { user, error } = await signIn({
+    const { user, error } = await authActions.signIn({
       email,
       password
     })

@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import Link from 'next/link';
 import { Files, Model, Prisma, Question } from '@prisma/client';
 import FilePreview from '../answers/file-preview';
-import { validateRequest } from '@/lib/auth';
+import { getAuth } from '@/lib/auth';
 
 type User = Prisma.UserGetPayload<{
     select: {
@@ -25,7 +25,7 @@ interface Props {
 
 export default async function DataInfo({ data, title }: Props) {
     const user = data.user;
-    const { session } = await validateRequest();
+    const { session } = await getAuth();
     return (
         <div className="info">
             <div className='flex gap-4 my-2 mt-4'>

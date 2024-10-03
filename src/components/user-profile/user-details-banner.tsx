@@ -5,15 +5,15 @@ import Link from 'next/link'
 import { MdOutlineLocationOn } from 'react-icons/md'
 import LinkNav from './link-nav'
 import Await from '../await'
-import { getUsersBy, getUserStats } from '@/actions'
+import { userActions } from '@/actions'
 
 const UserDetailsBanner = async ({ username }: { username: string }) => {
 
-    const user = await getUsersBy("username", username);
+    const user = await userActions.getUsersBy("username", username);
 
     if (!user) return null;
 
-    const promise = getUserStats(user.id);
+    const promise = userActions.getUserStats(user.id);
 
     return (
         <>

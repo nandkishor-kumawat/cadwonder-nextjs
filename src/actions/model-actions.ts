@@ -3,11 +3,11 @@ import { revalidatePath } from "next/cache"
 
 import { Files, Model } from "@prisma/client";
 import prisma from "@/lib/prisma";
-import { validateRequest } from "@/lib/auth";
+import { getAuth } from "@/lib/auth";
 import { cache } from "react";
 
 export const postModel = async (body: Model & { fileDetails: Files[] }) => {
-	const { user } = await validateRequest();
+	const { user } = await getAuth();
 	if (!user) return { error: "You need to be logged in to post a model" }
 	if (body.userId !== user.id) return { error: "You are not authorized to post this model" }
 	try {
@@ -38,7 +38,7 @@ export const postModel = async (body: Model & { fileDetails: Files[] }) => {
 }
 
 export const likeModel = async (formData: FormData) => {
-	const { user } = await validateRequest();
+	const { user } = await getAuth();
 	if (!user) return { error: "You need to be logged in to like a model" }
 	const modelId = formData.get('id') as string;
 	const userId = formData.get('user_id') as string;

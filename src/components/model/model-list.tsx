@@ -4,9 +4,9 @@ import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { MdDownload } from 'react-icons/md';
 import { BiCommentDetail } from 'react-icons/bi'
-import { isModelLiked, likeModel } from '@/actions';
+import { modelActions } from '@/actions';
 import LikeButton from './like-button';
-import { validateRequest } from '@/lib/auth';
+import { getAuth } from '@/lib/auth';
 import { Prisma } from '@prisma/client';
 import { AiFillLike } from 'react-icons/ai';
 import prisma from '@/lib/prisma';
@@ -47,10 +47,10 @@ const ModelItem = async ({ model: data }: { model: IModel }) => {
     likesCount
   } = data;
 
-  const { user } = await validateRequest();
+  const { user } = await getAuth();
   const owner = data.user;
 
-  const isLiked = await isModelLiked(id, user?.id);
+  const isLiked = await modelActions.isModelLiked(id, user?.id);
 
   return (
     <div className="rounded border bg-card text-card-foreground shadow-sm group">
@@ -88,7 +88,7 @@ const ModelItem = async ({ model: data }: { model: IModel }) => {
         </div>
         <div className="flex items-center gap-2">
 
-          <form action={likeModel}>
+          <form action={modelActions.likeModel}>
             {/* <LikeButton id={id} user_id={user?.id} /> */}
             <input type="hidden" name="id" value={id} />
             <input type="hidden" name="user_id" value={user?.id} />

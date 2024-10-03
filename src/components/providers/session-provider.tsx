@@ -1,6 +1,6 @@
 "use client";
 
-import { validateRequest } from "@/lib/auth";
+import { getAuth } from "@/lib/auth";
 import { Session, User } from "lucia";
 import { createContext, PropsWithChildren, useMemo } from "react";
 
@@ -17,7 +17,7 @@ export type SessionContextValue =
 export const SessionContext = createContext<SessionContextValue | undefined>(undefined);
 
 interface Props extends PropsWithChildren<{
-    value: Awaited<ReturnType<typeof validateRequest>>;
+    value: Awaited<ReturnType<typeof getAuth>>;
 }> { }
 
 export const SessionProvider = ({ children, value }: Props) => {

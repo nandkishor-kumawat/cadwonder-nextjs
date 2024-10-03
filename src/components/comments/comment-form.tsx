@@ -5,8 +5,7 @@ import { useSession } from '@/hooks'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { useFormStatus } from 'react-dom'
-import { postComment } from '@/actions'
-import { Skeleton } from '../ui/skeleton'
+import { commentActions } from '@/actions'
 
 
 function Submit() {
@@ -41,7 +40,7 @@ export default function CommentForm({ association_id }: Props) {
     return (
         <form
             key={Math.random()}
-            action={postComment}
+            action={commentActions.postComment}
         >
             <input type="hidden" name="association_id" value={association_id} />
             <input type="hidden" name="user_id" value={user?.id} />

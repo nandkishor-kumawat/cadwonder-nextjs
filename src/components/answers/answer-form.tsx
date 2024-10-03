@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { useSession } from '@/hooks'
 import { Button } from '../ui/button'
 import { useFormStatus } from 'react-dom'
-import { postAnswer } from '@/actions'
+import { answerActions } from '@/actions'
 import { Textarea } from '../ui/textarea'
 import { Skeleton } from '../ui/skeleton'
 import UploadFileCard from '../upload-file-card'
@@ -83,7 +83,7 @@ export default function AnswerForm({ question_id }: Props) {
       userId: user?.id,
     } as Answer & { fileDetails: Files[] };
 
-    const { answer } = await postAnswer(body);
+    const { answer } = await answerActions.postAnswer(body);
     console.table(answer);
 
     toast.success(`Answer posted successfully`, {

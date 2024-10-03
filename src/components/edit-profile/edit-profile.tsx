@@ -27,7 +27,7 @@ import Link from 'next/link'
 import { useSession } from '@/hooks'
 import ProfilePicUploader from '@/components/edit-profile/profile-pic-uploader'
 import Overlay from '@/components/loaders/overlay'
-import { updateProfile } from '@/actions'
+import { dashboardActions } from '@/actions'
 import { toast } from 'sonner'
 import { bg1, countries, SoftwareSkills, SpecializedIn } from '@/data'
 
@@ -133,7 +133,7 @@ const EditProfile = () => {
 
         setIsLoading(true);
 
-        await updateProfile({ ...values, socials }, user_id)
+        await dashboardActions.updateProfile({ ...values, socials }, user_id)
         setIsLoading(false);
 
         toast.success(`Profile updated successfully`, {

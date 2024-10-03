@@ -1,17 +1,17 @@
 "use server"
 
-import { validateRequest } from "@/lib/auth";
+import { getAuth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { Files, Question } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { cache } from "react";
 
-type QuestionBody = Question & {
+interface QuestionBody extends Question {
   fileDetails: Files[]
 }
 
 export const postQuestion = async (body: QuestionBody) => {
-  const { user } = await validateRequest();
+  const { user } = await getAuth();
 
   if (!user) return { error: "You need to be logged in to post a question" }
   try {
@@ -42,7 +42,7 @@ export const postQuestion = async (body: QuestionBody) => {
 
 export const deleteQuestion = async (questionId: string) => {
   try {
-    const { user } = await validateRequest();
+    const { user } = await getAuth();
     if (!user) return { error: "You need to be logged in to delete a question" }
     const question = await prisma.question.findUnique({
       where: {
@@ -67,6 +67,7 @@ export const deleteQuestion = async (questionId: string) => {
 }
 
 export const getQuestionBySlug = cache(async (slug: string) => {
+  const { user } = await getAuth();
   try {
     const question = await prisma.question.findFirst({
       where: {
@@ -140,3 +141,16 @@ export const getQuestions = async (queryString: string) => {
     return [];
   }
 }
+
+export const isQuestionUnlocked = cache(async (questionId: string) => {
+  const { user } = await getAuth();
+  if (!user) return false;
+  const transaction = await prisma.transaction.findFirst({
+    where: {
+      questionId,
+      userId: user.id,
+      status: 'SUCCESS'
+    }
+  })
+  return !!transaction;
+})

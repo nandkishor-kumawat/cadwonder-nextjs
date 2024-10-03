@@ -2,7 +2,7 @@ import React from 'react'
 import { Metadata } from 'next';
 import DataInfo from '@/components/questions/data-info';
 import { siteMetadata } from '@/lib/siteMetaData';
-import { getModelBySlug } from '@/actions';
+import { modelActions } from '@/actions';
 import { notFound } from 'next/navigation';
 
 type Props = {
@@ -15,7 +15,7 @@ export async function generateMetadata({
   const { slug } = params;
 
   const url = `${siteMetadata.siteUrl}/models/${slug}`;
-  const { model, error } = await getModelBySlug(slug);
+  const { model, error } = await modelActions.getModelBySlug(slug);
   if (!model) return {};
 
   const publishedAt = new Date(model.createdAt).toISOString();
@@ -50,7 +50,7 @@ export async function generateMetadata({
 
 export default async function page({ params: { slug } }: Props) {
 
-  const { model, error } = await getModelBySlug(slug);
+  const { model, error } = await modelActions.getModelBySlug(slug);
   if (!model) notFound();
 
   const jsonLd = {

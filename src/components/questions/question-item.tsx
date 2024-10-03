@@ -7,10 +7,15 @@ import { color2 } from '@/data/colors';
 import Link from 'next/link';
 import QuestionStates from './question-states';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { getQuestions } from '@/actions';
+import { questionActions } from '@/actions';
 
 
-const QuestionCard = async ({ question: data }: { question: Awaited<ReturnType<typeof getQuestions>>[0] }) => {
+interface Props {
+    question: Awaited<ReturnType<typeof questionActions.getQuestions>>[0]
+}
+
+
+const QuestionCard = async ({ question: data }: Props) => {
 
     const {
         id,

@@ -1,4 +1,4 @@
-import { getModels, getUsersBy } from '@/actions';
+import { modelActions, userActions } from '@/actions';
 import Await from '@/components/await';
 import ModelList from '@/components/model/model-list';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Page = async ({ searchParams, params: { username } }: Props) => {
-  const user = await getUsersBy("username", username);
+  const user = await userActions.getUsersBy("username", username);
 
   if (!user) return null;
 
@@ -20,7 +20,7 @@ const Page = async ({ searchParams, params: { username } }: Props) => {
 
   const params = new URLSearchParams({ ...filteredSearchParams, userId: user.id });
   const queryString = params.toString();
-  const promise = getModels(queryString);
+  const promise = modelActions.getModels(queryString);
 
   return (
     <div className="grid gap-2 pb-2" style={{

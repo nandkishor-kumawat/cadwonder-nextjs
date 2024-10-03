@@ -8,7 +8,7 @@ import { siteMetadata } from '@/lib/siteMetaData'
 import NextTopLoader from 'nextjs-toploader';
 import { SessionProvider, ThemeProvider } from '@/components/providers'
 import { Footer } from '@/components/footer'
-import { validateRequest } from '@/lib/auth'
+import { getAuth } from '@/lib/auth'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -59,7 +59,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const session = await validateRequest();
+  const session = await getAuth();
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>

@@ -26,7 +26,7 @@ import { createSlug } from "@/lib/functions";
 import { useRouter } from "next/navigation";
 import UploadFileCard from "@/components/upload-file-card";
 import Overlay from "@/components/loaders/overlay";
-import { postQuestion } from "@/actions";
+import { questionActions } from "@/actions";
 import { toast } from "sonner"
 import { Question } from "@prisma/client"
 
@@ -120,7 +120,7 @@ export default function NewQuestion() {
       userId: session?.user.id!
     } as Question & { fileDetails: Files[] };
 
-    const { error, question } = await postQuestion(body);
+    const { error, question } = await questionActions.postQuestion(body);
     setIsLoading(false);
 
     if (error) {

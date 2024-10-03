@@ -1,10 +1,10 @@
 import React from 'react'
 import CommentItem from './comment-item'
-import { getCommentsByAssociationId } from '@/actions';
+import { commentActions } from '@/actions';
 
 export default async function CommentList({ id }: { id: string }) {
 
-    const { comments } = await getCommentsByAssociationId(id);
+    const { comments } = await commentActions.getCommentsByAssociationId(id);
 
     return (
         <div className='w-full'>

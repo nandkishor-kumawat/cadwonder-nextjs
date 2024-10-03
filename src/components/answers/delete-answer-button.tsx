@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { MdDeleteForever } from 'react-icons/md';
 import { toast } from 'sonner';
-import { deleteAnswer } from '@/actions';
+import { answerActions } from '@/actions';
 import { useRouter } from 'next/navigation';
 
 
@@ -19,7 +19,7 @@ export default function DeleteAnswerButton({ id }: { id: string }) {
 
     const deleteAns = () => {
         startTransition(async () => {
-            const { error, message } = await deleteAnswer(id);
+            const { error, message } = await answerActions.deleteAnswer(id);
             toast(message, {
                 style: {
                     color: error ? "red" : "green"

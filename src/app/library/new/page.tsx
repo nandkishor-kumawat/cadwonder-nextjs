@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { postModel } from '@/actions'
+import { modelActions } from '@/actions'
 import { toast } from 'sonner'
 
 
@@ -96,7 +96,7 @@ function NewModal() {
       fileDetails
     } as Model & { fileDetails: Files[] };
 
-    const { error, model } = await postModel(body);
+    const { error, model } = await modelActions.postModel(body);
     setIsLoading(false);
     if (error) {
       toast.error(error, {

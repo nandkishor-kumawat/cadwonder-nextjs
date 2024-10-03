@@ -32,7 +32,7 @@ export const lucia = new Lucia(adapter, {
     })
 });
 
-export const validateRequest = cache(
+export const getAuth = cache(
     async (): Promise<{ user: User; session: Session } | { user: null; session: null }> => {
         const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
         if (!sessionId) {
@@ -61,6 +61,7 @@ export const validateRequest = cache(
 export const createSession = async (userId: string, provider: 'google' | 'credentials' = 'credentials') => {
     const h = headers();
     const { ua, browser, os } = userAgent({ headers: h });
+    //https://ipapi.co/json
     const { ip } = await fetch('https://api.ipify.org?format=json').then(res => res.json());
     const deviceInfo = {
         userAgent: ua,

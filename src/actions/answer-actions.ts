@@ -1,13 +1,13 @@
 "use server"
 
-import { validateRequest } from "@/lib/auth";
+import { getAuth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { Answer, Files } from "@prisma/client";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 export const postAnswer = async (data: Answer & { fileDetails: Files[] }) => {
 
-  const { user } = await validateRequest();
+  const { user } = await getAuth();
   if (!user) return { error: "You need to be logged in to post an answer" }
 
   try {
@@ -51,7 +51,7 @@ export const postAnswer = async (data: Answer & { fileDetails: Files[] }) => {
 
 export const deleteAnswer = async (id: string) => {
   try {
-    const { user } = await validateRequest();
+    const { user } = await getAuth();
     if (!user) return { message: "You need to be logged in to delete an answer", error: true };
     const answer = await prisma.answer.findUnique({
       where: {

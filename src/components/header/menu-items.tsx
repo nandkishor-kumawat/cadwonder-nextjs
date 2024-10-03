@@ -14,7 +14,7 @@ import { AiFillLike } from 'react-icons/ai';
 import { BiCube } from 'react-icons/bi';
 import { MdLogout } from 'react-icons/md';
 import { useSession } from '@/hooks';
-import { signOut } from '@/actions/auth-actions';
+import { authActions } from '@/actions';
 import { NavItem } from '../ui/nav-item';
 import { Role } from '@prisma/client';
 
@@ -26,7 +26,7 @@ const MenuItems = () => {
   const { session } = useSession();
 
   const handleLogout = async () => {
-    await signOut();
+    await authActions.signOut();
 
     router.push('/login');
   }

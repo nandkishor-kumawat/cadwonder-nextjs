@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import { Skeleton } from '@/components/ui/skeleton';
 import Await from '@/components/await';
 import QuestionList from '@/components/questions/question-list';
-import { getQuestions, getUsersBy } from '@/actions';
+import { questionActions, userActions } from '@/actions';
 
 interface Props {
   searchParams?: Record<string, string>;
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const Page = async ({ searchParams, params: { username } }: Props) => {
-  const user = await getUsersBy("username", username);
+  const user = await userActions.getUsersBy("username", username);
 
 
   if (!user) return null;
@@ -21,7 +21,7 @@ const Page = async ({ searchParams, params: { username } }: Props) => {
 
   const params = new URLSearchParams({ ...filteredSearchParams, userId: user.id });
   const queryString = params.toString();
-  const promise = getQuestions(queryString);
+  const promise = questionActions.getQuestions(queryString);
 
   return (
     <Suspense fallback={

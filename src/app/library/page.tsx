@@ -3,7 +3,7 @@ import SearchBar from '@/components/form/SearchBar'
 import ModelList from '@/components/model/model-list'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Metadata } from 'next'
-import { getModels } from '@/actions'
+import { modelActions } from '@/actions'
 import Await from '@/components/await'
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default async function Page({
   const params = new URLSearchParams(filteredSearchParams);
   const queryString = params.toString();
 
-  const promise = getModels(queryString);
+  const promise = modelActions.getModels(queryString);
 
   return (
     <div className="container max-w-4xl mx-auto px-2 py-4 space-y-6">

@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 import Spinner from "@/components/loaders/spinner"
 import { toast } from "sonner";
 import { countries, roles } from "@/data"
-import { signUp } from "@/actions"
+import { authActions } from "@/actions"
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -74,7 +74,7 @@ export default function ProfileForm() {
       formData.append(key, value);
     });
 
-    const { error, user } = await signUp(formData);
+    const { error, user } = await authActions.signUp(formData);
 
     if (error) {
       toast.error(error, {

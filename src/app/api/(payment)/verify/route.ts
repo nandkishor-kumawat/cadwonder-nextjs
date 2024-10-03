@@ -1,35 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import prisma from '@/lib/prisma';
 
-const generatedSignature = (
-    razorpayOrderId: string,
-    razorpayPaymentId: string
-) => {
-    const keySecret = process.env.key_secret;
-    if (!keySecret) {
-        throw new Error(
-            'Razorpay key secret is not defined in environment variables.'
-        );
+
+const verifySignature = (orderId: string, paymentId: string, signature: string) => {
+    const razorpaySignature = process.env.RAZORPAY_SECRET;
+    if (!razorpaySignature) {
+        throw new Error('Razorpay secret key is not defined');
     }
-    const sig = crypto
-        .createHmac('sha256', keySecret)
-        .update(razorpayOrderId + '|' + razorpayPaymentId)
-        .digest('hex');
-    return sig;
-};
+    const hmac = crypto.createHmac('sha256', razorpaySignature);
+    hmac.update(`${orderId}|${paymentId}`);
+    const generatedSignature = hmac.digest('hex');
+    return signature === generatedSignature;
+}
 
 
 export async function POST(request: NextRequest) {
-    const { orderCreationId, razorpayPaymentId, razorpaySignature } =
-        await request.json();
+    const { orderId, paymentId, signature } = await request.json();
 
-    const signature = generatedSignature(orderCreationId, razorpayPaymentId);
-    if (signature !== razorpaySignature) {
+    const isVerified = verifySignature(orderId, paymentId, signature);
+    if (!isVerified) {
         return NextResponse.json(
             { message: 'payment verification failed', isOk: false },
             { status: 400 }
         );
     }
+
+    await prisma.transaction.update({
+        where: {
+            orderId: orderId,
+        },
+        data: {
+            paymentId: paymentId,
+            status: 'SUCCESS',
+            signature: signature,
+        },
+    });
     return NextResponse.json(
         { message: 'payment verified successfully', isOk: true },
         { status: 200 }

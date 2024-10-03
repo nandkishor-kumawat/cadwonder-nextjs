@@ -2,12 +2,12 @@ import { bucket } from '@/firebase';
 import { getDownloadURL } from 'firebase-admin/storage'
 import { NextResponse } from 'next/server';
 import crypto from 'crypto'
-import { validateRequest } from '@/lib/auth';
+import { getAuth } from '@/lib/auth';
 
 export async function POST(request: Request) {
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
-    const { user } = await validateRequest();
+    const { user } = await getAuth();
 
     if (!user || user.role !== 'ADMIN') {
         return NextResponse.json({ error: 'You are not Authorized to upload' }, { status: 401 });

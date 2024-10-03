@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Prisma } from '@prisma/client'
 import DeleteAnswerButton from './delete-answer-button'
 import FilePreview from './file-preview'
-import { validateRequest } from '@/lib/auth'
+import { getAuth } from '@/lib/auth'
 import CommentList from '../comments/comment-list'
 import CommentForm from '../comments/comment-form'
 
@@ -21,7 +21,7 @@ interface Props {
 
 export default async function AnswerItem({ answer }: Props) {
 
-  const session = await validateRequest();
+  const session = await getAuth();
 
   const user = answer?.user;
 

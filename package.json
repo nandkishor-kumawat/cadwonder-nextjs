@@ -6,7 +6,8 @@
     "dev": "prisma generate && next dev -p 3001",
     "build": "prisma generate && next build",
     "start": "next start -p 3001",
-    "lint": "next lint"
+    "lint": "next lint",
+    "studio":"prisma generate && prisma studio"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
